@@ -1,0 +1,20 @@
+{
+    "name": "Steam-Card-Bot-PRO",
+    "version": "1.0.0",
+    "description": "An free open source, fully automated Level Up Bot with all features and support and much more",
+    "main": "index.js",
+    "author": "Refloow -MajokingGames - https://steamcommunity.com/id/MajokingGames/",
+    "license": "LICENSE in LICENSE.txt",
+    "dependencies": {
+        "steam-user": "^3.29.1",
+        "steamcommunity": "^3.40.0",
+        "steam-totp": "^2.1.0",
+        "steam-tradeoffer-manager": "^2.5.0",
+        "lodash": "^4.15.0",
+        "path": "^0.12.7",
+        "colors": "^1.1.2",
+        "winston": "^3.1.0",
+        "steamid": "^1.1.0",
+        "request": "^2.85.0"
+    }
+}
