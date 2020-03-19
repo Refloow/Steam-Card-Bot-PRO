@@ -4,7 +4,7 @@
     "description": "An free open source, fully automated Level Up Bot with all features and support and much more",
     "main": "index.js",
     "author": "Refloow -MajokingGames - https://steamcommunity.com/id/MajokingGames/",
-    "license": "LICENSE in LICENSE.txt",
+    "license": "MIT",
     "dependencies": {
         "steam-user": "^3.29.1",
         "steamcommunity": "^3.40.0",
