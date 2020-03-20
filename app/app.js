@@ -3,6 +3,7 @@ let SteamUser = require("steam-user"),
     TradeOfferManager = require("steam-tradeoffer-manager"),
     SteamCommunity = require("steamcommunity"),
     Utils = require("../app/utils.js"),
+    method = require('./methods'),
     CONFIG = require("../app/SETTINGS/config.js"),
     logcolors= require("../app/logcolors.js")
     allCards = {},
@@ -25,6 +26,10 @@ let client = new SteamUser(),
         "cancelTime": "7200000" // 2 hours in ms
     }),
     community = new SteamCommunity();
+
+// Checking for correct version (updates) for bot on github
+
+method.check();
 
 setInterval(() => {
     for (let i = 0; i < Object.keys(userMsgs).length; i++) {
