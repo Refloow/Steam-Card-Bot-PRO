@@ -22,5 +22,49 @@ t = module.exports = {
                 console.log(`| [GitHub] | VERSION |: You're running the latest version of Steam-Card-Bot-PRO (v${v.green})\n\n`)
         }
         request(options, look)
+    },
+
+    ChatSpamProtectionEnabled: function() {
+        return config.chat_spam_protection == true;
+    },
+
+    SpamRemoveMessageEnabled: function() {
+        return config.spam_remove_message_enable == true;
+    },
+
+    SpamAdminNotification: function () {
+        return config.spam_admin_notification_enable == true;
+    },
+
+    removingInactiveFriendsEnabled: function() {
+        return config.bot_clearing_friend_list == true;
+    },
+
+    SendingMessageToRemovedInactive: function() {
+        return config. message_inactive_friend_removed == true;
+    },
+
+    DailyChatLogsEnabled: function() {
+        return config.chat_daily_logs == true;
+    },
+
+    ChatLogsForEachUserEnabled: function() {
+        return config.chat_logs_for_each_user == true;
+    },
+
+    TradeCommentEnabled: function() {
+        return config.After_Trade_Comment_enable == true;
+    },
+
+    FriendRequestGoupInviteEnabled: function() {
+        return config.friend_group_inviting == true;
+    },
+
+    SendingWelcomeMessage: function() {
+        return config.EnableWelcomeMessage == true;
+    },
+
+    BuyingWithRef: function() {
+        return config.Buying_Sets_With_Ref_Enable == true;
     }
 }
