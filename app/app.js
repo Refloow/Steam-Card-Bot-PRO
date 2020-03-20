@@ -31,40 +31,50 @@ let client = new SteamUser(),
 
 method.check();
 
-setInterval(() => {
-    for (let i = 0; i < Object.keys(userMsgs).length; i++) {
-        if (userMsgs[Object.keys(userMsgs)[i]] > CONFIG.MAXMSGPERSEC) {
-            client.chatMessage(Object.keys(userMsgs)[i], CONFIG.SPAMREMOVEMESSAGE);
-            client.removeFriend(Object.keys(userMsgs)[i]);
-            for (let j = 0; j < CONFIG.ADMINS.length; j++) {
-                client.chatMessage(CONFIG.ADMINS[j], "User #" + Object.keys(userMsgs)[i] + " has been removed for spamming. To block him use !block [STEAMID64] (Command will work after adding admin commands to system.)");
+if(method.ChatSpamProtectionEnabled()) {
+   setInterval(() => {
+          for (let i = 0; i < Object.keys(userMsgs).length; i++) {
+           if (userMsgs[Object.keys(userMsgs)[i]] > CONFIG.MAXMSGPERSEC) {
+                if(method.SpamRemoveMessageEnabled()) {
+                  client.chatMessage(Object.keys(userMsgs)[i], CONFIG.SPAMREMOVEMESSAGE);
+                }
+               client.removeFriend(Object.keys(userMsgs)[i]);
+               for (let j = 0; j < CONFIG.ADMINS.length; j++) {
+                   if(method.SpamAdminNotification()) {
+                       client.chatMessage(CONFIG.ADMINS[j], "User #" + Object.keys(userMsgs)[i] + " has been removed for spamming. To block him use !block [STEAMID64] (Command will work after adding admin commands to system.)");
+                    }
+                }
+           }
+       }
+       userMsgs = {};
+   }, 1000);
+}
+
+if(method.removingInactiveFriendsEnabled()) {
+    setInterval(() => {
+        for (let i = 0; i < Object.keys(users).length; i++) {
+            if (users[Object.keys(users)[i]].idleforhours >= CONFIG.MAXHOURSADDED) {
+                if(method.SendingMessageToRemovedInactive()) {
+                    client.chatMessage(Object.keys(users)[i], CONFIG.REMOVEDINACTIVE);
+                }
+                client.removeFriend(Object.keys(users)[i]);
+                delete users[Object.keys(users)[i]];
+                fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
+                    if (ERR) {
+                        logger.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
+                    }
+                });
+            } else {
+                users[Object.keys(users)[i]].idleforhours += 1;
+                fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
+                    if (ERR) {
+                        logger.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
+                    }
+                });
             }
         }
-    }
-    userMsgs = {};
-}, 1000);
-
-setInterval(() => {
-    for (let i = 0; i < Object.keys(users).length; i++) {
-        if (users[Object.keys(users)[i]].idleforhours >= CONFIG.MAXHOURSADDED) {
-            client.chatMessage(Object.keys(users)[i], CONFIG.REMOVEDINACTIVE);
-            client.removeFriend(Object.keys(users)[i]);
-            delete users[Object.keys(users)[i]];
-            fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
-                if (ERR) {
-                    logger.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
-                }
-            });
-        } else {
-            users[Object.keys(users)[i]].idleforhours += 1;
-            fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
-                if (ERR) {
-                    logger.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
-                }
-            });
-        }
-    }
-}, 1000 * 60 * 60);
+    }, 1000 * 60 * 60);
+}
 
 fs.readFile("./app/UserData/Users.json", (ERR, DATA) => {
     if (ERR) {
@@ -155,17 +165,21 @@ client.on("friendMessage", (SENDER, MSG) => {
         userLogs[SENDER.getSteamID64()] = [];
         userLogs[SENDER.getSteamID64()].push(MSG);
     }
-    fs.writeFile("./app/ChatLogs/UserLogs/" + SENDER.getSteamID64() + "-log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".json", JSON.stringify({ logs: userLogs[SENDER.getSteamID64()] }), (ERR) => {
-        if (ERR) {
-            logcolors.fail("| [Users] |: An error occurred while writing UserLogs file: " + ERR);
-        }
-    });
-    chatLogs += SENDER.getSteamID64() + " : " + MSG + "\n";
-    fs.writeFile("./app/ChatLogs/FullLogs/log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".txt", chatLogs, (ERR) => {
-        if (ERR) {
-            logcolors.fail("| [Users] |: An error occurred while writing FullLogs file: " + ERR);
-        }
-    });
+    if(method.ChatLogsForEachUserEnabled()) {
+        fs.writeFile("./app/ChatLogs/UserLogs/" + SENDER.getSteamID64() + "-log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".json", JSON.stringify({ logs: userLogs[SENDER.getSteamID64()] }), (ERR) => {
+            if (ERR) {
+                logcolors.fail("| [Users] |: An error occurred while writing UserLogs file: " + ERR);
+            }
+        });
+    }
+    if(method.DailyChatLogsEnabled()) {
+        chatLogs += SENDER.getSteamID64() + " : " + MSG + "\n";
+        fs.writeFile("./app/ChatLogs/FullLogs/log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".txt", chatLogs, (ERR) => {
+            if (ERR) {
+                logcolors.fail("| [Users] |: An error occurred while writing FullLogs file: " + ERR);
+            }
+        });
+    }
     if (Object.keys(users).indexOf(SENDER.getSteamID64()) < 0) {
         users[SENDER.getSteamID64()] = {};
         users[SENDER.getSteamID64()].idleforhours = 0;
@@ -184,21 +198,21 @@ client.on("friendMessage", (SENDER, MSG) => {
     }
 
 	if (MSG.toUpperCase() == "!COMMANDS") {
-        client.chatMessage(SENDER, CONFIG.MESSAGES.COMMANDS);	
+        client.chatMessage(SENDER, CONFIG.COMMANDS);	
 		
 	} else if (MSG.toUpperCase() == "!OWNER") {
-        client.chatMessage(SENDER, CONFIG.MESSAGES.OWNER);
+        client.chatMessage(SENDER, CONFIG.OWNER);
 	
 	} else if (MSG.toUpperCase() === "!INFO") {
-        client.chatMessage(SENDER, CONFIG.MESSAGES.INFO);
+        client.chatMessage(SENDER, CONFIG.INFO);
         if (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64()) >= 0) {
-            client.chatMessage(SENDER, CONFIG.MESSAGES.SELLHELP);
+            client.chatMessage(SENDER, CONFIG.SELLHELP);
         }	
 		
     } else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
         let n = parseInt(MSG.toUpperCase().replace("!LEVEL ", ""));
         if (!isNaN(n) && parseInt(n) > 0) {
-            if (n <= CONFIG.MESSAGES.MAXLEVEL) {
+            if (n <= CONFIG.MAXLEVEL) {
                 Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA, CURRENTLEVEL, XPNEEDED) => {
                     if (!ERR) {
                         if (DATA) {
@@ -292,7 +306,7 @@ client.on("friendMessage", (SENDER, MSG) => {
 			   let n = parseInt(MSG.toUpperCase().replace("!DONATESETS ", "")),
 					amountofsets = n;
 				if (!isNaN(n) && parseInt(n) > 0) {
-					if (n <= CONFIG.MESSAGES.MAXSELL) {
+					if (n <= CONFIG.MAXSELL) {
 						client.chatMessage(SENDER, "Processing your request.");
 						let botKeys = [],
 							t = manager.createOffer(SENDER.getSteamID64());
@@ -389,7 +403,7 @@ client.on("friendMessage", (SENDER, MSG) => {
                 let n = parseInt(MSG.toUpperCase().replace("!SELLTF2 ", "")),
                     amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2;
                 if (!isNaN(n) && parseInt(n) > 0) {
-                    if (n <= CONFIG.MESSAGES.MAXSELL) {
+                    if (n <= CONFIG.MAXSELL) {
                         client.chatMessage(SENDER, "✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
@@ -495,7 +509,7 @@ client.on("friendMessage", (SENDER, MSG) => {
                let n = parseInt(MSG.toUpperCase().replace("!SELLCSGO ", "")),
                     amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS;
                 if (!isNaN(n) && parseInt(n) > 0) {
-                    if (n <= CONFIG.MESSAGES.MAXSELL) {
+                    if (n <= CONFIG.MAXSELL) {
                         client.chatMessage(SENDER, "✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
@@ -603,7 +617,7 @@ client.on("friendMessage", (SENDER, MSG) => {
             let n = MSG.toUpperCase().replace("!BUYTF2 ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2;
             if (!isNaN(n) && parseInt(n) > 0) {
-                if (n <= CONFIG.MESSAGES.MAXBUY) {
+                if (n <= CONFIG.MAXBUY) {
                     let t = manager.createOffer(SENDER.getSteamID64());
                     t.getUserDetails((ERR, ME, THEM) => {
                         if (ERR) {
@@ -805,7 +819,7 @@ client.on("friendMessage", (SENDER, MSG) => {
         } else {
             client.chatMessage(SENDER, "⚠️ Please try again later.");
         }
-    
+if(method.BuyingWithRef()) {
 	} else if (MSG.toUpperCase().indexOf("!BUYREF") >= 0) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYREF ", ""),
@@ -813,7 +827,7 @@ client.on("friendMessage", (SENDER, MSG) => {
 				client.chatMessage(SENDER, "You can get " + amountofsets + " set(s) for " + n + " Refined Metal");
 			if (parseInt(n)%2 == 0) {	
 				if (!isNaN(n) && parseInt(n) > 0) {
-					if (n <= CONFIG.MESSAGES.MAXBUYREF) {
+					if (n <= CONFIG.MAXBUYREF) {
 						let t = manager.createOffer(SENDER.getSteamID64());
 						t.getUserDetails((ERR, ME, THEM) => {
 							if (ERR) {
@@ -1018,13 +1032,14 @@ client.on("friendMessage", (SENDER, MSG) => {
         } else {
             client.chatMessage(SENDER, "⚠️ Please try again later.");
         }
+    }
 		
 	} else if (MSG.toUpperCase().indexOf("!BUYCSGO") >= 0) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYCSGO ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
             if (!isNaN(n) && parseInt(n) > 0) {
-                if (n <= CONFIG.MESSAGES.MAXBUY) {
+                if (n <= CONFIG.MAXBUY) {
                     let t = manager.createOffer(SENDER.getSteamID64());
                     t.getUserDetails((ERR, ME, THEM) => {
                         if (ERR) {
@@ -1318,7 +1333,7 @@ client.on("friendMessage", (SENDER, MSG) => {
 				   let n = parseInt(MSG.toUpperCase().replace("!DONATESETS ", "")),
 						amountofsets = n;
 					if (!isNaN(n) && parseInt(n) > 0) {
-						if (n <= CONFIG.MESSAGES.MAXSELL) {
+						if (n <= CONFIG.MAXSELL) {
 							client.chatMessage(SENDER, "✔️ Processing your request.");
 							let botKeys = [],
 								t = manager.createOffer(SENDER.getSteamID64());
@@ -1423,10 +1438,14 @@ client.on("friendRelationship", (SENDER, REL) => {
     if (REL === 2) {
         client.addFriend(SENDER);
     } else if (REL === 3) {
-        if (CONFIG.INVITETOGROUPID) {
-            client.inviteToGroup(SENDER, CONFIG.INVITETOGROUPID);
+        if(method.FriendRequestGoupInviteEnabled()) {
+            if (CONFIG.INVITETOGROUPID) {
+                 client.inviteToGroup(SENDER, CONFIG.INVITETOGROUPID);
+            }
         }
-        client.chatMessage(SENDER, CONFIG.MESSAGES.WELCOME);
+        if(method.SendingWelcomeMessage()) {
+            client.chatMessage(SENDER, CONFIGs.WELCOME);
+        }
     }
 });
 
@@ -1476,14 +1495,16 @@ manager.on("sentOfferChanged", (OFFER, OLDSTATE) => {
                 logcolors.fail("| [Steam] |: An error occurred while getting user profile: " + ERR);
                 client.chatMessage(OFFER.partner, "An error occurred while getting your profile (to comment).");
             } else {
-                USER.comment(CONFIG.COMMENTAFTERTRADE, (ERR) => {
-                    if (ERR) {
-                        logcolors.fail("| [Steam] |: An error occurred while commenting on user profile: " + ERR);
-                        client.chatMessage(OFFER.partner, "An error occurred while getting commenting on your profile.");
-                    } else {
-                        client.chatMessage(OFFER.partner, "Thanks for trading! :D");
-                    }
-                });
+                if(method.TradeCommentEnabled()) {
+                    USER.comment(CONFIG.COMMENTAFTERTRADE, (ERR) => {
+                        if (ERR) {
+                            logcolors.fail("| [Steam] |: An error occurred while commenting on user profile: " + ERR);
+                            client.chatMessage(OFFER.partner, "An error occurred while getting commenting on your profile.");
+                        } else {
+                            client.chatMessage(OFFER.partner, "Thanks for trading! :D");
+                        }
+                    });
+                }
             }
         });
     } else if (OFFER.state == 6) {
