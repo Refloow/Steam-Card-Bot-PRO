@@ -247,6 +247,101 @@ client.on("friendMessage", (SENDER, MSG) => {
         if (!isNaN(n) && parseInt(n) > 0) {
             client.chatMessage(SENDER, "✔️ With " + n + " CS:GO keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + " sets and with " + n + " TF2 keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 +" sets.");
         }
+
+        } else if (MSG.toUpperCase().indexOf("!SELLCHECK") >= 0 && (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64().toString()) >= 0 || CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(parseInt(SENDER.getSteamID64())) >= 0)) {
+        let n = parseInt(MSG.toUpperCase().replace("!SELLCHECK ", ""));
+        client.chatMessage(SENDER, "Loading inventory...");
+
+        Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
+            logcolors.info("| [Debug] |: Inventory Loaded");
+            if (!ERR) {
+                let s = DATA;
+                Utils.getSets(s, allCards, (ERR, DATA) => {
+                    logcolors.info("| [Debug] |: Sets Loaded");
+                    if (!ERR) {
+
+                        // console.log(b);
+                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
+                        // 1: GET BOTS CARDS. DONE
+                        // 2: GET PLAYER's BADGES. DONE
+                        // 3: MAGIC
+                        let hisMaxSets = 0,
+                            botNSets = 0;
+                        // Loop for sets he has partially completed
+                        // Loop for sets he has never crafted
+                        for (let i = 0; i < Object.keys(DATA).length; i++) {
+                            if (DATA[Object.keys(DATA)[i]].length >= 5) {
+                                hisMaxSets += 5;
+                            } else {
+                                hisMaxSets += DATA[Object.keys(DATA)[i]].length;
+                            }
+                            botNSets += DATA[Object.keys(DATA)[i]].length;
+                        }
+                        totalBotSets = botNSets;
+                        let playThis = CONFIG.PLAYGAMES;
+                        if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
+                            playThis[0] = parseString(playThis[0], totalBotSets);
+                        }
+                        client.gamesPlayed(playThis);
+                        client.chatMessage(SENDER, "You currently have " + botNSets + " sets available which the bot can buy. For all of them the bot will pay you " + parseInt(botNSets / CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS * 100) / 100 + " keys.");
+                    } else {
+                        logcolors.fail("| [Inventory] |: An error occurred while getting user sets: " + ERR);
+                    }
+                });
+            } else {
+                logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
+            }
+        });
+
+    } else if (MSG.toUpperCase().indexOf("!BUYONECHECK") >= 0) {
+        client.chatMessage(SENDER, "Loading badges...");
+        Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
+            if (!ERR) {
+                let b = {}; // List with badges that CAN still be crafted
+                if (DATA) {
+                    for (let i = 0; i < Object.keys(DATA).length; i++) {
+                        if (DATA[Object.keys(DATA)[i]] < 6) {
+                            b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
+                        }
+                    }
+                } else {
+                    client.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                }
+                // console.log(b);
+                // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
+                // 1: GET BOTS CARDS. DONE
+                // 2: GET PLAYER's BADGES. DONE
+                // 3: MAGIC
+                let hisMaxSets = 0,
+                    botNSets = 0;
+                // Loop for sets he has partially completed
+                for (let i = 0; i < Object.keys(b).length; i++) {
+                    if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
+                        hisMaxSets += 5 - b[Object.keys(b)[i]].length;
+                    }
+                }
+                // Loop for sets he has never crafted
+                for (let i = 0; i < Object.keys(botSets).length; i++) {
+                    if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
+                        if (botSets[Object.keys(botSets)[i]].length >= 1) {
+                            hisMaxSets += 1;
+                        }
+                    }
+                    botNSets += botSets[Object.keys(botSets)[i]].length;
+                }
+                totalBotSets = botNSets;
+                let playThis = CONFIG.PLAYGAMES;
+                if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
+                    playThis[0] = parseString(playThis[0], totalBotSets);
+                }
+                client.gamesPlayed(playThis);
+                client.chatMessage(SENDER, "There are currently sets from " + Object.keys(botSets).length + " different games, of which you have not crafted " + hisMaxSets + ". This would cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
+            } else {
+                client.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
+            }
+        });
+
         
 	} else if (MSG.toUpperCase() == "!STOCK") {
 		if (Object.keys(botSets).length > 0) {
@@ -1225,6 +1320,269 @@ if(method.BuyingWithRef()) {
                                     } else {
                                         logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
                                         client.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                    }
+                                }
+                            });
+                        } else {
+                            client.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                        }
+                    });
+                } else {
+                    client.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                }
+            } else {
+                client.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+            }
+        } else {
+            client.chatMessage(SENDER, "⚠️ Please try again later.");
+        }
+
+        } else if (MSG.toUpperCase().indexOf("!BUYONE") >= 0) {
+        if (botSets) {
+            let n = MSG.toUpperCase().replace("!BUYONE ", ""),
+                amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
+            if (!isNaN(n) && parseInt(n) > 0) {
+                if (n <= CONFIG.MAXBUY) {
+                    let t = manager.createOffer(SENDER.getSteamID64());
+                    t.getUserDetails((ERR, ME, THEM) => {
+                        if (ERR) {
+                            logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
+                            client.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                        } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
+                            n = parseInt(n);
+                            let theirKeys = [];
+                            client.chatMessage(SENDER, "⚠️ Processing your request.");
+                            manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
+                                if (ERR) {
+                                    logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
+                                    client.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                } else {
+                                    logcolors.info("| [Debug] |: Inventory Loaded");
+                                    if (!ERR) {
+                                        logcolors.info("| [Debug] |: Inventory Loaded 2");
+                                        for (let i = 0; i < INV.length; i++) {
+                                            if (theirKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
+                                                theirKeys.push(INV[i]);
+                                            }
+                                        }
+                                        if (theirKeys.length != n) {
+                                            client.chatMessage(SENDER, "⚠️ You do not have enough keys.");
+                                        } else {
+                                            Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
+                                                if (!ERR) {
+                                                    logcolors.info("| [Debug] |: DEBUG#BADGE LOADED");
+                                                    if (!ERR) {
+                                                        let b = {}; // List with badges that CAN still be crafted
+                                                        if (DATA) {
+                                                            for (let i = 0; i < Object.keys(DATA).length; i++) {
+                                                                if (DATA[Object.keys(DATA)[i]] < 6) {
+                                                                    b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
+                                                                }
+                                                            }
+                                                        } else {
+                                                            client.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                                                        }
+                                                        console.log(DATA);
+                                                        console.log(b);
+                                                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
+                                                        // 1: GET BOTS CARDS. DONE
+                                                        // 2: GET PLAYER's BADGES. DONE
+                                                        // 3: MAGIC
+                                                        let hisMaxSets = 0,
+                                                            botNSets = 0;
+                                                        // Loop for sets he has partially completed
+                                                        for (let i = 0; i < Object.keys(b).length; i++) {
+                                                            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
+                                                                hisMaxSets += 5 - b[Object.keys(b)[i]].length;
+                                                            }
+                                                        }
+                                                        logcolors.info("| [Debug] |: Loop 1 DONE");
+                                                        // Loop for sets he has never crafted
+                                                        for (let i = 0; i < Object.keys(botSets).length; i++) {
+                                                            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
+                                                                if (botSets[Object.keys(botSets)[i]].length >= 5) {
+                                                                    hisMaxSets += 5;
+                                                                } else {
+                                                                    hisMaxSets += botSets[Object.keys(botSets)[i]].length;
+                                                                }
+                                                            }
+                                                            botNSets += botSets[Object.keys(botSets)[i]].length;
+                                                        }
+                                                        totalBotSets = botNSets;
+                                                        let playThis = CONFIG.PLAYGAMES;
+                                                        if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
+                                                            playThis[0] = parseString(playThis[0], totalBotSets);
+                                                        }
+                                                        client.gamesPlayed(playThis);
+                                                        logcolors.info("| [Debug] |: Loop 2 DONE");
+                                                        // HERE
+                                                        if (amountofsets <= hisMaxSets) {
+                                                            hisMaxSets = amountofsets;
+                                                            logcolors.info("| [Debug] |: Trade Created");
+                                                            sortSetsByAmount(botSets, (DATA) => {
+                                                                logcolors.info("| [Debug] |:" + DATA);
+                                                                logcolors.info("| [Debug] |: Sets Sorted")
+                                                                firstLoop: for (let i = 0; i < DATA.length; i++) {
+                                                                    if (b[DATA[i]] == 0) {
+                                                                        continue firstLoop;
+                                                                    } else {
+                                                                        logcolors.info("| [Debug] |: DEBUG#" + i);
+                                                                        logcolors.info("| [Debug] |: DEBUG FOR LOOP ITEMS");
+                                                                        if (hisMaxSets > 0) {
+                                                                            logcolors.info("| [Debug] |: DEBUG# MAXSETSMORETHAN1");
+                                                                            if (!b[DATA[i]] && botSets[DATA[i]].length > 0) { // TODO NOT FOR LOOP WITH BOTSETS. IT SENDS ALL
+                                                                                // BOT HAS ENOUGH SETS AND USER NEVER CRAFTED THIS
+                                                                                bLoop: for (let j = 0; j < botSets[DATA[i]].length; j++) {
+                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
+                                                                                        t.addMyItems(botSets[DATA[i]][j]);
+                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: ITEM ADD");
+                                                                                        hisMaxSets--;
+                                                                                        continue firstLoop;
+                                                                                    } else {
+                                                                                        logcolors.info("| [Debug] |: DEBUG#LOOP #1: " + botSets[DATA[i]][j]);
+                                                                                        continue firstLoop;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
+                                                                            break firstLoop;
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (hisMaxSets > 0) {
+                                                                    client.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                                                } else {
+                                                                    logcolors.info("| [Debug] |: -SENDING");
+                                                                    t.addTheirItems(theirKeys);
+                                                                    t.data("commandused", "BuyOne");
+                                                                    t.data("amountofkeys", n);
+                                                                    t.data("amountofsets", amountofsets.toString());
+                                                                    t.data("index", setsThatShouldntBeSent.length);
+                                                                    setsThatShouldntBeSent.push(t.itemsToGive);
+                                                                    t.send((ERR, STATUS) => {
+                                                                        if (ERR) {
+                                                                            client.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                            logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
+                                                                        } else {
+                                                                           client.chatMessage(SENDER, "⚠️ Trade Sent! Confirming it...");
+                                                                            logcolors.info("| [Steam] |: Trade offer sent!");
+                                                                        }
+                                                                    });
+                                                                }
+                                                            });
+                                                        } else {
+                                                            client.chatMessage(SENDER, "⚠️ There are currently not enough sets that you have not used in stock for this amount of keys. Please try again later. If you want the bot to ignore your current badges use !buyany.");
+                                                        }
+                                                    } else {
+                                                        logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
+                                                    }
+                                                } else {
+                                                    client.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                                                    logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
+                                        client.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                    }
+                                }
+                            });
+                        } else {
+                            client.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                        }
+                    });
+                } else {
+                    client.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                }
+            } else {
+                client.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+            }
+        } else {
+            client.chatMessage(SENDER, "⚠️ Please try again later.");
+        }
+    } else if (MSG.toUpperCase().indexOf("!BUYANY") >= 0) {
+        if (botSets) {
+            let n = MSG.toUpperCase().replace("!BUYANY ", ""),
+                amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
+            if (!isNaN(n) && parseInt(n) > 0) {
+                if (n <= CONFIG.MAXBUY) {
+                    let t = manager.createOffer(SENDER.getSteamID64());
+                    n = parseInt(n);
+                    let theirKeys = [];
+                    t.getUserDetails((ERR, ME, THEM) => {
+                        if (ERR) {
+                            logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
+                            client.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                        } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
+                            client.chatMessage(SENDER, "⚠️ Processing your request.");
+                            manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
+                                if (ERR) {
+                                    logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
+                                    client.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                } else {
+                                    let amountofB = amountofsets;
+                                    for (let i = 0; i < INV.length; i++) {
+                                        if (theirKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
+                                            theirKeys.push(INV[i]);
+                                        }
+                                    }
+                                    if (theirKeys.length != n) {
+                                        client.chatMessage(SENDER, "⚠️ You do not have enough keys.");
+                                    } else {
+                                        sortSetsByAmount(botSets, (DATA) => {
+                                            let setsSent = {};
+                                            firstLoop: for (let i = 0; i < DATA.length; i++) {
+                                                console.log(setsSent);
+                                                console.log(DATA[i]);
+                                                if (botSets[DATA[i]]) {
+                                                    for (let j = 0; j < botSets[DATA[i]].length; j++) {
+                                                        if (amountofB > 0) {
+                                                            if ((setsSent[DATA[i]] && setsSent[DATA[i]] > -1) || !setsSent[DATA[i]]) {
+                                                                t.addMyItems(botSets[DATA[i]][j]);
+                                                                logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
+                                                                amountofB--;
+                                                                if (!setsSent[DATA[i]]) {
+                                                                    setsSent[DATA[i]] = 1;
+                                                                } else {
+                                                                    setsSent[DATA[i]] += 1;
+                                                                }
+                                                            } else {
+                                                                logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
+                                                                continue firstLoop;
+                                                            }
+                                                        } else {
+                                                            logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
+                                                            continue firstLoop;
+                                                        }
+                                                    }
+                                                } else {
+                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
+                                                    continue firstLoop;
+                                                }
+                                            }
+                                        });
+                                    }
+                                    if (amountofB > 0) {
+                                        client.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                    } else {
+                                        logcolors.info("| [Debug] |: -SENDING");
+                                        t.addTheirItems(theirKeys);
+                                        t.data("commandused", "BuyAny");
+                                        t.data("amountofsets", amountofsets.toString());
+                                        t.data("amountofkeys", n);
+                                        t.data("index", setsThatShouldntBeSent.length);
+                                        setsThatShouldntBeSent.push(t.itemsToGive);
+                                        t.send((ERR, STATUS) => {
+                                            if (ERR) {
+                                                client.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
+                                            } else {
+                                                client.chatMessage(SENDER, "⚠️ Trade Sent! Confirming it...");
+                                                logcolors.info("| [Steam] |: Trade offer sent!");
+                                            }
+                                        });
                                     }
                                 }
                             });
