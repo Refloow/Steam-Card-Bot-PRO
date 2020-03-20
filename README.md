@@ -13,8 +13,8 @@ https://discord.gg/UKbGDpv
 
 - Commands are not case sensitive
 - Clean and understandable console log (Live feed of all actions that bot take)
-- !buyref amount_of_ref (Buying sets with refined metal from TF2)
-- All features can be enabled or disabled inside of config file. (Comming in next update).
+- !buyref amount_of_ref (Buying sets with refined metal from TF2) (Can be disabled in config)
+- All features have endless customization inside of the config file
 
 #### Main features: 
 
