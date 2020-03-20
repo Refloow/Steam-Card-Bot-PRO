@@ -41,22 +41,26 @@ Info Commands:
 3. !info (Custom info command that can be set at config)
 4. !level x (Calculation command for users who want to see how much sets they need to reach dream level)
 5. !check (Displays amount bot has to offer to user (not counting sets that user already crafted))
-6. !stock (Displays stock of the bot)
+6. !sellcheck
+7. !buyonecheck
+8. !stock (Displays stock of the bot)
 
 - Action Commands:
 
-7. !donatesets (Command for filling bot with sets or can be used if someone wants to donate sets)
-8. !selltf2 amount_of_keys
-9. !sellcsgo amount_of_keys
+9. !donatesets (Command for filling bot with sets or can be used if someone wants to donate sets)
 10. !buytf2 amount_of_keys
-11. !buyref amount_of_ref
-12. !buycsgo amount_of_keys
+11. !selltf2 amount_of_keys
+12. !buyref amount_of_ref
+13. !buyone amounf_of_keys
+14.  !buyany amounf_of_keys
+15.  !buycsgo amount_of_keys
+16.  !sellcsgo amount_of_keys
 
 - Admin Commands:
 
-13. !block user_id (admin command to block user from using bot due spaming)
-14. !usercheck
-15. !withdraw (command for admin to withdraw keys) 
+17. !block user_id (admin command to block user from using bot due spaming)
+18. !usercheck
+19. !withdraw (command for admin to withdraw keys) 
 
 
 # Prerequisites (What bot require to start)
