@@ -3,10 +3,10 @@
 Here will be displayed changes from all version to now
 # 1.1.2
 - Added new commands:
-  !sellcheck
-  !buyonecheck
-  !buyone amounf_of_keys
-  !buyany amounf_of_keys
+ 1. !sellcheck
+ 2. !buyonecheck
+ 3. !buyone amounf_of_keys
+ 4. !buyany amounf_of_keys
 
 
 
