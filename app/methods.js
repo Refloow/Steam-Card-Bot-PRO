@@ -64,7 +64,43 @@ t = module.exports = {
         return config.EnableWelcomeMessage == true;
     },
 
-    BuyingWithRef: function() {
-        return config.Buying_Sets_With_Ref_Enable == true;
+    // -------------------- COMMAND METHODS ----------------------------------
+
+    UserBuyingWithTF2: function() {
+        return config.buytf2_enable == true;
+    },
+
+    UserSellingWithTF2: function() {
+        return config.selltf2_enable == true;
+    },
+
+    UserBuyingWithRef: function() {
+        return config.buyref_enable == true;
+    },
+
+    UserBuyingOne: function() {
+        return config.buyone_enable == true;
+    },
+
+    UserBuyingAny: function() {
+        return config.buyany_enable == true;
+    },
+
+    UserBuyingWithCSGO: function() {
+        return config.buycsgo_enable == true;
+    },
+
+    UserSellingWithCSGO: function() {
+        return config.sellcsgo_enable == true;
+    },
+
+    // Check commands methods
+
+    SellChecking: function() {
+        return config.sellcheck_enable == true;
+    },
+
+    BuyCheckingOne: function() {
+        return config.buyonecheck_enable == true;
     }
 }
