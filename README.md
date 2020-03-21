@@ -26,10 +26,10 @@ https://discord.gg/UKbGDpv
 - Saving each accepted trade.
 - Cleaning friend list for users which are inactive for x amount of hours (value can be set in config)
 - Chat Logs :
+    1. Full logs (Saved for each day)
+    2. User Logs (Saved for each user who used bot)
 - Trade Size Limit
 - Max level you can request by !level command
-Full logs (Saved for each day)
-User Logs (Saved for each user who used bot)
 - Commenting user after the trade.
 - Declining incoming group invites.
 - Variety of commands such as:
