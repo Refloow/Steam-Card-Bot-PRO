@@ -19,6 +19,8 @@
 
  - !sellcheck command
  - !buyonecheck command
+ 
+ - Updated user message if user trys to use command (if command fail: reason command is toggled by admin.)
 
 # 1.1.3
 - Fixed saving of logs
