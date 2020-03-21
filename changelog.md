@@ -1,6 +1,9 @@
 # Changelog
 
-Here will be displayed changes from all version to now
+# 1.1.3
+- Fixed saving of logs
+- Added error catcher if modules were not installerd
+
 # 1.1.2
 - Added new commands:
  1. !sellcheck
