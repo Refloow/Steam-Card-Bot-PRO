@@ -1,14 +1,32 @@
-let SteamUser = require("steam-user"),
-    SteamTotp = require("steam-totp"),
-    TradeOfferManager = require("steam-tradeoffer-manager"),
-    SteamCommunity = require("steamcommunity"),
-    Utils = require("../app/utils.js"),
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+/* 
+  Here is contact info: refloowcontact@gmail.com 
+  or main dev steam: https://steamcommunity.com/id/MajokingGames/
+
+*/
+
+
+// Checking if all modules are correctly installed
+
+try {
+    SteamUser = require("steam-user");
+    SteamTotp = require("steam-totp");
+    TradeOfferManager = require("steam-tradeoffer-manager");
+    SteamCommunity = require("steamcommunity");
+    fs = require("fs");
+} catch (ex) {
+    console.log('\n\n\n | [Modules] |: Missing dependencies. Run install.bat file or use npm install.\n\n\n');
+    console.log(ex);
+    process.exit(1);
+}
+
+let Utils = require("../app/utils.js"),
     method = require('./methods'),
     CONFIG = require("../app/SETTINGS/config.js"),
     logcolors= require("../app/logcolors.js")
     allCards = {},
     botSets = {},
-    fs = require("fs"),
     users = {},
     userMsgs = {},
     SID64REGEX = new RegExp(/^[0-9]{17}$/),
