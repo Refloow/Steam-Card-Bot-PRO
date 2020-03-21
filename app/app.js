@@ -216,7 +216,47 @@ client.on("friendMessage", (SENDER, MSG) => {
     }
 
 	if (MSG.toUpperCase() == "!COMMANDS") {
-        client.chatMessage(SENDER, CONFIG.COMMANDS);	
+         client.chatMessage(SENDER, "!commands - display list of availeble commands"); 
+          client.chatMessage(SENDER, "!owner - display owner profile"); 
+           client.chatMessage(SENDER, "!info - info about bot "); 
+
+            client.chatMessage(SENDER, "‎-\n");
+
+           client.chatMessage(SENDER, "!level [your dream level] - calculates how many sets and how many keys it will cost to reach your desired level");   
+          client.chatMessage(SENDER, "!check [amount] - shows how many sets and which level you will reach for a specific amount of CS:GO keys");
+          if(method.BuyCheckingOne()) {
+         client.chatMessage(SENDER, "!buyonecheck [amount] - shows how many sets bot have from games that you dont have badge for (Counting only 1 set from each game)");
+         }
+        if(method.SellChecking()) {    
+        client.chatMessage(SENDER, "!sellcheck [amount] - shows how many sets you have that bot can buy");
+        }
+
+        client.chatMessage(SENDER, "‎-\n");       
+
+        if(method.UserBuyingWithTF2()) {
+        client.chatMessage(SENDER, "!buytf2 [amount of TF keys] - the same as !buycsgo, but you pay with TF keys");
+        }
+        if(method.UserBuyingWithRef()) {      
+        client.chatMessage(SENDER, "!buyref [amount of REF] - use this to buy sets you have not crafted yet for that amount of ref, following the current bot rate");
+        }
+        if(method.UserBuyingOne()) {   
+        client.chatMessage(SENDER, "!buyone [amount of CS:GO keys] - only use this if you are a badge collector. The bot will send one set of each game, by the current bot rate");
+        }
+        if(method.UserBuyingAny()) {
+        client.chatMessage(SENDER, "!buyany [amount of CS:GO keys] - use this to buy that amount of CS:GO keys for any sets, even from badges that has already been crafted, following the current bot rate");
+        }
+        if(method.UserBuyingWithCSGO()) {   
+        client.chatMessage(SENDER, "!buycsgo [amount of CS:GO keys] - use this to buy sets you have not crafted yet for that amount of CS:GO keys, following the current bot rate");
+        }  
+
+        client.chatMessage(SENDER, "‎-\n");    
+        
+        if(method.UserSellingWithCSGO()) {
+        client.chatMessage(SENDER, "!sellcsgo [amount of CS:GO keys] - sell your sets for CS:GO key(s)");
+        }
+        if(method.UserSellingWithTF2()) {
+        client.chatMessage(SENDER, "!selltf2 [amount of TF keys] - sell your sets for TF key(s)");
+        }   
 		
 	} else if (MSG.toUpperCase() == "!OWNER") {
         client.chatMessage(SENDER, CONFIG.OWNER);
@@ -268,6 +308,7 @@ client.on("friendMessage", (SENDER, MSG) => {
 
         } else if (MSG.toUpperCase().indexOf("!SELLCHECK") >= 0 && (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64().toString()) >= 0 || CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(parseInt(SENDER.getSteamID64())) >= 0)) {
         let n = parseInt(MSG.toUpperCase().replace("!SELLCHECK ", ""));
+        if(method.SellChecking()) {
         client.chatMessage(SENDER, "Loading inventory...");
 
         Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
@@ -310,57 +351,59 @@ client.on("friendMessage", (SENDER, MSG) => {
                 logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
             }
         });
+    }
 
-    } else if (MSG.toUpperCase().indexOf("!BUYONECHECK") >= 0) {
-        client.chatMessage(SENDER, "Loading badges...");
-        Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-            if (!ERR) {
-                let b = {}; // List with badges that CAN still be crafted
-                if (DATA) {
-                    for (let i = 0; i < Object.keys(DATA).length; i++) {
-                        if (DATA[Object.keys(DATA)[i]] < 6) {
-                            b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
+    if(method.BuyCheckingOne()) {
+        } else if (MSG.toUpperCase().indexOf("!BUYONECHECK") >= 0) {
+            client.chatMessage(SENDER, "Loading badges...");
+            Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
+                if (!ERR) {
+                    let b = {}; // List with badges that CAN still be crafted
+                    if (DATA) {
+                        for (let i = 0; i < Object.keys(DATA).length; i++) {
+                            if (DATA[Object.keys(DATA)[i]] < 6) {
+                                b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
+                            }
+                        }
+                    } else {
+                        client.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                    }
+                    // console.log(b);
+                    // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
+                    // 1: GET BOTS CARDS. DONE
+                    // 2: GET PLAYER's BADGES. DONE
+                    // 3: MAGIC
+                    let hisMaxSets = 0,
+                        botNSets = 0;
+                    // Loop for sets he has partially completed
+                    for (let i = 0; i < Object.keys(b).length; i++) {
+                        if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
+                            hisMaxSets += 5 - b[Object.keys(b)[i]].length;
                         }
                     }
+                    // Loop for sets he has never crafted
+                    for (let i = 0; i < Object.keys(botSets).length; i++) {
+                        if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
+                            if (botSets[Object.keys(botSets)[i]].length >= 1) {
+                                hisMaxSets += 1;
+                            }
+                        }
+                        botNSets += botSets[Object.keys(botSets)[i]].length;
+                    }
+                    totalBotSets = botNSets;
+                    let playThis = CONFIG.PLAYGAMES;
+                    if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
+                        playThis[0] = parseString(playThis[0], totalBotSets);
+                    }
+                    client.gamesPlayed(playThis);
+                    client.chatMessage(SENDER, "There are currently sets from " + Object.keys(botSets).length + " different games, of which you have not crafted " + hisMaxSets + ". This would cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
                 } else {
-                    client.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                    client.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                    logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
                 }
-                // console.log(b);
-                // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                // 1: GET BOTS CARDS. DONE
-                // 2: GET PLAYER's BADGES. DONE
-                // 3: MAGIC
-                let hisMaxSets = 0,
-                    botNSets = 0;
-                // Loop for sets he has partially completed
-                for (let i = 0; i < Object.keys(b).length; i++) {
-                    if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-                        hisMaxSets += 5 - b[Object.keys(b)[i]].length;
-                    }
-                }
-                // Loop for sets he has never crafted
-                for (let i = 0; i < Object.keys(botSets).length; i++) {
-                    if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-                        if (botSets[Object.keys(botSets)[i]].length >= 1) {
-                            hisMaxSets += 1;
-                        }
-                    }
-                    botNSets += botSets[Object.keys(botSets)[i]].length;
-                }
-                totalBotSets = botNSets;
-                let playThis = CONFIG.PLAYGAMES;
-                if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-                    playThis[0] = parseString(playThis[0], totalBotSets);
-                }
-                client.gamesPlayed(playThis);
-                client.chatMessage(SENDER, "There are currently sets from " + Object.keys(botSets).length + " different games, of which you have not crafted " + hisMaxSets + ". This would cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
-            } else {
-                client.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
-                logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
-            }
-        });
+            });
+        }
 
-        
 	} else if (MSG.toUpperCase() == "!STOCK") {
 		if (Object.keys(botSets).length > 0) {
 			client.chatMessage(SENDER, "⚆ Loading badges...");
@@ -508,13 +551,14 @@ client.on("friendMessage", (SENDER, MSG) => {
 					client.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
 				}
 		} else {
-			client.chatMessage(SENDER, "⚠️ Please try again later.");
+			client.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
 		}
-		
-    } else if (MSG.toUpperCase().indexOf("!SELLTF2") >= 0) {
+	
+	    } else if (MSG.toUpperCase().indexOf("!SELLTF2") >= 0) {
         if (botSets) {
                 let n = parseInt(MSG.toUpperCase().replace("!SELLTF2 ", "")),
                     amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2;
+            if(method.UserSellingWithTF2()) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
                         client.chatMessage(SENDER, "✔️ Processing your request.");
@@ -614,13 +658,15 @@ client.on("friendMessage", (SENDER, MSG) => {
                     client.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
                 }
         } else {
-            client.chatMessage(SENDER, "⚠️ Please try again later.");
+            client.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
-    
+    }
+
 	} else if (MSG.toUpperCase().indexOf("!SELLCSGO") >= 0) {
         if (botSets) {
                let n = parseInt(MSG.toUpperCase().replace("!SELLCSGO ", "")),
                     amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS;
+                    if(method.UserSellingWithCSGO()) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
                         client.chatMessage(SENDER, "✔️ Processing your request.");
@@ -722,13 +768,15 @@ client.on("friendMessage", (SENDER, MSG) => {
                     client.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
                 }
         } else {
-            client.chatMessage(SENDER, "⚠️ Please try again later.");
+            client.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
+    }
     
 	} else if (MSG.toUpperCase().indexOf("!BUYTF2") >= 0) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYTF2 ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2;
+                if(method.UserBuyingWithTF2()) {
             if (!isNaN(n) && parseInt(n) > 0) {
                 if (n <= CONFIG.MAXBUY) {
                     let t = manager.createOffer(SENDER.getSteamID64());
@@ -930,14 +978,16 @@ client.on("friendMessage", (SENDER, MSG) => {
                 client.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            client.chatMessage(SENDER, "⚠️ Please try again later.");
+            client.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
-if(method.BuyingWithRef()) {
+    }
+
 	} else if (MSG.toUpperCase().indexOf("!BUYREF") >= 0) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYREF ", ""),
 				amountofsets = parseInt(n) / CONFIG.CARDS.BUY1SETFORAMOUNTOFREF; 
 				client.chatMessage(SENDER, "You can get " + amountofsets + " set(s) for " + n + " Refined Metal");
+                if(method.UserBuyingWithRef()) {
 			if (parseInt(n)%2 == 0) {	
 				if (!isNaN(n) && parseInt(n) > 0) {
 					if (n <= CONFIG.MAXBUYREF) {
@@ -1143,7 +1193,7 @@ if(method.BuyingWithRef()) {
 				client.chatMessage(SENDER, "⚠️ Each set costs 2 ref. Try again using an even amount of Refined Metal.");
 			}
         } else {
-            client.chatMessage(SENDER, "⚠️ Please try again later.");
+            client.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 		
@@ -1151,6 +1201,7 @@ if(method.BuyingWithRef()) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYCSGO ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
+        if(method.UserBuyingWithCSGO()) {
             if (!isNaN(n) && parseInt(n) > 0) {
                 if (n <= CONFIG.MAXBUY) {
                     let t = manager.createOffer(SENDER.getSteamID64());
@@ -1352,13 +1403,15 @@ if(method.BuyingWithRef()) {
                 client.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            client.chatMessage(SENDER, "⚠️ Please try again later.");
+            client.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
+    }
 
         } else if (MSG.toUpperCase().indexOf("!BUYONE") >= 0) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYONE ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
+        if(method.UserBuyingOne()) {
             if (!isNaN(n) && parseInt(n) > 0) {
                 if (n <= CONFIG.MAXBUY) {
                     let t = manager.createOffer(SENDER.getSteamID64());
@@ -1518,12 +1571,15 @@ if(method.BuyingWithRef()) {
                 client.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            client.chatMessage(SENDER, "⚠️ Please try again later.");
+            client.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
+    }
+
     } else if (MSG.toUpperCase().indexOf("!BUYANY") >= 0) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYANY ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
+        if(method.UserBuyingAny()) {
             if (!isNaN(n) && parseInt(n) > 0) {
                 if (n <= CONFIG.MAXBUY) {
                     let t = manager.createOffer(SENDER.getSteamID64());
@@ -1615,9 +1671,12 @@ if(method.BuyingWithRef()) {
                 client.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            client.chatMessage(SENDER, "⚠️ Please try again later.");
+            client.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
+    }
     
+// START OF THE ADMIN COMMANDS 
+
     } else if (CONFIG.ADMINS.indexOf(SENDER.getSteamID64()) >= 0 || CONFIG.ADMINS.indexOf(parseInt(SENDER.getSteamID64())) >= 0) {
         // Admin commands.
         if (MSG.toUpperCase().indexOf("!BLOCK") >= 0) {
