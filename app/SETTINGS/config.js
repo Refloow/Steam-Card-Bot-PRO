@@ -47,8 +47,6 @@ module.exports = {
     MAXBUY: 50, // Max keys you can buy sets for at a time
     MAXSELL: 100, // Max keys you can sell sets for at a time
     MAXBUYGEMS: 1, // Max sack of gems you can buy sets for at a time
-
-    Buying_Sets_With_Ref_Enable: true,         // [true/false] Enable or disable | bot selling sets for ref metal in tf2
     MAXBUYREF: 100, // Max ref you can buy sets for at a time
 
     //-----------------------------------------------------------------------------------------------
@@ -88,6 +86,19 @@ module.exports = {
     //-----------------------------------------------------------------------------------------------
 
 
+// ----------------------------------------------------C-O-M-M-A-N-D-S------S-E-T-T-I-N-G-S--------------------------------------------//
+
+    buytf2_enable: true,                       // [true/false] Enable or disable | !buytf2 command      (// This command when called sell sets to user for tf2 keys)
+    selltf2_enable: true,                      // [true/false] Enable or disable | !selltf2 command     (// This command when called sell keys for sets to user)
+    buyref_enable: true,                       // [true/false] Enable or disable | !buyref command      (// This command when called sell sets to user for ref metal)
+    buyone_enable: true,                       // [true/false] Enable or disable | !buyone command      (// This command when called sell sets for keys but (gives user 1 set from each game that he hasnt crafted) - For badge collectors
+    buyany_enable: true,                       // [true/false] Enable or disable | !buyany command      (// This command when called sell any sets for keys to user without checking badges)
+    buycsgo_enable: true,                      // [true/false] Enable or disable | !buycsgo command     (// This command when called sell sets to user for csgo keys)
+    sellcsgo_enable: true,                     // [true/false] Enable or disable | !sellcsgo command    (// This command when called sell csgo keys for sets to user)
+
+    sellcheck_enable: true,                    // [true/false] Enable or disable | !sellcheck command   (// This command when called checks user inventory and gives info about sets he can sell to bot)
+    buyonecheck_enable: true,                  // [true/false] Enable or disable | !buyonecheck command (// This command when called provide info to the user about amount of sets he can buy (only one set per game (for badge collectors)))
+
     //-SETTINGS: MESSAGES
 
     EnableWelcomeMessage: true,             // [true/false] Enable or disable | Bot sending welcome message uppon accepting friend request
@@ -98,7 +109,6 @@ module.exports = {
     INFO: "Use these commands to get information about the card set bot: \n!stock [card sets in stock] \n!owner [profile]",
     OWNER: "/me https://steamcommunity.com/id/",
     SELLHELP: "You are also able to sell sets. You can do this by using !sell [amount of keys].",
-    COMMANDS: "You can use these commands: \n!buytf2 [amount of TF2 keys] \n!buycsgo [amount of CS:GO keys] \n!buyref [amount of Refined Metal] \n\n!level [desired level you want to become] \n!check [amount of keys] \n!info [information about the bot]",
 
 
     //-----------------------------------------------------------------------------------------------
