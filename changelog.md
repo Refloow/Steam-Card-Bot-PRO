@@ -2,8 +2,8 @@
 
 # 1.1.4
 - Some Fixes
-- Added new methods for enabilg and disabling commands
-- Added new configuration methods for enabilng and disabling commands
+- Added new methods for enabling and disabling commands
+- Added new configuration methods for enabling and disabling commands
 - From now on !commands command will show custom list of command depends on your configuration in config file
    (You are now able to disable some command and it wont appear in !commands info command list)
 
@@ -22,7 +22,7 @@
 
 # 1.1.3
 - Fixed saving of logs
-- Added error catcher if modules were not installerd
+- Added error catcher if modules were not installed
 
 # 1.1.2
 - Added new commands:
@@ -30,7 +30,6 @@
  2. !buyonecheck
  3. !buyone amounf_of_keys
  4. !buyany amounf_of_keys
-
 
 
 # 1.1.1
