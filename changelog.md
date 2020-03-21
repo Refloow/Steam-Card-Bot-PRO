@@ -1,5 +1,25 @@
 # Changelog
 
+# 1.1.4
+- Some Fixes
+- Added new methods for enabilg and disabling commands
+- Added new configuration methods for enabilng and disabling commands
+- From now on !commands command will show custom list of command depends on your configuration in config file
+   (You are now able to disable some command and it wont appear in !commands info command list)
+
+ List of commands that can be toggled
+
+ - !buytf2 command 
+ - !selltf2 command
+ - !buyref command
+ - !buyone command
+ - !buyany command
+ - !buycsgo command
+ - !sellcsgo command
+
+ - !sellcheck command
+ - !buyonecheck command
+
 # 1.1.3
 - Fixed saving of logs
 - Added error catcher if modules were not installerd
