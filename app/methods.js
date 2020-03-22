@@ -24,6 +24,8 @@ t = module.exports = {
         request(options, look)
     },
 
+    // Other bot functions
+
     ChatSpamProtectionEnabled: function() {
         return config.chat_spam_protection == true;
     },
@@ -66,35 +68,9 @@ t = module.exports = {
 
     // -------------------- COMMAND METHODS ----------------------------------
 
-    UserBuyingWithTF2: function() {
-        return config.buytf2_enable == true;
-    },
-
-    UserSellingWithTF2: function() {
-        return config.selltf2_enable == true;
-    },
-
-    UserBuyingWithRef: function() {
-        return config.buyref_enable == true;
-    },
-
-    UserBuyingOne: function() {
-        return config.buyone_enable == true;
-    },
-
-    UserBuyingAny: function() {
-        return config.buyany_enable == true;
-    },
-
-    UserBuyingWithCSGO: function() {
-        return config.buycsgo_enable == true;
-    },
-
-    UserSellingWithCSGO: function() {
-        return config.sellcsgo_enable == true;
-    },
-
     // Check commands methods
+
+    //-----------------------------
 
     SellChecking: function() {
         return config.sellcheck_enable == true;
@@ -102,5 +78,144 @@ t = module.exports = {
 
     BuyCheckingOne: function() {
         return config.buyonecheck_enable == true;
+    },
+
+    BuyCheckingAny: function() {
+        return config.buyanycheck_enable == true;
+    },
+
+    //-------------------------------
+
+
+    // SIMPLE BUY ------------------------------------------------------------
+
+    UserBuying: function() {
+        return config.buy_enable == true; //
+    },
+
+    UserBuyingAny: function() {
+        return config.buyany_enable == true;
+    },
+
+    UserBuyingOne: function() {
+        return config.buyone_enable == true;
+    },
+
+    // CURRENCY BUY -----------------------------------------------------------
+
+    UserBuyingWithRef: function() {
+        return config.buyref_enable == true;
+    },
+
+    UserBuyingWithHydra: function() {
+        return config.buyhydra_enable == true; //
+    },
+
+    UserBuyingWithCSGO: function() {
+        return config.buycsgo_enable == true;
+    },
+
+    UserBuyingWithTF2: function() {
+        return config.buytf2_enable == true;
+    },
+
+    UserBuyingWithGems: function() {
+        return config.buygems_enable == true; //
+    },
+
+    UserBuyingWithPUBG: function() {
+        return config.buypubg_enable == true; //
+    },
+
+    // CURRENCY BUY (For One) --------------------------------------------------
+
+    UserBuyingOneWithRef: function() {
+        return config.buyoneref_enable == true; //
+    },
+
+    UserBuyingOneWithHydra: function() {
+        return config.buyonehydra_enable == true; //
+    },
+
+    UserBuyingOneWithCSGO: function() {
+        return config.buyonecsgo_enable == true; //
+    },
+
+    UserBuyingOneWithTF2: function() {
+        return config.buyonetf2_enable == true; //
+    },
+
+    UserBuyingOneWithGems: function() {
+        return config.buyonegems_enable == true; //
+    },
+
+    UserBuyingOneWithPUBG: function() {
+        return config.buyonepubg_enable == true; //
+    },
+
+
+    // CURRENCY BUY (For Any) ----------------------------------------------------
+
+    UserBuyingAnyWithRef: function() {
+        return config.buyanyref_enable == true; //
+    },
+
+    UserBuyingAnyWithHydra: function() {
+        return config.buyanyhydra_enable == true; //
+    },
+
+    UserBuyingAnyWithCSGO: function() {
+        return config.buyanycsgo_enable == true; //
+    },
+
+    UserBuyingAnyWithTF2: function() {
+        return config.buyanytf2_enable == true; //
+    },
+
+    UserBuyingAnyWithGems: function() {
+        return config.buyanygems_enable == true; //
+    },
+
+    UserBuyingAnyWithPUBG: function() {
+        return config.buyanypubg_enable == true; //
+    },
+
+    //---------------------------------------------------------------------------------
+
+    // SELLING SECTION----------------------------------------------------------------
+
+    // SIMPLE SELL
+
+
+    UserSell: function() {
+        return config.sell_enable == true; //
+    },
+
+
+    // CURRENCY SELL ------------------------------------------------------------------
+
+    UserSellingWithRef: function() {
+        return config.sellref_enable == true; //
+    },
+
+    UserSellingWithHydra: function() {
+        return config.sellhydra_enable == true; //
+    },
+
+    UserSellingWithCSGO: function() {
+        return config.sellcsgo_enable == true;
+    },
+
+    UserSellingWithTF2: function() {
+        return config.selltf2_enable == true;
+    },
+
+    UserSellingWithGems: function() {
+        return config.sellgems_enable == true; //
+    },
+
+    UserSellingWithPUBG: function() {
+        return config.sellpubg_enable == true; //
     }
+
 }
