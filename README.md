@@ -3,6 +3,12 @@ An free open source, fully automated Level Up Bot with all features and support 
 
 - This project will receive constant updates and new features added !
 
+- Here is an announcements (posted on 3/22/2020) :
+1. Code isnt perfect rn it has some issues (*not critical errors*), i have some more work to do tomorrow il release some patches
+Hope you all having a great day !
+2. Tomorrow new detailed tutorial on seting the bot up will be added to this file.
+
+
 # DISCORD Support Server
 
 https://discord.gg/UKbGDpv
@@ -151,6 +157,14 @@ Step 5 (run the bot)
 - Click start.bat file to run bot.
 
 If there is any questions feel free to ask me on: https://steamcommunity.com/id/MajokingGames/
+
+# Support the project
+- If you like the project and the fact that is free you can support us by giving an donation.
+- We are accepting donations on:
+
+1. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
+2. Paypal: https://paypal.me/MajokingGames
+
 
 # Want Improvements ?
 
