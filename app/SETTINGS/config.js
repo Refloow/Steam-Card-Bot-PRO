@@ -23,20 +23,24 @@ module.exports = {
 
     // VALUES configuration
 
+    // THIS IS MAIN CURRENC USED FOR !BUY AND !SELL COMMANDS
 
     KEYSFROMGAME: 730, // 730 = CSGO, 440 = TF2
 
     // Rate Settings
 
     CARDS: {
-        BUY1KEYFORAMOUNTOFSETS: 18, // For instance; if set to 9 you sell 9 sets for 1 key.
-        GIVE1KEYPERAMOUNTOFSETS: 50, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
-        BUY1KEYFORAMOUNTOFSETSTF2: 19, // For instance; if set to 9 you sell 9 sets for 1 key.
-        GIVE1KEYPERAMOUNTOFSETSTF2: 50, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
-		
-		BUY1SETFORAMOUNTOFREF: 3, // For instance; if set to 1 you sell 1 sets for 2 ref.
-		BUY1GEMSFORAMOUNTOFSETS: 4, // For instance; if set to 4 you sell 4 sets for 1 sack of gems.
-		
+        BUY1KEYFORAMOUNTOFSETS: 26, // For instance; if set to 9 you sell 9 sets for 1 key.
+        GIVE1KEYPERAMOUNTOFSETS: 60, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
+        BUY1KEYFORAMOUNTOFSETSHYDRA: 12, // For instance; if set to 9 you sell 9 sets for 1 key.
+        GIVE1KEYPERAMOUNTOFSETS: 60, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
+        BUY1KEYFORAMOUNTOFSETSTF2: 16, // For instance; if set to 9 you sell 9 sets for 1 key.
+        GIVE1KEYPERAMOUNTOFSETSTF2: 20, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
+        
+        BUY1SETFORAMOUNTOFREF: 3, // For instance; if set to 1 you sell 1 sets for 2 ref.
+        BUY1GEMSFORAMOUNTOFSETS: 4, // For instance; if set to 4 you sell 4 sets for 1 sack of gems.
+        GIVE1GEMSFORAMOUNTOFSETSGEMS: 10,
+        
         MAXSETSELL: 50, // The maximum amount of sets of a kind the bot will send when !sell is used
         PEOPLETHATCANSELL: ["STEAMID64", "STEAMID64"]
     },
@@ -73,7 +77,8 @@ module.exports = {
             "Operation Phoenix Case Key",
             "Gamma Case Key",
             "Gamma 2 Case Key",
-            "Glove Case Key"
+            "Glove Case Key",
+            "Operation Hydra Case Key"
     ], // These are all keys ^ //Mann Co. Supply Crate Key//
 
 
@@ -88,27 +93,112 @@ module.exports = {
 
 // ----------------------------------------------------C-O-M-M-A-N-D-S------S-E-T-T-I-N-G-S--------------------------------------------//
 
-    buytf2_enable: true,                       // [true/false] Enable or disable | !buytf2 command      (// This command when called sell sets to user for tf2 keys)
-    selltf2_enable: true,                      // [true/false] Enable or disable | !selltf2 command     (// This command when called sell keys for sets to user)
-    buyref_enable: true,                       // [true/false] Enable or disable | !buyref command      (// This command when called sell sets to user for ref metal)
-    buyone_enable: true,                       // [true/false] Enable or disable | !buyone command      (// This command when called sell sets for keys but (gives user 1 set from each game that he hasnt crafted) - For badge collectors
-    buyany_enable: true,                       // [true/false] Enable or disable | !buyany command      (// This command when called sell any sets for keys to user without checking badges)
-    buycsgo_enable: true,                      // [true/false] Enable or disable | !buycsgo command     (// This command when called sell sets to user for csgo keys)
-    sellcsgo_enable: true,                     // [true/false] Enable or disable | !sellcsgo command    (// This command when called sell csgo keys for sets to user)
+// After seting command to false, command wont apear on !commands info command and user wont be able to use that bot command.
 
-    sellcheck_enable: true,                    // [true/false] Enable or disable | !sellcheck command   (// This command when called checks user inventory and gives info about sets he can sell to bot)
-    buyonecheck_enable: true,                  // [true/false] Enable or disable | !buyonecheck command (// This command when called provide info to the user about amount of sets he can buy (only one set per game (for badge collectors)))
+
+// Here is short turoial on how to navigate through theese settings.
+// 
+// Commands are sorted in sections, | check commands | , | buy commands | and | sell commands |
+// for easier navigation commands that include some currencys are tagged with side number like /*1*/
+// If you check all commands that have /*1*/ at the side they include ref currency in command
+// This way you can find all commands that uses one feature and disable it.
+
+// Why is sorted like this ?
+// When adding new commands its much easyer to navigate and add new things, if commands were sorted via currencys there will be mess.
+
+// /*1*/ - Commands that include refined metal
+// /*2*/ - Commands that include hydra keys
+// /*3*/ - Commands that include csgo keys
+// /*4*/ - Commands that include tf2 keys
+// /*5*/ - Commands that include gems
+// /*6*/ - Commands that include pubg
+
+
+//-----------------------------CHECK COMMANDS------------------------------------------------------------------------------------------//
+
+//----------------------------SIMPLE CHECK
+
+    sellcheck_enable: true,                    // [true/false] Enable or disable | !sellcheck command   (// This command when called checks user inventory and gives info about sets he can sell to bot)  
+    buyonecheck_enable: true,                  // [true/false] Enable or disable | !buyonecheck command
+    buyanycheck_enable: false,                  // -soon
+
+
+//-----------------------------BUY COMMANDS------------------------------------------------------------------------------------------//
+
+// ----------------------------SIMPLE BUY (!buy, !buyany, !buyone commands)
+
+    buy_enable: true,                          // [ture/false] Enable or disable | !buy command         (// This command when called sell sets for keys (main currecy that you set default is cs go keys) following current bot rate)
+    buyany_enable: true,                       // [true/false] Enable or disable | !buyany command      (// This command when called sell any sets for keys to user without checking badges) 
+    buyone_enable: true,                       // [true/false] Enable or disable | !buyone command      (// This command when called sell sets for keys but (gives user 1 set from each game that he hasnt crafted) - For badge collectors
+
+
+// ----------------------------CURRENCYS BUY (!buyref, !buyhydra, !buycsgo, !buytf2, !buygems, !buypubg)
+
+
+ /*1*/  buyref_enable: true,                    // [true/false] Enable or disable | !buyref command      (// This command when called sell sets to user for ref metal)
+ /*2*/  buyhydra_enable: true,                  // [true/false] Enable or disable | !buyhydra command    (// This command when called sell sets for user hydra keys)
+ /*3*/  buycsgo_enable: true,                   // [true/false] Enable or disable | !buycsgo command     (// This command when called sell sets to user for csgo keys)
+ /*4*/  buytf2_enable: true,                    // [true/false] Enable or disable | !buytf2 command      (// This command when called sell sets to user for tf2 keys)
+ /*5*/  buygems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buypubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+
+
+// ----------------------------CURRENCYS BUY ONE (!buyoneref, !buyonehydra, !buyonecsgo, !buyonetf2, !buyonegems, !buyonepubg)
+
+ 
+ /*1*/  buyoneref_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  buyonehydra_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*3*/  buyonecsgo_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*4*/  buyonetf2_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  buyonegems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buyonepubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+
+
+// ----------------------------CURRENCYS BUY ANY (!buyanyref, !buyanyhydra, !buyanycsgo, !buyanytf2, !buyanygems, !buyanypubg)
+
+ 
+ /*1*/  buyanyref_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  buyanyhydra_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*3*/  buyanycsgo_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*4*/  buyanytf2_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  buyanygems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buyanypubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+
+//-----------------------------------------------------------------------------------------------------------------------------------//
+
+//-----------------------------SELL COMMANDS------------------------------------------------------------------------------------------//
+
+// ----------------------------SIMPLE SELL (!sell)
+
+
+    sell_enable: true,                             // [true/false] Enable or disable | !sell command       (// This command when called sell keys for sets) - Uses main currency set at: KEYSFROMGAME
+
+
+// ----------------------------SIMPLE CURRENCYS (!sellref, !sellhydra, !sellcsgo, !selltf2, !sellgems, !sellpubg)
+
+ /*1*/  sellref_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  sellhydra_enable: true,                    // [true/false] Enable or disable | !sellhydra command   (// This command when called sell hydra cs go keys for sets to user)
+ /*3*/  sellcsgo_enable: true,                     // [true/false] Enable or disable | !sellcsgo command    (// This command when called sell csgo keys for sets to user)
+ /*4*/  selltf2_enable: true,                      // [true/false] Enable or disable | !selltf2 command     (// This command when called sell tf2 keys for sets to user)
+ /*5*/  sellgems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  sellpubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+
+
+//-------------------------------------------------------------------------------------------------------------------------------------//
+
+
+
 
     //-SETTINGS: MESSAGES
 
     EnableWelcomeMessage: true,             // [true/false] Enable or disable | Bot sending welcome message uppon accepting friend request
-    WELCOME: "Hi, this is BOT you can configure this message in config.",
+    WELCOME: "Hello ! This is Refloow's Level Up Bot use: !help or !commands to see all available commands !", // Welcome message.
 
         //IFNO COMMANDS
 
-    INFO: "Use these commands to get information about the card set bot: \n!stock [card sets in stock] \n!owner [profile]",
-    OWNER: "/me https://steamcommunity.com/id/",
-    SELLHELP: "You are also able to sell sets. You can do this by using !sell [amount of keys].",
+    INFO: "Use these commands to get information about the card set bot: \n!stock [card sets in stock] \n!owner [profile]", //Info command message
+    OWNER: "/me https://steamcommunity.com/id/", // owner command message
+    SELLHELP: "You are also able to sell sets. You can do this by using !sell [amount of keys].", // sellhelp command message
 
 
     //-----------------------------------------------------------------------------------------------
