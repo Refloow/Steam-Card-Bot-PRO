@@ -3,66 +3,113 @@ An free open source, fully automated Level Up Bot with all features and support 
 
 - This project will receive constant updates and new features added !
 
-- 3/22/2020 (Tomorrow) - 1.2.0 is comming
-
 # DISCORD Support Server
 
 https://discord.gg/UKbGDpv
 
+# Unique Features
+
+- Endless customization
+- Each command can be disabled or enabled inside of the config file
+- Commands are not case sensitive
+- Has readable and understandable deb console logs
+
+
 # Current Features
 
-#### Unique features: 
+- Auto accepting friend request
+  1. Uppon accepting friend request sending an welcome message        (Message can be set or disabled in config)
+  2. Uppon accepting friend request adding user to the selected group (Group can be set or inviting disabled inside of the config)
 
-- Commands are not case sensitive
-- Clean and understandable console log (Live feed of all actions that bot take)
-- !buyref amount_of_ref (Buying sets with refined metal from TF2) (Can be disabled in config)
-- All features have endless customization inside of the config file
+- Chat spam protection (can be disabled or enabled in config)
+  1. Uppon removing user sending him message (message can be set or disabled in config)
+  2. Notifing admin when user get removed for spaming -sending user id (user can get blocked via admin command !block) (notifications can be disabled in config)
+  3. Setting limit of messages per sec to count as spam
 
-#### Main features: 
+- Bot clearing friendlist (feature can be disabled in config)
+  1. Sending message to the user which is removed (message can be set or disabled in config)
+  2. Setting timer for removing inactive users (time can be set at config)
 
-- Auto accept friend requests.
-- Custom message uppon accepting friend request
-- Inviting user to the selected group after accepting friend request.
-- Anti spam protection. (User gets removed and admin or owner gets notified if user spams x amount of messages per sec (value can be set at config))
-- Easy to setup config (All messages and important data can be set at config)
-- Saving each accepted trade.
-- Cleaning friend list for users which are inactive for x amount of hours (value can be set in config)
-- Chat Logs :
-    1. Full logs (Saved for each day)
-    2. User Logs (Saved for each user who used bot)
-- Trade Size Limit
-- Max level you can request by !level command
-- Commenting user after the trade.
-- Declining incoming group invites.
-- Variety of commands such as:
+- CHAT LOGS
+  1. Daily chat logs (can be disabled in config)
+  2. Chat logs per user (can be disabled in config)
 
-Info Commands:
+- Commenting after trade (comment can be set or commenting disabled in config)
 
-1. !commands (Displays list of all commands that are availeble)
-2. !owner (Displays owner profile)
-3. !info (Custom info command that can be set at config)
-4. !level x (Calculation command for users who want to see how much sets they need to reach dream level)
-5. !check (Displays amount bot has to offer to user (not counting sets that user already crafted))
-6. !sellcheck
-7. !buyonecheck
-8. !stock (Displays stock of the bot)
 
-- Action Commands:
+## INFO COMMANDS such as:
 
-9. !donatesets (Command for filling bot with sets or can be used if someone wants to donate sets)
-10. !buytf2 amount_of_keys
-11. !selltf2 amount_of_keys
-12. !buyref amount_of_ref
-13. !buyone amounf_of_keys
-14.  !buyany amounf_of_keys
-15.  !buycsgo amount_of_keys
-16.  !sellcsgo amount_of_keys
+- !info (custom command)
+- !owner (showing owner profile)
+- !sellhelp (custom command)
 
-- Admin Commands:
+- !commands (- Gives out list of the commands) - List of the commands automaticaly update depends on your config and display only commands which are enabled
+- !help - Same command as !commands but it is !help instead of !commands
 
-17. !block user_id (admin command to block user from using bot due spaming)
-18. !usercheck
-19. !withdraw (command for admin to withdraw keys) 
+(You have option to disable one, or both of them, also both can be enabled, customize it how you like it !)
+
+- INTERACTION COMMANDS such as:
+
+## Checking commands
+- !check (Displays amount of sets bot has to offer to user (not counting sets that user already crafted))
+- !sellcheck (can be disabled in config) (// This command when called checks user inventory and gives info about sets he can sell to bot) 
+- !buyonecheck (can be disabled in config) 
+- !buyanycheck -soon (next update)
+- !stock (Displays stock of the bot)
+
+## Calculation commands
+
+- !level dream_level
+
+
+## BUY COMMANDS:
+
+- !buy - - - (can be disabled in config) - - - - (// This command when called sell sets for keys (main currecy that you set default is cs go keys) following current bot rate)
+- !buyany - - - (can be disabled in config) - - - - (// This command when called sell any sets for keys to user without checking badges)
+- !buyone - - - (can be disabled in config) - - - - (// This command when called sell sets for keys but (gives user 1 set from each game that he hasnt crafted) - For badge collectors
+
+- !buyref - - - (can be disabled in config) - - - - (// This command when called sell sets to user for ref metal)
+- !buyhydra - - - (can be disabled in config) - - - - (// This command when called sell sets for user hydra keys)
+- !buycsgo - - - (can be disabled in config) - - - - (// This command when called sell sets to user for csgo keys)
+- !buytf2 - - - (can be disabled in config) - - - - (// This command when called sell sets to user for tf2 keys)
+- !buygems - - - (can be disabled in config) -soon (next update)
+- !buypubg - - - (can be disabled in config) -soon (next update)
+
+- !buyoneref - - - (can be disabled in config) -soon (next update)
+- !buyonehydra - - - (can be disabled in config) -soon (next update)
+- !buyonecsgo - - - (can be disabled in config) -soon (next update)
+- !buyonetf2 - - - (can be disabled in config) -soon (next update)
+- !buyonegems - - - (can be disabled in config) -soon (next update)
+- !buyonepubg - - - (can be disabled in config) -soon (next update)
+
+- !buyanyref - - - (can be disabled in config) -soon (next update)
+- !buyanyhydra - - - (can be disabled in config) -soon (next update)
+- !buyanycsgo - - - (can be disabled in config) -soon (next update)
+- !buyanytf2 - - - (can be disabled in config) -soon (next update)
+- !buyanygems - - - (can be disabled in config) -soon (next update)
+- !buyanypubg - - - (can be disabled in config) -soon (next update)
+
+## SELL COMMANDS:
+
+- !sell - - - (can be disabled in config) - - - -  (// This command when called sell keys for sets) - Uses main currency set at: KEYSFROMGAME
+
+- !sellref - - - (can be disabled in config)
+- !sellhydra - - - (can be disabled in config) - - - - (// This command when called sell hydra cs go keys for sets to user)
+- !sellcsgo - - - (can be disabled in config) - - - - (// This command when called sell csgo keys for sets to user)
+- !selltf2 - - - (can be disabled in config) - - - - (// This command when called sell tf2 keys for sets to user)
+- !sellgems - - - (can be disabled in config) -soon (next update)
+- !sellpubg - - - (can be disabled in config) -soon (next update)
+
+## Admin commands:
+
+- !block user_id (admin command to block user from using bot due spaming)
+- !usercheck
+- !withdraw (command for admin to withdraw keys)
+- !donatesets
+
+## Others
+
+- !donatesets
 
 
 # Prerequisites (What bot require to start)
