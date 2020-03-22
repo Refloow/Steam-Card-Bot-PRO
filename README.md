@@ -3,6 +3,8 @@ An free open source, fully automated Level Up Bot with all features and support 
 
 - This project will receive constant updates and new features added !
 
+- 3/22/2020 (Tomorrow) - 1.2.0 is comming
+
 # DISCORD Support Server
 
 https://discord.gg/UKbGDpv
