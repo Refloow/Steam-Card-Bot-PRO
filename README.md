@@ -163,7 +163,6 @@ If there is any questions feel free to ask me on: https://steamcommunity.com/id/
 - We are accepting donations on:
 
 1. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
-2. Paypal: https://paypal.me/MajokingGames
 
 
 # Want Improvements ?
