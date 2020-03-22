@@ -1,5 +1,22 @@
 # Changelog
 
+# 1.2.0 Release
+
+## Short summary:
+
+- Rewrtied readme with more detailed informations and new features
+- Reworked config file to support new features and added options for future ones.
+- Updated !commands info command with all new and future commands.
+- Organized code for future updates
+  1. Sorted code 
+  2. Added new notes
+- Added methods for future command settings
+- Sorted methods in sections
+- Added !help command
+- Added !buyhydra command
+- Added !buy command
+- Added !sell command
+
 # 1.1.4
 - Some Fixes
 - Added new methods for enabling and disabling commands
