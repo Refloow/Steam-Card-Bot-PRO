@@ -16,7 +16,7 @@ module.exports = {
     //-----------------------------------------------------------------------------------------------
 
     PLAYGAMES: ["// Your custom message here for played game", 440], // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
-    ADMINS: [""], // to add admin put steam64id 
+    ADMINS: ["76561198353038739"], // to add admin put steam64id 
 
     //-----------------------------------------------------------------------------------------------
 
@@ -233,4 +233,28 @@ module.exports = {
     friend_group_inviting: true,            // [true/false] Enable or disable | Inviting user to the selected group on friend request
     INVITETOGROUPID: "",                    // Invite users to this group
 
+
+
+
+   //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//
+   //                                              //
+   //                W A R N I N G                 //
+   //                                              //
+   //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//
+
+   // RANDOM GROUP INVITES CAN ONLY BE SET TO ACCEPT OR DECLINE
+   // IF DECLINING IS ON TURN OFF THE ACCEPTING OF THE RANDOM GROUP INVITES
+   // UNPREDICTABLE ERRORS AND CRASHES CAN HAPPEN IF BOTH WERE SET ON TRUE
+   // BOTH CAN BE SET ON FALSE THAT WAY BOT WOTN RESPOND ON GROUP INVITES !
+
+   // SUMMARY: One of the 2 options always needs to be false
+   // IF both of the settings were set to false bot doesnt respond on group invites.
+
+
+    // SETTINGS: AUTO DECLINING RANDOM GROUP INVITES
+
+    decline_random_group_inv: true,         // [true/false] Enable or disable | Auto declining all incoming random group invites.
+    accept_random_group_inv: false,         // [true/false] Enable or disable | Auto accepting all incoming random group invites.
+
 }
+
