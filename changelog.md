@@ -1,5 +1,21 @@
 # Changelog
 
+# 1.2.1 Patch
+
+- Managing random group invites
+1. Option to auto decline all incoming group invites
+2. Option to auto accept all incoming group invites
+- Organized code
+- Added console logs messages when:
+ 1. User gets removed from the friendlist
+ 2. User adds us on the friendlist
+ 3. Bot checking for offline friendrequests on start.
+ 4. When bot receive incoming group invite
+ 5. When bot decline incoming group invite
+ 6. When bot accept incoming group invite
+ - Added new methods for random group invites\
+ - Fixed some issue
+
 # 1.2.0 Release
 
 ## Short summary:
