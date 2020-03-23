@@ -49,55 +49,6 @@ let client = new SteamUser(),
 
 method.check();
 
-// Spam protection logic
-
-if(method.ChatSpamProtectionEnabled()) {
-   setInterval(() => {
-          for (let i = 0; i < Object.keys(userMsgs).length; i++) {
-           if (userMsgs[Object.keys(userMsgs)[i]] > CONFIG.MAXMSGPERSEC) {
-                if(method.SpamRemoveMessageEnabled()) {
-                  client.chatMessage(Object.keys(userMsgs)[i], CONFIG.SPAMREMOVEMESSAGE);
-                }
-               client.removeFriend(Object.keys(userMsgs)[i]);
-               for (let j = 0; j < CONFIG.ADMINS.length; j++) {
-                   if(method.SpamAdminNotification()) {
-                       client.chatMessage(CONFIG.ADMINS[j], "User #" + Object.keys(userMsgs)[i] + " has been removed for spamming. To block him use !block [STEAMID64] (Command will work after adding admin commands to system.)");
-                    }
-                }
-           }
-       }
-       userMsgs = {};
-   }, 1000);
-}
-
-// Removing inactive friends
-
-if(method.removingInactiveFriendsEnabled()) {
-    setInterval(() => {
-        for (let i = 0; i < Object.keys(users).length; i++) {
-            if (users[Object.keys(users)[i]].idleforhours >= CONFIG.MAXHOURSADDED) {
-                if(method.SendingMessageToRemovedInactive()) {
-                    client.chatMessage(Object.keys(users)[i], CONFIG.REMOVEDINACTIVE);
-                }
-                client.removeFriend(Object.keys(users)[i]);
-                delete users[Object.keys(users)[i]];
-                fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
-                    if (ERR) {
-                        logger.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
-                    }
-                });
-            } else {
-                users[Object.keys(users)[i]].idleforhours += 1;
-                fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
-                    if (ERR) {
-                        logger.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
-                    }
-                });
-            }
-        }
-    }, 1000 * 60 * 60);
-}
-
 // Reading users data from users file to remove inactive friends
 
 fs.readFile("./app/UserData/Users.json", (ERR, DATA) => {
@@ -145,6 +96,7 @@ client.on("webSession", (sessionID, cookies) => {
         }
     }); 
     // Add people that added the bot while it was online.
+    logcolors.info(`| [Start] |: Checking for offline friend requests.`);
     for (let i = 0; i < Object.keys(client.myFriends).length; i++) {
         if (client.myFriends[Object.keys(client.myFriends)[i]] == 2) {
             client.addFriend(Object.keys(client.myFriends)[i]);
@@ -171,6 +123,7 @@ client.on("webSession", (sessionID, cookies) => {
                         playThis[0] = parseString(playThis[0], totalBotSets);
                     }
                     client.gamesPlayed(playThis);
+                    logcolors.true(`| [Start] |: Successfully checked for offline friend requests.`)
                 } else {
                     logcolors.fail("| [Inventory] |: An error occurred while getting bot sets: " + ERR);
                     process.exit();
@@ -186,6 +139,117 @@ community.on("sessionExpired", (ERR) => {
     logcolors.info("| [WebSession] |: Session Expired. Relogging.");
     client.webLogOn();
 });
+
+// Responding to the friend requests and inviting user to the selected group
+
+client.on("friendRelationship", (SENDER, REL) => {
+    if (REL === 2) {
+      logcolors.info(`| [Steam] | FRIEND |: USER ID: ${SENDER.getSteamID64()} added us on the friendlist.`)
+        client.addFriend(SENDER);
+    } else if (REL === 3) {
+        if(method.FriendRequestGoupInviteEnabled()) {
+            if (CONFIG.INVITETOGROUPID) {
+                 client.inviteToGroup(SENDER, CONFIG.INVITETOGROUPID);
+            }
+        }
+        if(method.SendingWelcomeMessage()) {
+            client.chatMessage(SENDER, CONFIG.WELCOME);
+        }
+    }
+});
+
+
+// Showing in logs when someone is removed from bots friendlist
+
+client.on('friendRelationship', function (SENDER, REL) {
+  if (REL == 0) {
+    logcolors.fail(`| [Steam] | FRIEND |: USER ID: ${SENDER.getSteamID64()} is no longer on our friendlist.`);
+  }
+});
+
+// Showing in logs when someone adds bot to friendlist
+
+client.on('friendRelationship', function (SENDER, REL) {
+  if (REL == 3) {
+    logcolors.true(`| [Steam] | FRIEND |: USER ID: ${SENDER.getSteamID64()} is now on our friendlist.`);
+  }
+});
+
+
+// Removing inactive friends
+
+if(method.removingInactiveFriendsEnabled()) {
+    setInterval(() => {
+        for (let i = 0; i < Object.keys(users).length; i++) {
+            if (users[Object.keys(users)[i]].idleforhours >= CONFIG.MAXHOURSADDED) {
+                if(method.SendingMessageToRemovedInactive()) {
+                    client.chatMessage(Object.keys(users)[i], CONFIG.REMOVEDINACTIVE);
+                }
+                client.removeFriend(Object.keys(users)[i]);
+                delete users[Object.keys(users)[i]];
+                fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
+                    if (ERR) {
+                        logcolors.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
+                    }
+                });
+            } else {
+                users[Object.keys(users)[i]].idleforhours += 1;
+                fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
+                    if (ERR) {
+                        logcolors.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
+                    }
+                });
+            }
+        }
+    }, 1000 * 60 * 60);
+}
+
+// Declining random group invites
+
+if(method.DecliningRandomGroupInvites()) {
+  client.on('groupRelationship', function(sid, REL) {
+      if (REL == SteamUser.EClanRelationship.Invited) {
+          logcolors.info('| [Steam] |: We were asked to join steam group #'+sid );  //cyan
+          client.respondToGroupInvite(sid, false);
+          logcolors.false('| [Steam] |: Declined incoming group invite.');
+      }
+  });
+}
+
+// Accepting random group invites
+
+if(method.AcceptingRandomGroupInvites()) {
+  client.on('groupRelationship', function(sid, REL) {
+      if (REL == SteamUser.EClanRelationship.Invited) {
+          logcolors.info('| [Steam] |: We were asked to join steam group #'+sid );  //cyan
+          client.respondToGroupInvite(sid, true);
+          logcolors.true('| [Steam] |: Accepting incoming group invite.');
+      }
+  });
+}
+
+// Spam protection logic
+
+if(method.ChatSpamProtectionEnabled()) {
+   setInterval(() => {
+          for (let i = 0; i < Object.keys(userMsgs).length; i++) {
+           if (userMsgs[Object.keys(userMsgs)[i]] > CONFIG.MAXMSGPERSEC) {
+                if(method.SpamRemoveMessageEnabled()) {
+                  client.chatMessage(Object.keys(userMsgs)[i], CONFIG.SPAMREMOVEMESSAGE);
+                }
+               client.removeFriend(Object.keys(userMsgs)[i]);
+               for (let j = 0; j < CONFIG.ADMINS.length; j++) {
+                   if(method.SpamAdminNotification()) {
+                       client.chatMessage(CONFIG.ADMINS[j], "User #" + Object.keys(userMsgs)[i] + " has been removed for spamming. To block him use !block [STEAMID64] (Command will work after adding admin commands to system.)");
+                    }
+                }
+           }
+       }
+       userMsgs = {};
+   }, 1000);
+}
+
+
 
 client.on("friendMessage", (SENDER, MSG) => {
     if (userLogs[SENDER.getSteamID64()]) {
@@ -2770,20 +2834,6 @@ client.on("friendMessage", (SENDER, MSG) => {
 	
 });
 
-client.on("friendRelationship", (SENDER, REL) => {
-    if (REL === 2) {
-        client.addFriend(SENDER);
-    } else if (REL === 3) {
-        if(method.FriendRequestGoupInviteEnabled()) {
-            if (CONFIG.INVITETOGROUPID) {
-                 client.inviteToGroup(SENDER, CONFIG.INVITETOGROUPID);
-            }
-        }
-        if(method.SendingWelcomeMessage()) {
-            client.chatMessage(SENDER, CONFIG.WELCOME);
-        }
-    }
-});
 
 manager.on("sentOfferChanged", (OFFER, OLDSTATE) => {
     if (OFFER.state == 2) {
