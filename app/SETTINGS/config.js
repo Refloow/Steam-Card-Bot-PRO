@@ -16,7 +16,7 @@ module.exports = {
     //-----------------------------------------------------------------------------------------------
 
     PLAYGAMES: ["// Your custom message here for played game", 440], // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
-    ADMINS: ["76561198353038739"], // to add admin put steam64id 
+    ADMINS: [""], // to add admin put steam64id 
 
     //-----------------------------------------------------------------------------------------------
 
