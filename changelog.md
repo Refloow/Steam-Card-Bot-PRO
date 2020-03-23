@@ -13,7 +13,7 @@
  4. When bot receive incoming group invite
  5. When bot decline incoming group invite
  6. When bot accept incoming group invite
- - Added new methods for random group invites\
+ - Added new methods for random group invites
  - Fixed some issue
 
 # 1.2.0 Release
