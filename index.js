@@ -12,7 +12,7 @@ console.log('888 T88b  88888888888   888888  888888  888888  888  888'.cyan);
 console.log('888  T88b Y8b.    888   888Y88..88PY88..88PY88b 888 d88P '.cyan);
 console.log('888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P" \n\n\n'.cyan);                              
 console.log('This bot was developed by MajokingGames'.cyan);
-console.log('Verision 1.2.0 PRO'.cyan);
+console.log('Verision 1.2.1 PRO'.cyan);
 console.log('Thanks for choosing us.'.cyan);
 console.log('This version doesnt contain UI. Login not required...'.red);
 console.log('Loading config file...'.green );
