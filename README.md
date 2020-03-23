@@ -39,6 +39,10 @@ https://discord.gg/UKbGDpv
 - CHAT LOGS
   1. Daily chat logs (can be disabled in config)
   2. Chat logs per user (can be disabled in config)
+  
+- Responding to incoming group invites (can be totaly disabled in config)
+ 1. Auto declining incoming group invites
+ 2. Auto accepting incoming group invites
 
 - Commenting after trade (comment can be set or commenting disabled in config)
 
