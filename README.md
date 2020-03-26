@@ -19,7 +19,7 @@ Hope you all having a great day !
 
 # DISCORD Support Server
 
-https://discord.gg/UKbGDpv
+https://discord.gg/MdFZrT6
 
 # Unique Features
 
