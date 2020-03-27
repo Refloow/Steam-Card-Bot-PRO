@@ -11,7 +11,7 @@ An free open source, fully automated Level Up Bot with all features and support 
 
 - This project will receive constant updates and new features added !
 
-- Here is an announcements (posted on 3/25/2020) :
+- Here is an announcements:
 1. Code isnt perfect rn it has some issues (*not critical errors*), i have some more work to do tomorrow il release some patches
 Hope you all having a great day !
 2. Tomorrow new detailed tutorial on seting the bot up will be added to this file.
