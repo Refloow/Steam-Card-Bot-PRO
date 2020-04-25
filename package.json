@@ -5,6 +5,10 @@
     "main": "index.js",
     "author": "Refloow -MajokingGames - https://steamcommunity.com/id/MajokingGames/",
     "license": "MIT",
+        "bugs": {
+        "url": "https://github.com/Refloow/Steam-Card-Bot-PRO/issues"
+    },
+    "homepage": "https://github.com/Refloow/Steam-Card-Bot-PRO/blob/master/README.md",
     "dependencies": {
         "steam-user": "^3.29.1",
         "steamcommunity": "^3.40.0",
