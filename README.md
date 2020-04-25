@@ -16,6 +16,15 @@ An free open source, fully automated Level Up Bot with all features and support 
 Hope you all having a great day !
 2. Tomorrow new detailed tutorial on seting the bot up will be added to this file.
 
+# Note:
+To everyone who plan to sell our project by stating that they coded it or that they sell edited version. Project is licenced under the MIT licence
+
+"The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software."
+
+This means that if you plan to sell our project to make quick buck please keep the copyright notice and copy of oreginal licence. In case of breaking licencing tearms we may take legal charges against you.
+
+Project is made open source and free for all. We cant prohibit reselling of our project but if you do please follow the licencing tearms.
 
 # DISCORD Support Server
 
