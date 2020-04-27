@@ -188,6 +188,4 @@ If there is any questions feel free to ask me on: https://steamcommunity.com/id/
 
 # Want Improvements ?
 
-If you have some requests feel free to contact me : https://steamcommunity.com/id/MajokingGames/ i can code custom features to the Bot.
-
-This project is licensed under the MIT License - see the LICENSE file for more details
+If you have some private requests feel free to contact main dev : https://steamcommunity.com/id/MajokingGames/
