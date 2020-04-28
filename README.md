@@ -12,7 +12,7 @@
 [![Language](https://img.shields.io/badge/language-JavaScript-yellow.svg)](https://en.wikipedia.org/wiki/JavaScript)
 [![Steam](https://img.shields.io/badge/steam-donate-yellow.svg)](https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti)
 
-# About
+# About 
 
 Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more !
 
