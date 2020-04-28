@@ -195,3 +195,7 @@ If there is any questions feel free to ask me on: https://steamcommunity.com/id/
 
 If you have some private requests feel free to contact main dev : https://steamcommunity.com/id/MajokingGames/
 Or mail at refloowcontact@gmail.com
+
+<p align="center">
+<img width="300" height="300" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
+</p>
