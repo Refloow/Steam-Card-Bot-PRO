@@ -1,12 +1,6 @@
 <p align="center">
-<img width="200" height="200" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
+<img width="150" height="150" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
 </p>
-
-
-# Steam Card Bot PRO
-
-Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more !
-
 
 ![GitHub package version](https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg)
 [![GitHub forks](https://img.shields.io/github/forks/Refloow/Steam-Card-Bot-PRO.svg?style=plastic)](https://github.com/Refloow/Steam-Card-Bot-PRO/network)
@@ -14,6 +8,10 @@ Steam Card Bot PRO is free open source, fully automated Level Up Bot with all fe
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)](https://raw.githubusercontent.com/Refloow/Steam-Card-Bot-PRO/master/LICENSE)
 [![Language](https://img.shields.io/badge/language-JavaScript-yellow.svg)](https://en.wikipedia.org/wiki/JavaScript)
 [![Steam](https://img.shields.io/badge/steam-donate-yellow.svg)](https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti)
+
+# Steam Card Bot PRO
+
+Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more !
 
 
 - This project will receive constant updates and new features added !
