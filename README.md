@@ -1,5 +1,11 @@
-# Steam-Card-Bot-PRO
-An free open source, fully automated Level Up Bot with all features and support + much more !
+<p align="center">
+<img width="300" height="300" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
+</p>
+
+
+# Steam Card Bot PRO
+
+Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more !
 
 
 ![GitHub package version](https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg)
