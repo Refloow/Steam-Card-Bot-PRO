@@ -1,6 +1,4 @@
-<p align="center">
-<img width="150" height="150" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
-</p>
+
 <p align="center">
 <img width="1000" height="150" src="http://www.picturetopeople.org/out/picturetopeople.org-cec43689f546d277bd05e9214ce5fb304dc838b11701c75f8d.png">
 </p>
