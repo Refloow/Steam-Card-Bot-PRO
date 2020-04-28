@@ -1,3 +1,6 @@
+<p align="center">
+<img width="100" height="100" src="https://steamcdn-a.akamaihd.net/steam/news/10946/news_post.jpg?t=1372214689">
+</p>
 
 <p align="center">
 <img width="1000" height="150" src="http://www.picturetopeople.org/out/picturetopeople.org-cec43689f546d277bd05e9214ce5fb304dc838b11701c75f8d.png">
