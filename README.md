@@ -1,5 +1,8 @@
 <p align="center">
-<img width="1000" height="150" src="https://github.com/d0biar/skdsajl/blob/master/ProjectImages/Steam-Card-Bot-PRO.png">
+<img width="150" height="150" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
+</p>
+<p align="center">
+<img width="600" height="100" src="https://github.com/d0biar/skdsajl/blob/master/ProjectImages/Steam-Card-Bot-PRO.png">
 </p>
 
 ![GitHub package version](https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg)
@@ -195,7 +198,3 @@ If there is any questions feel free to ask me on: https://steamcommunity.com/id/
 
 If you have some private requests feel free to contact main dev : https://steamcommunity.com/id/MajokingGames/
 Or mail at refloowcontact@gmail.com
-
-<p align="center">
-<img width="300" height="300" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
-</p>
