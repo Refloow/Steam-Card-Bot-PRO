@@ -1,5 +1,5 @@
 <p align="center">
-<img width="300" height="300" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
+<img width="250" height="250" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
 </p>
 
 
