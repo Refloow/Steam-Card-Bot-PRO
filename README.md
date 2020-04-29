@@ -11,6 +11,7 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)](https://raw.githubusercontent.com/Refloow/Steam-Card-Bot-PRO/master/LICENSE)
 [![Language](https://img.shields.io/badge/-Node.js-green)](https://en.wikipedia.org/wiki/Node.js)
 [![Language](https://img.shields.io/badge/language-JavaScript-yellow.svg)](https://en.wikipedia.org/wiki/JavaScript)
+[![Support](https://img.shields.io/discord/690327113039085600)](https://discord.gg/XxvjjPs)
 [![Steam](https://img.shields.io/badge/steam-donate-yellow.svg)](https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti)
 
 # About
