@@ -5,6 +5,13 @@
 <img width="600" height="100" src="https://github.com/d0biar/skdsajl/blob/master/ProjectImages/Steam-Card-Bot-PRO.png">
 </p>
 
+# About
+
+Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more !
+
+
+- This project will receive constant updates and new features added !
+
 ![GitHub package version](https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg)
 [![GitHub forks](https://img.shields.io/github/forks/Refloow/Steam-Card-Bot-PRO.svg?style=plastic)](https://github.com/Refloow/Steam-Card-Bot-PRO/network)
 [![GitHub stars](https://img.shields.io/github/stars/Refloow/Steam-Card-Bot-PRO.svg?style=plastic)](https://github.com/Refloow/Steam-Card-Bot-PRO/stargazers)
@@ -14,17 +21,6 @@
 [![Language](https://img.shields.io/badge/language-JavaScript-yellow.svg)](https://en.wikipedia.org/wiki/JavaScript)
 [![Steam](https://img.shields.io/badge/steam-donate-yellow.svg)](https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti)
 
-# About
-
-Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more !
-
-
-- This project will receive constant updates and new features added !
-
-- Here is an announcements:
-1. Code isnt perfect rn it has some issues (*not critical errors*), i have some more work to do tomorrow il release some patches
-Hope you all having a great day !
-2. Tomorrow new detailed tutorial on seting the bot up will be added to this file.
 
 # Note:
 To everyone who plan to sell our project by stating that they coded it or that they sell edited version. Project is licensed under the MIT license
