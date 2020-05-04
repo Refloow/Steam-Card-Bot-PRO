@@ -47,28 +47,28 @@ https://discord.gg/XxvjjPs
 
 # Current Features
 
-- Auto accepting friend request
+### Auto accepting friend request
   1. Uppon accepting friend request sending an welcome message        (Message can be set or disabled in config)
   2. Uppon accepting friend request adding user to the selected group (Group can be set or inviting disabled inside of the config)
 
-- Chat spam protection (can be disabled or enabled in config)
+### Chat spam protection (can be disabled or enabled in config)
   1. Uppon removing user sending him message (message can be set or disabled in config)
   2. Notifing admin when user get removed for spaming -sending user id (user can get blocked via admin command !block) (notifications can be disabled in config)
   3. Setting limit of messages per sec to count as spam
 
-- Bot clearing friendlist (feature can be disabled in config)
+### Bot clearing friendlist (feature can be disabled in config)
   1. Sending message to the user which is removed (message can be set or disabled in config)
   2. Setting timer for removing inactive users (time can be set at config)
 
-- CHAT LOGS
+### CHAT LOGS
   1. Daily chat logs (can be disabled in config)
   2. Chat logs per user (can be disabled in config)
   
-- Responding to incoming group invites (can be totaly disabled in config)
+### Responding to incoming group invites (can be totaly disabled in config)
   1. Auto declining incoming group invites
   2. Auto accepting incoming group invites
 
-- Commenting after trade (comment can be set or commenting disabled in config)
+### Commenting after trade (comment can be set or commenting disabled in config)
 
 
 ## INFO COMMANDS such as:
