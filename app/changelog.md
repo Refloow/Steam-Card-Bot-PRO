@@ -1,5 +1,13 @@
 # Changelog
 
+# 1.3.0 Release
+
+- Fixed command order issue (not calling commands properly) * important
+- Added additional error handlers for modules
+- Added more detailed dev console logs
+- Added more detailed comments for developers
+
+
 # 1.2.1 Patch
 
 - Managing random group invites
