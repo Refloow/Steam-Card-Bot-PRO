@@ -47,6 +47,12 @@ https://discord.gg/XxvjjPs
 
 # Current Features
 
+### Customization
+
+Enable feature by setting `true` or disable it by setting `false` in `config.js`
+- `TRUE` = Enabled
+- `FALSE` = Disabled
+
 ### Auto accepting friend request
   1. Uppon accepting friend request sending an welcome message        (Message can be set or disabled in config)
   2. Uppon accepting friend request adding user to the selected group (Group can be set or inviting disabled inside of the config)
