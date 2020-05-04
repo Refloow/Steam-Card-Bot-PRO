@@ -1,9 +1,30 @@
 // We strongly recommend not editing stuff that is in this file.
 
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+/* 
+  Here is contact info: refloowlibrarycontact@gmail.com
+  or main dev steam: https://steamcommunity.com/id/MajokingGames/
+
+*/
+
+try {
+    // Checking if module colors is installed
+    colors = require('colors');
+    // Checking if module moment is installed
+    moment = require('moment');
+// Catching error
+} catch (ex) {
+    // Displaying error message
+    console.log('\n\n\n | [Modules] |: Missing dependencies. Run install.bat file or use npm install.\n\n\n');
+    console.log(ex);
+    process.exit(1);
+}
+
+// Importing required files
 const package = require('./../package.json');
 const config = require('./SETTINGS/config.js');
-const colors = require('colors');
-const moment = require('moment');
+
 
 t = module.exports = {
     
@@ -231,3 +252,11 @@ t = module.exports = {
     }
 
 }
+
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+/* 
+  Here is contact info: refloowlibrarycontact@gmail.com
+  or main dev steam: https://steamcommunity.com/id/MajokingGames/
+
+*/
