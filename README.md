@@ -153,6 +153,7 @@ https://discord.gg/XxvjjPs
 # Essentials
 - Steam Account
 - Shared Secret code ([What is ?](https://searchsecurity.techtarget.com/definition/shared-secret) | [How to get it on IOS ?](https://forums.backpack.tf/topic/45995-guide-how-to-get-your-shared-secret-from-ios-device-steam-mobile/) | [How to get it on android ?](https://forums.backpack.tf/topic/46354-guide-how-to-find-the-steam-identity_secret-on-an-android-phone/))
+- Steam Account API: API Key can be retrieved at https://steamcommunity.com/dev/apikey
 
 # Detailed YouTube Video Tutorial
 
