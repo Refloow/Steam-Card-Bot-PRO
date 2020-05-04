@@ -1,7 +1,23 @@
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+/* 
+  Here is contact info: refloowlibrarycontact@gmail.com
+  or main dev steam: https://steamcommunity.com/id/MajokingGames/
+
+*/
 
 // This here is for dev log chat colors and formating at all in CMD logs.
 
-const winston = require('winston');
+try {
+    // Checking if module winston is correctly installed
+    winston = require('winston');
+} catch (ex) {
+  // Loging error 
+    console.log('\n\n\n | [Modules] |: Missing dependencies. Run install.bat file or use npm install.\n\n\n');
+    console.log(ex);
+    process.exit(1);
+}
+
 const level ={
   false: 0,
   true: 1,
@@ -31,3 +47,11 @@ const logger = module.exports = winston.createLogger({
   ],
   level: 'info'
 });
+
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+/* 
+  Here is contact info: refloowlibrarycontact@gmail.com
+  or main dev steam: https://steamcommunity.com/id/MajokingGames/
+
+*/
