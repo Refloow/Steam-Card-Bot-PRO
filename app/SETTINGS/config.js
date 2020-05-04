@@ -1,4 +1,12 @@
 module.exports = {
+	
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+/* 
+  Here is contact info: refloowlibrarycontact@gmail.com
+  or main dev steam: https://steamcommunity.com/id/MajokingGames/
+
+*/
 
     // Account Credentials AREA
 
