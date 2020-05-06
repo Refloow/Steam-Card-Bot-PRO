@@ -16,7 +16,7 @@ Steam Card Bot PRO is free open source, fully automated Level Up Bot with all fe
 ![GitHub package version](https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg)
 [![GitHub forks](https://img.shields.io/github/forks/Refloow/Steam-Card-Bot-PRO.svg?style=plastic)](https://github.com/Refloow/Steam-Card-Bot-PRO/network)
 [![GitHub stars](https://img.shields.io/github/stars/Refloow/Steam-Card-Bot-PRO.svg?style=plastic)](https://github.com/Refloow/Steam-Card-Bot-PRO/stargazers)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)](https://raw.githubusercontent.com/Refloow/Steam-Card-Bot-PRO/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)](https://raw.githubusercontent.com/Refloow/Steam-Card-Bot-PRO/master/LICENSE) 
 [![Support](https://img.shields.io/discord/690327113039085600)](https://discord.gg/XxvjjPs)
 [![Language](https://img.shields.io/badge/Uses-Node.js-green)](https://en.wikipedia.org/wiki/Node.js)
 [![Language](https://img.shields.io/badge/language-JavaScript-yellow.svg)](https://en.wikipedia.org/wiki/JavaScript)
