@@ -42,7 +42,7 @@ https://discord.gg/XxvjjPs
 - Endless customization
 - Each command can be disabled or enabled inside of the config file
 - Commands are not case sensitive
-- Has readable and understandable deb console logs
+- Has readable and understandable dev console logs
 
 
 # Current Features
