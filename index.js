@@ -13,7 +13,7 @@ try {
   colors = require('colors');
 } catch (ex) {
   // If modules are not installed showing an clear error message to user.
-  console.log('| [Modules] |: Missing dependencies. Install a version with dependecies or use npm install.');
+  console.log(`\n\n\n| [Modules] |: Missing dependencies. Install a version with dependecies or use npm install. (run install.bat file) \n\n\n`);
   console.log(ex);
   process.exit(1);
 }
