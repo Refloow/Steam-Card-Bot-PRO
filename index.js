@@ -18,11 +18,6 @@ try {
   process.exit(1);
 }
 
-// Starting app file
-
-require('./app/app.js');
-
-
 // Basic display information on app start
 
 console.log('8888888b.          .d888888                              '.cyan);
@@ -42,6 +37,11 @@ console.log('Starting LevelUp bot...'.green );
 console.log('If bot doesnt start in next 1 minute steam is down.\n\n'.green );
 
 // Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+// Starting app file
+
+require('./app/app.js');
+
 
 /* 
   Here is contact info: refloowlibrarycontact@gmail.com
