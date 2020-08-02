@@ -7,7 +7,7 @@
 
 # About
 
-Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more ! 
+Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more !
 
 
 - This project will receive constant updates and new features added !
