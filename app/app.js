@@ -1,4 +1,4 @@
-// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+/ Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
 
 /* 
   Here is contact info: refloowlibrarycontact@gmail.com
@@ -33,7 +33,7 @@ try {
 let Utils = require("../app/utils.js"),
     method = require('./methods'),
     CONFIG = require("../app/SETTINGS/config.js"),
-    logcolors= require("../app/logcolors.js")
+    logcolors = require("../app/logcolors.js"),
     allCards = {},
     botSets = {},
     users = {},
@@ -59,6 +59,10 @@ let refloow = new SteamUser(),
 
 method.check();
 
+// Running validatelogininfo method to check if username and password were set in config
+
+method.validatelogininfo();
+
 // Reading users data from users file to remove inactive friends
 
 fs.readFile("./app/UserData/Users.json", (ERR, DATA) => {
@@ -74,9 +78,9 @@ fs.readFile("./app/UserData/Users.json", (ERR, DATA) => {
 Utils.getCardsInSets((ERR, DATA) => {
     if (!ERR) {
         allCards = DATA;
-        logcolors.info("| [Inventory] |: Card data loaded. [" + Object.keys(DATA).length + "]");
+        logcolors.info("| [Steam] |: Card data loaded. [" + Object.keys(DATA).length + "]");
     } else {
-        logcolors.fail("| [Inventory] |: An error occurred while getting cards: " + ERR);
+        logcolors.fail("| [Steam] |: An error occurred while getting card data: " + ERR);
     }
 });
 
@@ -265,6 +269,9 @@ if(method.ChatSpamProtectionEnabled()) {
 // Messages & Commands
 
 refloow.on("friendMessage", (SENDER, MSG) => {
+  if(method.RefloowChat()) {
+    logcolors.new("| [RefloowChat] |: " + SENDER.getSteamID64() + " |: " + MSG)
+  }
     if (userLogs[SENDER.getSteamID64()]) {
         userLogs[SENDER.getSteamID64()].push(MSG);
     } else {
@@ -280,6 +287,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
     }
     if(method.DailyChatLogsEnabled()) {
         chatLogs += SENDER.getSteamID64() + " : " + MSG + "\n";
+  
         fs.writeFile("./app/ChatLogs/FullLogs/log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".txt", chatLogs, (ERR) => {
             if (ERR) {
                 logcolors.fail("| [Users] |: An error occurred while writing FullLogs file: " + ERR);
@@ -303,246 +311,172 @@ refloow.on("friendMessage", (SENDER, MSG) => {
         userMsgs[SENDER.getSteamID64()] = 1;
     }
 
-    if (MSG.toUpperCase() == "!COMMANDS") {
-         refloow.chatMessage(SENDER, "!commands - display list of availeble commands");
-          refloow.chatMessage(SENDER, "!help - display list of availeble commands");  
-           refloow.chatMessage(SENDER, "!owner - display owner profile"); 
-            refloow.chatMessage(SENDER, "!info - info about bot ");
+  
+   // !commands, !help command 
 
-            refloow.chatMessage(SENDER, "!level [your dream level] - calculates how many sets and how many keys it will cost to reach your desired level");   
-           refloow.chatMessage(SENDER, "!check [amount] - shows how many sets and which level you will reach for a specific amount of CS:GO keys"); 
+    switch (MSG.toUpperCase()) {
+    case "!COMMANDS":
+    case "!HELP": 
+         refloow.chatMessage(SENDER, "!commands - display list of availeble commands\n");
+          refloow.chatMessage(SENDER, "!help - display list of availeble commands\n");  
+           refloow.chatMessage(SENDER, "!owner - display owner profile\n"); 
+            refloow.chatMessage(SENDER, "!info - info about bot \n");
+             refloow.chatMessage(SENDER, "!rate - current bot prices\n");
+              refloow.chatMessage(SENDER, "!price - current bot prices\n");
+
+            refloow.chatMessage(SENDER, "!level [your dream level] - calculates how many sets and how many keys it will cost to reach your desired level\n");   
+           refloow.chatMessage(SENDER, "!check [amount] - shows how many sets and which level you will reach for a specific amount of CS:GO keys\n"); 
         if(method.SellChecking()) {
-          refloow.chatMessage(SENDER, "!sellcheck command - info about bot ");
+          refloow.chatMessage(SENDER, "!sellcheck command - info about bot \n");
         }
         if(method.BuyCheckingOne()) { 
-          refloow.chatMessage(SENDER, "!buyonecheck [amount] - shows how many sets bot have from games that you dont have badge for (Counting only 1 set from each game) ");
+          refloow.chatMessage(SENDER, "!buyonecheck [amount] - shows how many sets bot have from games that you dont have badge for (Counting only 1 set from each game) \n");
         }
         if(method.BuyCheckingAny()) { 
-          refloow.chatMessage(SENDER, "!buyanycheck command unavailable ");
+          refloow.chatMessage(SENDER, "!buyanycheck command unavailable \n");
         }
                       refloow.chatMessage(SENDER, "‎-\n");
 
         if(method.UserBuying()) {
-           refloow.chatMessage(SENDER, "!buy [amount of keys] - use this to buy card sets with main bot currency which is set. ");
+           refloow.chatMessage(SENDER, "!buy [amount of keys] - use this to buy card sets with main bot currency which is set. \n");
         }
         if(method.UserBuyingAny()) { 
-           refloow.chatMessage(SENDER, "!buyany [amount of CS:GO keys] - use this to buy that amount of CS:GO keys for any sets, even from badges that has already been crafted, following the current bot rate ");
+           refloow.chatMessage(SENDER, "!buyany [amount of CS:GO keys] - use this to buy that amount of CS:GO keys for any sets, even from badges that has already been crafted, following the current bot rate \n");
         }
         if(method.UserBuyingOne()) { 
-           refloow.chatMessage(SENDER, "!buyone [amount of CS:GO keys] - only use this if you are a badge collector. The bot will send one set of each game, by the current bot rate ");
+           refloow.chatMessage(SENDER, "!buyone [amount of CS:GO keys] - only use this if you are a badge collector. The bot will send one set of each game, by the current bot rate \n");
         } 
                        refloow.chatMessage(SENDER, "‎-\n");
 
         if(method.UserBuyingWithRef()) {
-           refloow.chatMessage(SENDER, "!buyref [amount of REF] - use this to buy sets you have not crafted yet for that amount of ref, following the current bot rate ");
+           refloow.chatMessage(SENDER, "!buyref [amount of REF] - use this to buy sets you have not crafted yet for that amount of ref, following the current bot rate \n");
         }
         if(method.UserBuyingWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyhydra - info about bot ");
+           refloow.chatMessage(SENDER, "!buyhydra - info about bot \n");
         } 
         if(method.UserBuyingWithCSGO()) {  
-           refloow.chatMessage(SENDER, "!buycsgo - info about bot ");
+           refloow.chatMessage(SENDER, "!buycsgo - info about bot \n");
         } 
         if(method.UserBuyingWithTF2()) {
-           refloow.chatMessage(SENDER, "!buytf2 [amount of TF keys] - the same as !buycsgo, but you pay with TF keys ");
+           refloow.chatMessage(SENDER, "!buytf2 [amount of TF keys] - the same as !buycsgo, but you pay with TF keys \n");
         } 
         if(method.UserBuyingWithGems()) {  
-           refloow.chatMessage(SENDER, "!buygems - command unavailable ");
+           refloow.chatMessage(SENDER, "!buygems - command unavailable \n");
         } 
         if(method.UserBuyingWithPUBG()) {   
-           refloow.chatMessage(SENDER, "!buypubg - command unavailable ");
+           refloow.chatMessage(SENDER, "!buypubg - command unavailable \n");
         }
                        refloow.chatMessage(SENDER, "‎-\n"); 
 
         if(method.UserBuyingOneWithRef()) {
-           refloow.chatMessage(SENDER, "!buyoneref - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyoneref - command unavailable \n");
         }
         if(method.UserBuyingOneWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyonehydra - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyonehydra - command unavailable \n");
         }
         if(method.UserBuyingOneWithCSGO()) { 
-           refloow.chatMessage(SENDER, "!buyonecsgo - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyonecsgo - command unavailable \n");
         }
         if(method.UserBuyingOneWithTF2()) { 
-           refloow.chatMessage(SENDER, "!buyonetf2 - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyonetf2 - command unavailable \n");
         }
         if(method.UserBuyingOneWithGems()) { 
-           refloow.chatMessage(SENDER, "!buyonegems - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyonegems - command unavailable \n");
         }
         if(method.UserBuyingOneWithPUBG()) { 
-           refloow.chatMessage(SENDER, "!buyonepubg - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyonepubg - command unavailable \n");
         }
                        refloow.chatMessage(SENDER, "‎-\n");
 
         if(method.UserBuyingAnyWithRef()) {
-           refloow.chatMessage(SENDER, "!buyanyref - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyanyref - command unavailable \n");
         }
         if(method.UserBuyingAnyWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyanyhydra - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyanyhydra - command unavailable \n");
         }
         if(method.UserBuyingAnyWithCSGO()) { 
-           refloow.chatMessage(SENDER, "!buyanycsgo - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyanycsgo - command unavailable \n");
         }
         if(method.UserBuyingAnyWithTF2()) { 
-           refloow.chatMessage(SENDER, "!buyanytf2 - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyanytf2 - command unavailable \n");
         }
         if(method.UserBuyingAnyWithGems()) { 
-           refloow.chatMessage(SENDER, "!buyanygems - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyanygems - command unavailable \n");
         }
         if(method.UserBuyingAnyWithPUBG()) { 
-           refloow.chatMessage(SENDER, "!buyanypubg - command unavailable ");
+           refloow.chatMessage(SENDER, "!buyanypubg - command unavailable \n");
         } 
                        refloow.chatMessage(SENDER, "‎-\n");
 
         if(method.UserSell()) {
-           refloow.chatMessage(SENDER, "!sell - [amount of keys] - sell your sets for BOT MAIN CURRENCY key(s) ");
+           refloow.chatMessage(SENDER, "!sell - [amount of keys] - sell your sets for BOT MAIN CURRENCY key(s) \n");
         } 
         if(method.UserSellingWithRef()) {
-           refloow.chatMessage(SENDER, "!sellref - command unavailable ");
+           refloow.chatMessage(SENDER, "!sellref - command unavailable \n");
         } 
         if(method.UserSellingWithHydra()) { 
-           refloow.chatMessage(SENDER, "!sellhydra [amount of CS:GO Hydra keys] - sell your sets for CS:GO Hydra key(s) ");
+           refloow.chatMessage(SENDER, "!sellhydra [amount of CS:GO Hydra keys] - sell your sets for CS:GO Hydra key(s) \n");
         } 
         if(method.UserSellingWithCSGO()) {  
-           refloow.chatMessage(SENDER, "!sellcsgo [amount of CS:GO keys] - sell your sets for CS:GO key(s) ");
+           refloow.chatMessage(SENDER, "!sellcsgo [amount of CS:GO keys] - sell your sets for CS:GO key(s) \n");
         } 
         if(method.UserSellingWithTF2()) { 
-           refloow.chatMessage(SENDER, "!selltf2 [amount of TF keys] - sell your sets for TF key(s) ");
+           refloow.chatMessage(SENDER, "!selltf2 [amount of TF keys] - sell your sets for TF key(s) \n");
         } 
         if(method.UserSellingWithGems()) {
-           refloow.chatMessage(SENDER, "!sellgems - command unavailable ");
+           refloow.chatMessage(SENDER, "!sellgems - command unavailable \n");
         } 
         if(method.UserSellingWithPUBG()) {  
-           refloow.chatMessage(SENDER, "!sellpubg - command unavailable ");
+           refloow.chatMessage(SENDER, "!sellpubg - command unavailable \n");
         }
+        break
+        break
+      }
 
+  // !PRICE, !PRICES, !RATE commands
 
-      }  else if (MSG.toUpperCase() == "!HELP") {
-         refloow.chatMessage(SENDER, "!commands - display list of availeble commands");
-          refloow.chatMessage(SENDER, "!help - display list of availeble commands");  
-           refloow.chatMessage(SENDER, "!owner - display owner profile"); 
-            refloow.chatMessage(SENDER, "!info - info about bot ");
+    switch (MSG.toUpperCase()) { case "!PRICE": case "!PRICES": case "!RATE":
 
-            refloow.chatMessage(SENDER, "!level [your dream level] - calculates how many sets and how many keys it will cost to reach your desired level");   
-           refloow.chatMessage(SENDER, "!check [amount] - shows how many sets and which level you will reach for a specific amount of CS:GO keys"); 
-        if(method.SellChecking()) {
-          refloow.chatMessage(SENDER, "!sellcheck command - info about bot ");
-        }
-        if(method.BuyCheckingOne()) { 
-          refloow.chatMessage(SENDER, "!buyonecheck [amount] - shows how many sets bot have from games that you dont have badge for (Counting only 1 set from each game) ");
-        }
-        if(method.BuyCheckingAny()) { 
-          refloow.chatMessage(SENDER, "!buyanycheck command unavailable ");
-        }
-                      refloow.chatMessage(SENDER, "‎-\n");
+        refloow.chatMessage(SENDER, `The current prices are:\n` +
+                                    CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + ` sets for 1 CS:GO key\n` +
+                                    CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + ` sets for 1 Hydra key\n` +
+                                    CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 + ` sets for 1 TF key\n\n` +
 
-        if(method.UserBuying()) {
-           refloow.chatMessage(SENDER, "!buy [amount of keys] - use this to buy card sets with main bot currency which is set. ");
-        }
-        if(method.UserBuyingAny()) { 
-           refloow.chatMessage(SENDER, "!buyany [amount of CS:GO keys] - use this to buy that amount of CS:GO keys for any sets, even from badges that has already been crafted, following the current bot rate ");
-        }
-        if(method.UserBuyingOne()) { 
-           refloow.chatMessage(SENDER, "!buyone [amount of CS:GO keys] - only use this if you are a badge collector. The bot will send one set of each game, by the current bot rate ");
-        } 
-                       refloow.chatMessage(SENDER, "‎-\n");
+                                    ` Also, we're buying ` + CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS + ` sets for 1 CS:GO key\n` +
+                                    CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSHYDRA + ` sets for 1 Hydra key\n` +
+                                    CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2 + ` sets for 1 TF key\n`);
+    break
+    
+    break
+    
+    break
 
-        if(method.UserBuyingWithRef()) {
-           refloow.chatMessage(SENDER, "!buyref [amount of REF] - use this to buy sets you have not crafted yet for that amount of ref, following the current bot rate ");
-        }
-        if(method.UserBuyingWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyhydra - info about bot ");
-        } 
-        if(method.UserBuyingWithCSGO()) {  
-           refloow.chatMessage(SENDER, "!buycsgo - info about bot ");
-        } 
-        if(method.UserBuyingWithTF2()) {
-           refloow.chatMessage(SENDER, "!buytf2 [amount of TF keys] - the same as !buycsgo, but you pay with TF keys ");
-        } 
-        if(method.UserBuyingWithGems()) {  
-           refloow.chatMessage(SENDER, "!buygems - command unavailable ");
-        } 
-        if(method.UserBuyingWithPUBG()) {   
-           refloow.chatMessage(SENDER, "!buypubg - command unavailable ");
-        }
-                       refloow.chatMessage(SENDER, "‎-\n"); 
+// !Owner command
 
-        if(method.UserBuyingOneWithRef()) {
-           refloow.chatMessage(SENDER, "!buyoneref - command unavailable ");
-        }
-        if(method.UserBuyingOneWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyonehydra - command unavailable ");
-        }
-        if(method.UserBuyingOneWithCSGO()) { 
-           refloow.chatMessage(SENDER, "!buyonecsgo - command unavailable ");
-        }
-        if(method.UserBuyingOneWithTF2()) { 
-           refloow.chatMessage(SENDER, "!buyonetf2 - command unavailable ");
-        }
-        if(method.UserBuyingOneWithGems()) { 
-           refloow.chatMessage(SENDER, "!buyonegems - command unavailable ");
-        }
-        if(method.UserBuyingOneWithPUBG()) { 
-           refloow.chatMessage(SENDER, "!buyonepubg - command unavailable ");
-        }
-                       refloow.chatMessage(SENDER, "‎-\n");
-
-        if(method.UserBuyingAnyWithRef()) {
-           refloow.chatMessage(SENDER, "!buyanyref - command unavailable ");
-        }
-        if(method.UserBuyingAnyWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyanyhydra - command unavailable ");
-        }
-        if(method.UserBuyingAnyWithCSGO()) { 
-           refloow.chatMessage(SENDER, "!buyanycsgo - command unavailable ");
-        }
-        if(method.UserBuyingAnyWithTF2()) { 
-           refloow.chatMessage(SENDER, "!buyanytf2 - command unavailable ");
-        }
-        if(method.UserBuyingAnyWithGems()) { 
-           refloow.chatMessage(SENDER, "!buyanygems - command unavailable ");
-        }
-        if(method.UserBuyingAnyWithPUBG()) { 
-           refloow.chatMessage(SENDER, "!buyanypubg - command unavailable ");
-        } 
-                       refloow.chatMessage(SENDER, "‎-\n");
-
-        if(method.UserSell()) {
-           refloow.chatMessage(SENDER, "!sell - [amount of keys] - sell your sets for BOT MAIN CURRENCY key(s) ");
-        } 
-        if(method.UserSellingWithRef()) {
-           refloow.chatMessage(SENDER, "!sellref - command unavailable ");
-        } 
-        if(method.UserSellingWithHydra()) { 
-           refloow.chatMessage(SENDER, "!sellhydra [amount of CS:GO Hydra keys] - sell your sets for CS:GO Hydra key(s) ");
-        } 
-        if(method.UserSellingWithCSGO()) {  
-           refloow.chatMessage(SENDER, "!sellcsgo [amount of CS:GO keys] - sell your sets for CS:GO key(s) ");
-        } 
-        if(method.UserSellingWithTF2()) { 
-           refloow.chatMessage(SENDER, "!selltf2 [amount of TF keys] - sell your sets for TF key(s) ");
-        } 
-        if(method.UserSellingWithGems()) {
-           refloow.chatMessage(SENDER, "!sellgems - command unavailable ");
-        } 
-        if(method.UserSellingWithPUBG()) {  
-           refloow.chatMessage(SENDER, "!sellpubg - command unavailable ");
-        }  
-		
-	} else if (MSG.toUpperCase() == "!OWNER") {
+} if (MSG.toUpperCase() == "!OWNER") {
         refloow.chatMessage(SENDER, CONFIG.OWNER);
-	
-	} else if (MSG.toUpperCase() === "!INFO") {
+
+}
+
+// !Info command
+
+else if (MSG.toUpperCase() === "!INFO") {
         refloow.chatMessage(SENDER, CONFIG.INFO);
         if (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64()) >= 0) {
             refloow.chatMessage(SENDER, CONFIG.SELLHELP);
-        }	
-		
-    } else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
+        } 
+    
+} 
+
+// !Level command
+
+else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
         let n = parseInt(MSG.toUpperCase().replace("!LEVEL ", ""));
         if (!isNaN(n) && parseInt(n) > 0) {
             if (n <= CONFIG.MAXLEVEL) {
                 Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA, CURRENTLEVEL, XPNEEDED) => {
-                  logcolors.true('Finished processing !level request');
+                  logcolors.true('| [Refloow] |: Finished processing !level request, fun fact user is level ' + CURRENTLEVEL);
+                  logcolors.true('| [Refloow] |: User was looking how much would level ' + n + ' cost');
                     if (!ERR) {
                         if (DATA) {
                             if (n > CURRENTLEVEL) {
@@ -570,68 +504,75 @@ refloow.on("friendMessage", (SENDER, MSG) => {
         } else {
             refloow.chatMessage(SENDER, "⚠️ Please provide a valid level.");
         }
-		
-    } else if (MSG.toUpperCase().indexOf("!CHECK") >= 0) {
-        let n = parseInt(MSG.toUpperCase().replace("!CHECK ", ""));
-        if (!isNaN(n) && parseInt(n) > 0) {
-          logcolors.true('Processing !check request');
-            refloow.chatMessage(SENDER, "✔️ With " + n + " CS:GO keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + " sets and with " + n + " TF2 keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 +" sets. With " + n + " Operation Hydra Case keys can get you " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + " sets.");
-        }
 
-
-        } else if (MSG.toUpperCase().indexOf("!SELLCHECK") >= 0 && (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64().toString()) >= 0 || CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(parseInt(SENDER.getSteamID64())) >= 0)) {
-        let n = parseInt(MSG.toUpperCase().replace("!SELLCHECK ", ""));
-        if(method.SellChecking()) {
-        refloow.chatMessage(SENDER, "Loading inventory...");
-
-        Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
-          logcolors.true('Processing !sellcheck request');
-            logcolors.info("| [Debug] |: Inventory Loaded");
-            if (!ERR) {
-                let s = DATA;
-                Utils.getSets(s, allCards, (ERR, DATA) => {
-                    logcolors.info("| [Debug] |: Sets Loaded");
-                    if (!ERR) {
-
-                        // console.log(b);
-                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                        // 1: GET BOTS CARDS. DONE
-                        // 2: GET PLAYER's BADGES. DONE
-                        // 3: MAGIC
-                        let hisMaxSets = 0,
-                            botNSets = 0;
-                        // Loop for sets he has partially completed
-                        // Loop for sets he has never crafted
-                        for (let i = 0; i < Object.keys(DATA).length; i++) {
-                            if (DATA[Object.keys(DATA)[i]].length >= 5) {
-                                hisMaxSets += 5;
-                            } else {
-                                hisMaxSets += DATA[Object.keys(DATA)[i]].length;
-                            }
-                            botNSets += DATA[Object.keys(DATA)[i]].length;
-                        }
-                        totalBotSets = botNSets;
-                        let playThis = CONFIG.PLAYGAMES;
-                        if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-                            playThis[0] = parseString(playThis[0], totalBotSets);
-                        }
-                        refloow.gamesPlayed(playThis);
-                        refloow.chatMessage(SENDER, "You currently have " + botNSets + " sets available which the bot can buy. For all of them the bot will pay you " + parseInt(botNSets / CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS * 100) / 100 + " keys.");
-                    } else {
-                        logcolors.fail("| [Inventory] |: An error occurred while getting user sets: " + ERR);
-                    }
-                });
-            } else {
-                logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
+        } else if (MSG.toUpperCase() == "!STOCK") {
+         logcolors.true('| [Refloow] |: Starting to process !stock request.'); 
+          if (Object.keys(botSets).lenght == undefined) {
+            refloow.chatMessage(SENDER, "Bot doesn't have any sets at the moment, please check later.")
+            logcolors.true('| [Refloow] |: Finished processing !stock request bot doenst have any sets in the inventory');
+          };
+          if (Object.keys(botSets).length > 0) {
+          refloow.chatMessage(SENDER, "⚆ Loading badges...");
+          Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
+          logcolors.true('| [Refloow] |: Processing !stock request...');
+        if (!ERR) {
+          let b = {}; // List with badges that CAN still be crafted
+          if (DATA) {
+            for (let i = 0; i < Object.keys(DATA).length; i++) {
+              if (DATA[Object.keys(DATA)[i]] < 6) {
+                b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
+              }
             }
-        });
+          } else {
+            refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+          }
+          // console.log(b);
+          // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
+          // 1: GET BOTS CARDS. DONE
+          // 2: GET PLAYER's BADGES. DONE
+          // 3: MAGIC
+          let hisMaxSets = 0,
+            botNSets = 0;
+          // Loop for sets he has partially completed
+          for (let i = 0; i < Object.keys(b).length; i++) {
+            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
+              hisMaxSets += 5 - b[Object.keys(b)[i]].length;
+            }
+          }
+          // Loop for sets he has never crafted
+          for (let i = 0; i < Object.keys(botSets).length; i++) {
+            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
+              if (botSets[Object.keys(botSets)[i]].length >= 5) {
+                hisMaxSets += 5;
+              } else {
+                hisMaxSets += botSets[Object.keys(botSets)[i]].length;
+              }
+            }
+            botNSets += botSets[Object.keys(botSets)[i]].length;
+          }
+          totalBotSets = botNSets;
+          let playThis = CONFIG.PLAYGAMES;
+          if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
+            playThis[0] = parseString(playThis[0], totalBotSets);
+          }
+          refloow.gamesPlayed(playThis);
+          logcolors.true('| [Refloow] |: Finished processing of !stock request');
+          refloow.chatMessage(SENDER, "There are currently " + hisMaxSets + "/" + botNSets + " sets available which you have not fully crafted yet. Buying all of them will cost you " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
+        } else {
+          refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+          logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
+        }
+      });
+    }
+		
     }
 
-    if(method.BuyCheckingOne()) {
-        } else if (MSG.toUpperCase().indexOf("!BUYONECHECK") >= 0) {
+   // !checkone command
+   
+    else if (MSG.toUpperCase().indexOf("!CHECKONE") >= 0) {
             refloow.chatMessage(SENDER, "Loading badges...");
             Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-              logcolors.true('Processing !buyonecheck request');
+              logcolors.true('| [Refloow] |: Processing !Checkone request');
                 if (!ERR) {
                     let b = {}; // List with badges that CAN still be crafted
                     if (DATA) {
@@ -679,61 +620,75 @@ refloow.on("friendMessage", (SENDER, MSG) => {
             });
         }
 
-	} else if (MSG.toUpperCase() == "!STOCK") {
-		if (Object.keys(botSets).length > 0) {
-			refloow.chatMessage(SENDER, "⚆ Loading badges...");
-			Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-        logcolors.true('Processing !stock request');
-				if (!ERR) {
-					let b = {}; // List with badges that CAN still be crafted
-					if (DATA) {
-						for (let i = 0; i < Object.keys(DATA).length; i++) {
-							if (DATA[Object.keys(DATA)[i]] < 6) {
-								b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
-							}
-						}
-					} else {
-						refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
-					}
-					// console.log(b);
-					// TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-					// 1: GET BOTS CARDS. DONE
-					// 2: GET PLAYER's BADGES. DONE
-					// 3: MAGIC
-					let hisMaxSets = 0,
-						botNSets = 0;
-					// Loop for sets he has partially completed
-					for (let i = 0; i < Object.keys(b).length; i++) {
-						if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-							hisMaxSets += 5 - b[Object.keys(b)[i]].length;
-						}
-					}
-					// Loop for sets he has never crafted
-					for (let i = 0; i < Object.keys(botSets).length; i++) {
-						if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-							if (botSets[Object.keys(botSets)[i]].length >= 5) {
-								hisMaxSets += 5;
-							} else {
-								hisMaxSets += botSets[Object.keys(botSets)[i]].length;
-							}
-						}
-						botNSets += botSets[Object.keys(botSets)[i]].length;
-					}
-					totalBotSets = botNSets;
-					let playThis = CONFIG.PLAYGAMES;
-					if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-						playThis[0] = parseString(playThis[0], totalBotSets);
-					}
-					refloow.gamesPlayed(playThis);
-					refloow.chatMessage(SENDER, "There are currently " + hisMaxSets + "/" + botNSets + " sets available which you have not fully crafted yet. Buying all of them will cost you " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
-				} else {
-					refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
-					logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
-				}
-			});
-		}
-	
-	} else if (MSG.toUpperCase().indexOf("!DONATESETS") >= 0) {
+
+    // !SELLCHECK COMMAND
+
+    else if (MSG.toUpperCase().indexOf("!CHECKSELL") >= 0 && (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64().toString()) >= 0 || CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(parseInt(SENDER.getSteamID64())) >= 0)) {
+        let n = parseInt(MSG.toUpperCase().replace("!CHECKSELL ", ""));
+        refloow.chatMessage(SENDER, "Loading inventory...");
+
+        Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
+          logcolors.true('| [Refloow] |: Processing !checksell request');
+            logcolors.info("| [Debug] |: Inventory Loaded");
+            if (!ERR) {
+                let s = DATA;
+                Utils.getSets(s, allCards, (ERR, DATA) => {
+                    logcolors.info("| [Debug] |: Sets Loaded");
+                    if (!ERR) {
+
+                        // console.log(b);
+                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
+                        // 1: GET BOTS CARDS. DONE
+                        // 2: GET PLAYER's BADGES. DONE
+                        // 3: MAGIC
+                        let hisMaxSets = 0,
+                            botNSets = 0;
+                        // Loop for sets he has partially completed
+                        // Loop for sets he has never crafted
+                        for (let i = 0; i < Object.keys(DATA).length; i++) {
+                            if (DATA[Object.keys(DATA)[i]].length >= 5) {
+                                hisMaxSets += 5;
+                            } else {
+                                hisMaxSets += DATA[Object.keys(DATA)[i]].length;
+                            }
+                            botNSets += DATA[Object.keys(DATA)[i]].length;
+                        }
+                        totalBotSets = botNSets;
+                        let playThis = CONFIG.PLAYGAMES;
+                        if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
+                            playThis[0] = parseString(playThis[0], totalBotSets);
+                        }
+                        refloow.gamesPlayed(playThis);
+                        refloow.chatMessage(SENDER, "You currently have " + botNSets + " sets available which the bot can buy. For all of them the bot will pay you " + parseInt(botNSets / CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS * 100) / 100 + " keys.");
+                        logcolors.true('| [Refloow] |: User has ' + botNSets + ' sets available to sell');
+                    } else {
+                        logcolors.fail("| [Inventory] |: An error occurred while getting user sets: " + ERR);
+                    }
+                });
+            } else {
+                logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
+            }
+        });
+  }
+
+    // !Check command
+
+    else if (MSG.toUpperCase().indexOf("!CHECK") >= 0) {
+
+      let n = parseInt(MSG.toUpperCase().replace("!CHECK ", ""));
+          if (!isNaN(n) && parseInt(n) > 0) {
+            logcolors.true('| [Refloow] |: Finished processing !check request');
+            logcolors.true('| [Refloow] |: User was looking rate for ' + n + ' key');
+            refloow.chatMessage(SENDER, "✔️ With " + n + " CS:GO keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + " sets and with " + n + " TF2 keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 +" sets. With " + n + " Operation Hydra Case keys can get you " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + " sets.");
+          } else {
+            refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+            logcolors.true('| [Refloow] |: Command was sent without check number indicator');
+          } 
+    }
+
+  // !Donatesets command
+
+  else if (MSG.toUpperCase().indexOf("!DONATESETS") >= 0) {
 		if (botSets) {
 			   let n = parseInt(MSG.toUpperCase().replace("!DONATESETS ", "")),
 					amountofsets = n;
@@ -743,7 +698,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
 						let botKeys = [],
 							t = manager.createOffer(SENDER.getSteamID64());
 						t.getUserDetails((ERR, ME, THEM) => {
-              logcolors.true('Processing !donatesets request');
+              logcolors.true('| [Refloow] |: Processing !donatesets request...');
 							if (ERR) {
 								logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
 								refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
@@ -822,10 +777,10 @@ refloow.on("friendMessage", (SENDER, MSG) => {
 							}
 						});
 					} else {
-						refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+						refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of sets.");
 					}
 				} else {
-					refloow.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
+					refloow.chatMessage(SENDER, "⚠️ Please enter a valid amount of sets.");
 				}
 		} else {
 			refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
@@ -869,7 +824,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
                             refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             refloow.chatMessage(SENDER, "⚠️ Processing your request.");
-                           logcolors.true('Processing !buyany request');
+                           logcolors.true('| [Refloow] |: Processing of !buyany request');
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
                                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
@@ -970,7 +925,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
-                            logcolors.true('Processing !buyone request');
+                            logcolors.true('| [Refloow] |: Processing of !buyone request');
                             refloow.chatMessage(SENDER, "⚠️ Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
@@ -1151,7 +1106,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
                             } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                                 n = parseInt(n);
                                 let theirRef = [];
-                                logcolors.true('Processing !buyref request');
+                                logcolors.true('| [Refloow] |: Processing of !buyref request');
                                 refloow.chatMessage(SENDER, "Processing your request.");
                                 manager.getUserInventoryContents(SENDER.getSteamID64(), 440, 2, true, (ERR, INV, CURR) => {
                                     if (ERR) {
@@ -1366,7 +1321,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
-                            logcolors.true('Processing !buyhydra request');
+                            logcolors.true('| [Refloow] |: Processing of !buyhydra request');
                             refloow.chatMessage(SENDER, "⚠️ Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
@@ -1578,7 +1533,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
-                            logcolors.true('Processing !buycsgo request');
+                            logcolors.true('| [Refloow] |: Processing of !buycsgo request');
                             refloow.chatMessage(SENDER, "⚠️ Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
@@ -1789,7 +1744,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
-                            logcolors.true('Processing !buytf2 request');
+                            logcolors.true('| [Refloow] |: Processing of !buytf2 request');
                             refloow.chatMessage(SENDER, "Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), 440, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
@@ -2000,7 +1955,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
-                            logcolors.true('Processing !buy request');
+                            logcolors.true('| [Refloow] |: Processing of !buy request');
                             refloow.chatMessage(SENDER, "⚠️ Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
@@ -2226,7 +2181,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
             if(method.UserSellingWithHydra()) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
-                      logcolors.true('Processing !sellhydra request');
+                      logcolors.true('| [Refloow] |: Processing of !sellhydra request');
                         refloow.chatMessage(SENDER, "✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
@@ -2339,7 +2294,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
             if(method.UserSellingWithCSGO()) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
-                      logcolors.true('Processing !sellcsgo request');
+                      logcolors.true('| [Refloow] |: Processing of !sellcsgo request');
                         refloow.chatMessage(SENDER, "✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
@@ -2452,7 +2407,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
             if(method.UserSellingWithTF2()) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
-                      logcolors.true('Processing !selltf2 request');
+                      logcolors.true('| [Refloow] |: Processing of !selltf2 request');
                         refloow.chatMessage(SENDER, "✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
@@ -2564,7 +2519,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
             if(method.UserSell()) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
-                      logcolors.true('Processing !sell request');
+                      logcolors.true('| [Refloow] |: Processing of !sell request');
                         refloow.chatMessage(SENDER, "✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
@@ -2762,7 +2717,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
 						amountofsets = n;
 					if (!isNaN(n) && parseInt(n) > 0) {
 						if (n <= CONFIG.MAXSELL) {
-              logcolors.true('Processing !donatesets request');
+              logcolors.true('| [RefloowAdmin] |: Processing of !donatesets request');
 							refloow.chatMessage(SENDER, "✔️ Processing your request.");
 							let botKeys = [],
 								t = manager.createOffer(SENDER.getSteamID64());
@@ -2854,14 +2809,12 @@ refloow.on("friendMessage", (SENDER, MSG) => {
 					}
 			} else {
 				refloow.chatMessage(SENDER, "⚠️ Please try again later.");
-			}
-		
-	} else {
-		refloow.chatMessage(SENDER, "⚠️ Command not recognized. Type !commands or !help to see all the commands.");;
-	}
-	
-	
-});
+		}
+            } else {
+     refloow.chatMessage(SENDER, "⚠️ Command not recognized. Type !commands or !help to see all the commands.");;
+    }
+ });		
+
 
 
 manager.on("sentOfferChanged", (OFFER, OLDSTATE) => {
