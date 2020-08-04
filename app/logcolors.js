@@ -29,7 +29,7 @@ const colors = {
     false: 'bold red',
     true: 'bold green',
     fail: 'red',
-    new: 'underline green',
+    new: 'underline gray',
     info: 'yellow'};
 
 winston.addColors(colors);
