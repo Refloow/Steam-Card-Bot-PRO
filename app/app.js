@@ -435,7 +435,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
 
   // !PRICE, !PRICES, !RATE commands
 
-    switch (MSG.toUpperCase()) { case "!PRICE": case "!PRICES": case "!RATE":
+  switch (MSG.toUpperCase()) { case "!PRICE": case "!PRICES": case "!RATE":
 
         refloow.chatMessage(SENDER, `The current prices are:\n` +
                                     CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + ` sets for 1 CS:GO key\n` +
@@ -450,11 +450,29 @@ refloow.on("friendMessage", (SENDER, MSG) => {
     break
     
     break
+}
 
 // !Owner command
 
-} if (MSG.toUpperCase() == "!OWNER") {
+if (MSG.toUpperCase() == "!OWNER") {
         refloow.chatMessage(SENDER, CONFIG.OWNER);
+
+}
+
+// This will log when this commands were executed
+
+else if (MSG.toUpperCase() == "!PRICE") {
+        logcolors.true('| [Refloow] |: Displaying prices, !PRICE command called by '  + SENDER.getSteamID64() ); 
+
+}
+
+else if (MSG.toUpperCase() == "!PRICES") {
+        logcolors.true('| [Refloow] |: Displaying prices, !PRICES command called by '  + SENDER.getSteamID64() ); 
+
+}
+
+else if (MSG.toUpperCase() == "!RATE") {
+        logcolors.true('| [Refloow] |: Displaying prices, !RATE command called by '  + SENDER.getSteamID64() ); 
 
 }
 
@@ -2707,9 +2725,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 					t.send();
                 }
             });
-        } else {
-            refloow.chatMessage(SENDER, "⚠️ Command not recognized. Type !commands or !help to see all the commands.");;
-        }
+      }
     
 	} else if (MSG.toUpperCase().indexOf("!DONATESETS") >= 0) {
 			if (botSets) {
