@@ -1,4 +1,4 @@
-/ Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
 
 /* 
   Here is contact info: refloowlibrarycontact@gmail.com
