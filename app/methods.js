@@ -24,6 +24,7 @@ try {
 // Importing required files
 const package = require('./../package.json');
 const config = require('./SETTINGS/config.js');
+const logcolors = require('./logcolors.js')
 
 
 t = module.exports = {
@@ -38,11 +39,75 @@ t = module.exports = {
             var page = JSON.parse(body)
             const v = package.version;
             if(page.version != v)
-                console.log(`| [GitHub] | VERSION |:  ${'New update available for '+package.name+ ' v'+page.version.green+'! You\'re currently only running version '+v.yellow+''}\n${`| [GitHub] | VERSION |: Go to https://github.com/Refloow/Steam-Card-Bot-PRO to update now!`}\n\n`)
+                console.log(` [GitHub] | VERSION |:  ${'New update available for '+package.name+ ' v'+page.version.green+'! You\'re currently only running version '+v.yellow+''}\n${`| [GitHub] | VERSION |: Go to https://github.com/Refloow/Steam-Card-Bot-PRO to update now!`}\n\n`)
             else 
-                console.log(`| [GitHub] | VERSION |: You're running the latest version of Steam-Card-Bot-PRO (v${v.green})\n\n`)
+                console.log(` [GitHub] | VERSION |: You're running the latest version of Steam-Card-Bot-PRO (v${v.green})\n\n`)
         }
         request(options, look)
+    },
+
+    // This method checks if any of this values are not set in the config
+    validatelogininfo: function() {
+        
+        logcolors.info(`Bot configured and steam throwing back InvalidPassword error = credentials are wrong or too many tries.\n`)
+        // Check if username is not set in the config
+        if (Boolean(!config.USERNAME)) {
+        logcolors.fail(`| [Account] |: Username is not configured`);
+        }
+
+        // Check if username is set in the config
+        if (Boolean(config.USERNAME)) {
+        logcolors.true(`| [Account] |: Username is configured`);
+        }
+
+        // Check if password is not set in the config
+        if (Boolean(!config.PASSWORD)) {
+        logcolors.fail(`| [Account] |: PASSWORD is not configured`);
+        }
+
+        // Check if password is set in the config
+        if (Boolean(config.PASSWORD)) {
+        logcolors.true(`| [Account] |: PASSWORD is configured`);
+        }
+
+        // Check if sharedsecret is not set in the config
+        if (Boolean(!config.SHAREDSECRET)) {
+        logcolors.fail(`| [Account] |: SHAREDSECRET is not configured`);
+        }
+
+        // Check if sharedsecret is set in the config
+        if (Boolean(config.SHAREDSECRET)) {
+        logcolors.true(`| [Account] |: SHAREDSECRET is configured`);
+        }
+
+        // Check if identitysecret is not set in the config
+        if (Boolean(!config.IDENTITYSECRET)) {
+        logcolors.fail(`| [Account] |: IDENTITYSECRET is not configured`);
+        }
+
+        // Check if identitysecret is set in the config
+        if (Boolean(config.IDENTITYSECRET)) {
+        logcolors.true(`| [Account] |: IDENTITYSECRET is configured`);
+        }
+
+        // Check if steamapikey is not set in the config
+        if (Boolean(!config.STEAMAPIKEY)) {
+        logcolors.fail(`| [Account] |: STEAMAPIKEY is not configured`);
+        }
+
+        // Check if steamapikey is set in the config
+        if (Boolean(config.STEAMAPIKEY)) {
+        logcolors.true(`| [Account] |: STEAMAPIKEY is configured`);
+        }
+
+        // This will make a bit of space between displaying other things
+        console.log(`\n`)
+    },
+
+    // Method for refloowchat function
+
+    RefloowChat: function() {
+        return config.RefloowChat_Enable == true;
     },
 
     // Other bot functions
