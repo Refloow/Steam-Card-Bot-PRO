@@ -29,7 +29,7 @@ console.log('888 T88b  88888888888   888888  888888  888888  888  888'.cyan);
 console.log('888  T88b Y8b.    888   888Y88..88PY88..88PY88b 888 d88P '.cyan);
 console.log('888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P" \n\n\n'.cyan);                              
 console.log('This bot was developed by MajokingGames'.cyan);
-console.log('Verision 1.3.0 PRO'.cyan);
+console.log('Verision 1.4.0 PRO'.cyan);
 console.log('Thanks for choosing us.'.cyan);
 console.log('This version doesnt contain UI. Login not required...'.red);
 console.log('Loading config file...'.green );
@@ -42,10 +42,8 @@ console.log('If bot doesnt start in next 1 minute steam is down.\n\n'.green );
 
 require('./app/app.js');
 
-
 /* 
   Here is contact info: refloowlibrarycontact@gmail.com
   or main dev steam: https://steamcommunity.com/id/MajokingGames/
 
 */
-
