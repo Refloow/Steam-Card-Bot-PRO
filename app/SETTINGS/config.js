@@ -41,7 +41,7 @@ module.exports = {
         BUY1KEYFORAMOUNTOFSETS: 26, // For instance; if set to 9 you sell 9 sets for 1 key.
         GIVE1KEYPERAMOUNTOFSETS: 60, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
         BUY1KEYFORAMOUNTOFSETSHYDRA: 12, // For instance; if set to 9 you sell 9 sets for 1 key.
-        GIVE1KEYPERAMOUNTOFSETS: 60, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
+        GIVE1KEYPERAMOUNTOFSETSHYDRA: 60, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
         BUY1KEYFORAMOUNTOFSETSTF2: 16, // For instance; if set to 9 you sell 9 sets for 1 key.
         GIVE1KEYPERAMOUNTOFSETSTF2: 20, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
         
@@ -122,15 +122,6 @@ module.exports = {
 // /*6*/ - Commands that include pubg
 
 
-//-----------------------------CHECK COMMANDS------------------------------------------------------------------------------------------//
-
-//----------------------------SIMPLE CHECK
-
-    sellcheck_enable: true,                    // [true/false] Enable or disable | !sellcheck command   (// This command when called checks user inventory and gives info about sets he can sell to bot)  
-    buyonecheck_enable: true,                  // [true/false] Enable or disable | !buyonecheck command
-    buyanycheck_enable: false,                  // -soon
-
-
 //-----------------------------BUY COMMANDS------------------------------------------------------------------------------------------//
 
 // ----------------------------SIMPLE BUY (!buy, !buyany, !buyone commands)
@@ -198,7 +189,7 @@ module.exports = {
 
 
     //-SETTINGS: MESSAGES
-
+    RefloowChat_Enable: true,               // [true/false] Enable or disable | This feature show in dev logs all messages sent by users to bot
     EnableWelcomeMessage: true,             // [true/false] Enable or disable | Bot sending welcome message uppon accepting friend request
     WELCOME: "Hello ! This is Refloow's Level Up Bot use: !help or !commands to see all available commands !", // Welcome message.
 
@@ -265,4 +256,3 @@ module.exports = {
     accept_random_group_inv: false,         // [true/false] Enable or disable | Auto accepting all incoming random group invites.
 
 }
-
