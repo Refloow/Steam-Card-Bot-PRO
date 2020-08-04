@@ -1,5 +1,45 @@
 # Changelog
 
+# Release 1.4.0
+
+## Fixes
+
+- Fixed the sell keys amount variable for hydra keys
+- Fixed some console log messages
+
+## Added
+
+ ---- COMMANDS---
+
+- Added (!price, !prices, !rate) - command that shows current prices like following:
+
+       The current prices are:
+       XX sets for 1 CS:GO key
+       XX sets for 1 Hydra key
+       XX sets for 1 TF key
+
+       Also, we're buying XX sets for 1 CS:GO key
+       XX sets for 1 Hydra key
+       XX sets for 1 TF key
+
+----- Fatures ---
+
+- Added more detailed dev logs of user actions
+- Added featured called RefloowChat, when enabled all chat messages from users were shown in the console in form like
+         | [RefloowChat] |: STEAMID |: Message
+      In gray color, there is option to enable and disable this, by default its enabled
+
+- Added handler if credentials were not set in the config
+
+- Added response if bot doesn't have any sets while user check !stock command
+- Added response for !check without number
+- Added method for feature ReflowChat
+
+## Changed
+
+- Rearanged some code inside of the app.js
+- Disabled showing command calculations in Dev logs for more clear overview
+
 # 1.3.0 Release
 
 - Fixed command order issue (not calling commands properly) * important
