@@ -2725,7 +2725,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 					t.send();
                 }
             });
-      }
+      } else {
+     // Command not recognized display for admins
+     refloow.chatMessage(SENDER, "⚠️ Command not recognized. Type !commands or !admincommands to see all the commands.");;
+    }
     
 	} else if (MSG.toUpperCase().indexOf("!DONATESETS") >= 0) {
 			if (botSets) {
@@ -2828,7 +2831,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 		}
             } else {
      refloow.chatMessage(SENDER, "⚠️ Command not recognized. Type !commands or !help to see all the commands.");;
-    }
+    } 
  });		
 
 
