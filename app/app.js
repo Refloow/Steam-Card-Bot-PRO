@@ -525,10 +525,6 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 
         } else if (MSG.toUpperCase() == "!STOCK") {
          logcolors.true('| [Refloow] |: Starting to process !stock request.'); 
-          if (Object.keys(botSets).lenght == undefined) {
-            refloow.chatMessage(SENDER, "Bot doesn't have any sets at the moment, please check later.")
-            logcolors.true('| [Refloow] |: Finished processing !stock request bot doenst have any sets in the inventory');
-          };
           if (Object.keys(botSets).length > 0) {
           refloow.chatMessage(SENDER, "⚆ Loading badges...");
           Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
