@@ -206,14 +206,14 @@ if(method.removingInactiveFriendsEnabled()) {
                 delete users[Object.keys(users)[i]];
                 fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
                     if (ERR) {
-                        logcolors.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
+                        logcolors.fail("| |UserData| |: An error occurred while writing UserData file: " + ERR);
                     }
                 });
             } else {
                 users[Object.keys(users)[i]].idleforhours += 1;
                 fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
                     if (ERR) {
-                        logcolors.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
+                        logcolors.fail("| |UserData| |: An error occurred while writing UserData file: " + ERR);
                     }
                 });
             }
