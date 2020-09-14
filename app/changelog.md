@@ -1,5 +1,55 @@
 # Changelog
 
+# Release 1.5.0
+
+## Fixes
+
+- Fixed stock command no sets issue now displaying correctly
+- Fixed accepted trades logs error: "An error occurred while writing trade file: Error: ENOENT: no such file or directory"
+- Fixed !help and !commands, remake was made so now it works much better
+
+## Added
+
+- Added brand new database with 9960 set data from games that bot can recognize
+
+- Added /pre, /me, /quote & /code to work in steam chat on messae sent by bot and formated message to use so.
+
+- Added :sets: count in the game played
+
+- Added gems for buy and sell
+
+- Added !sellcheck fix capturing and saving not recognized game id's also displaying in the dev logs
+- Added some more dev console messages
+- Added dev console messages when command is triggered
+- Added alert for each command executed inside of the dev logs
+- Added new method for disabling command executed messages in dev logs
+- Added option in the config for disabling command executed messagea in dev logs
+- Added config visual (option to run the separate script which will check the config and tell you what is enabled and what disabled for easier overlook) *STILL WORKING ON IT*
+  - Added methods in methods.js for visual config lookup
+- Added version check that works on time interval so bot will check from now on for updates on app start & every 2 hours *allerts only if update is available*
+  - Added methods in methods.js for version check that works on time interval
+- Added connection with the mongodb (EVERYONE IS ABLE TO ACCESS)
+- Added reloging if session replaced
+
+
+## Changed
+
+- Updated all modules to newest versions
+- Organized and added new options to the config
+- New event for index.js startup message that will show version from package.
+
+## Other
+
+- Localization files:
+ -  [DB] ChatLogs
+ -  [DB] SetsData
+ -  [DB] UserData
+ -  [DB] TradesAccepted
+  In chat logs are stored chat logs, by full logs and user logs
+  Sets data contains database with known sets + missing file is written there if there is some unknown games
+  UserData contains user data used for removing inactive users etc...
+  iN TradesAccepted db there is accepted trades logs.
+
 # Release 1.4.0
 
 ## Fixes
