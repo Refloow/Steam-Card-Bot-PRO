@@ -55,17 +55,17 @@ let refloow = new SteamUser(),
     }),
     community = new SteamCommunity();
 
-// Checking for correct version (updates) for bot on github
-
+// Checking for correct version (updates) for bot on github (On app start)
 method.check();
+// Checking for new version every 2 hours and display alert only if update available.
+setInterval(function(){ method.checkaswego(); }, 7200000);
 
 // Running validatelogininfo method to check if username and password were set in config
-
 method.validatelogininfo();
 
 // Reading users data from users file to remove inactive friends
 
-fs.readFile("./app/UserData/Users.json", (ERR, DATA) => {
+fs.readFile("./app/[DB] UserData/Users.json", (ERR, DATA) => {
     if (ERR) {
         logcolors.fail("| [Friends] |: An error occurred while getting Users: " + ERR);
     } else {
@@ -84,19 +84,22 @@ Utils.getCardsInSets((ERR, DATA) => {
     }
 });
 
+
 // Loging on
 
+var logid=1;
 refloow.logOn({
     accountName: CONFIG.USERNAME,
     password: CONFIG.PASSWORD,
-    twoFactorCode: SteamTotp.getAuthCode(CONFIG.SHAREDSECRET)
+    twoFactorCode: SteamTotp.getAuthCode(CONFIG.SHAREDSECRET),
+  logonID:logid
 });
 
 // Logged on
 
 refloow.on("loggedOn", (details, parental) => {
     refloow.getPersonas([refloow.steamID], (personas) => {
-        logcolors.true("| [Steam] |: Logged on steam as #" + refloow.steamID + " " + personas[refloow.steamID].player_name + "");
+        logcolors.true("| [Steam] |: Logged on steam as #" + refloow.steamID + "");
     });
     refloow.setPersona(1);
 });
@@ -108,7 +111,14 @@ refloow.on("webSession", (sessionID, cookies) => {
         if (ERR) {
             logcolors.fail("| [WebSession] |: An error occurred while setting cookies.");
         } else {
-            logcolors.true("| [WebSession] |: Websession Created And Cookies Set.");
+            logcolors.true('| [WebSession] |: Websession Created And Cookies Set. \n\n');
+
+            logcolors.info('/////////////////////////////////////////////////////////////////////////// \n');
+            logcolors.fail('| [Refloow] |: Looks like the bot has been successfully set up on the account !');
+            logcolors.fail('| [Refloow] |: To support the project for more updates leave an star on github repository:\n');
+            logcolors.fail('| [GitHub] |: https://github.com/OSL-Works/Steam-Card-Bot-PRO \n\n');
+            logcolors.info('/////////////////////////////////////////////////////////////////////////// \n');
+
         }
     }); 
     // Add people that added the bot while it was online.
@@ -152,9 +162,24 @@ refloow.on("webSession", (sessionID, cookies) => {
 });
 
 // Preform relog if session expire
+
 community.on("sessionExpired", (ERR) => {
+  logid+=1;
+  if(refloow.steamID)
+  {
     logcolors.info("| [WebSession] |: Session Expired. Relogging.");
     refloow.webLogOn();
+  }
+  else
+  {
+    refloow.logOn({
+    accountName: CONFIG.USERNAME,
+    password: CONFIG.PASSWORD,
+    twoFactorCode: SteamTotp.getAuthCode(CONFIG.SHAREDSECRET),
+  logonID:logid
+});
+  }
+    
 });
 
 // Responding to the friend requests and inviting user to the selected group
@@ -204,16 +229,16 @@ if(method.removingInactiveFriendsEnabled()) {
                 }
                 refloow.removeFriend(Object.keys(users)[i]);
                 delete users[Object.keys(users)[i]];
-                fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
+                fs.writeFile("./app/[DB] UserData/Users.json", JSON.stringify(users), (ERR) => {
                     if (ERR) {
-                        logcolors.fail("| |UserData| |: An error occurred while writing UserData file: " + ERR);
+                        logcolors.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
                     }
                 });
             } else {
                 users[Object.keys(users)[i]].idleforhours += 1;
-                fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
+                fs.writeFile("./app/[DB] UserData/Users.json", JSON.stringify(users), (ERR) => {
                     if (ERR) {
-                        logcolors.fail("| |UserData| |: An error occurred while writing UserData file: " + ERR);
+                        logcolors.error("| |UserData| |: An error occurred while writing UserData file: " + ERR);
                     }
                 });
             }
@@ -279,7 +304,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
         userLogs[SENDER.getSteamID64()].push(MSG);
     }
     if(method.ChatLogsForEachUserEnabled()) {
-        fs.writeFile("./app/ChatLogs/UserLogs/" + SENDER.getSteamID64() + "-log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".json", JSON.stringify({ logs: userLogs[SENDER.getSteamID64()] }), (ERR) => {
+        fs.writeFile("./app/[DB] ChatLogs/UserLogs/" + SENDER.getSteamID64() + "-log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".json", JSON.stringify({ logs: userLogs[SENDER.getSteamID64()] }), (ERR) => {
             if (ERR) {
                 logcolors.fail("| [Users] |: An error occurred while writing UserLogs file: " + ERR);
             }
@@ -288,7 +313,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
     if(method.DailyChatLogsEnabled()) {
         chatLogs += SENDER.getSteamID64() + " : " + MSG + "\n";
   
-        fs.writeFile("./app/ChatLogs/FullLogs/log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".txt", chatLogs, (ERR) => {
+        fs.writeFile("./app/[DB] ChatLogs/FullLogs/log-" + new Date().getDate() + "-" + new Date().getMonth() + "-" + new Date().getFullYear() + ".txt", chatLogs, (ERR) => {
             if (ERR) {
                 logcolors.fail("| [Users] |: An error occurred while writing FullLogs file: " + ERR);
             }
@@ -297,7 +322,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
     if (Object.keys(users).indexOf(SENDER.getSteamID64()) < 0) {
         users[SENDER.getSteamID64()] = {};
         users[SENDER.getSteamID64()].idleforhours = 0;
-        fs.writeFile("./app/UserData/Users.json", JSON.stringify(users), (ERR) => {
+        fs.writeFile("./app/[DB] UserData/Users.json", JSON.stringify(users), (ERR) => {
             if (ERR) {
                 logcolors.fail("| [Users] |: An error occurred while writing UserData file: " + ERR);
             }
@@ -317,140 +342,144 @@ refloow.on("friendMessage", (SENDER, MSG) => {
     switch (MSG.toUpperCase()) {
     case "!COMMANDS":
     case "!HELP": 
-         refloow.chatMessage(SENDER, "!commands - display list of availeble commands\n");
-          refloow.chatMessage(SENDER, "!help - display list of availeble commands\n");  
-           refloow.chatMessage(SENDER, "!owner - display owner profile\n"); 
-            refloow.chatMessage(SENDER, "!info - info about bot \n");
-             refloow.chatMessage(SENDER, "!rate - current bot prices\n");
-              refloow.chatMessage(SENDER, "!price - current bot prices\n");
-
-            refloow.chatMessage(SENDER, "!level [your dream level] - calculates how many sets and how many keys it will cost to reach your desired level\n");   
-           refloow.chatMessage(SENDER, "!check [amount] - shows how many sets and which level you will reach for a specific amount of CS:GO keys\n"); 
-        if(method.SellChecking()) {
-          refloow.chatMessage(SENDER, "!sellcheck command - info about bot \n");
-        }
+    {
+        var startMessage="/code <----------------------------- General Commands ------------------------------>\n\n";
+          
+       
+       startMessage+="!commands - display list of available commands\n";
+       startMessage+="!help - display list of available commands\n";
+       startMessage+="!owner - display owner profile\n";
+       startMessage+="!info - info about bot \n";
+       startMessage+="!rate - current bot prices\n";
+       startMessage+="!price - current bot prices\n";
+       startMessage+="!level [your dream level] - calculates how many sets and how many keys it will cost to reach your desired level\n";
+       startMessage+="!check [amount] - shows how many sets and which level you will reach for a specific amount of CS:GO keys\n";
+     
+      
+      startMessage+=             "\n<----------------------------- Buying  Commands ------------------------------>\n\n"
+            
+       var optionalMessages="";
+       
         if(method.BuyCheckingOne()) { 
-          refloow.chatMessage(SENDER, "!buyonecheck [amount] - shows how many sets bot have from games that you dont have badge for (Counting only 1 set from each game) \n");
+         optionalMessages+= "!buyonecheck [amount] - shows how many sets bot have from games that you dont have badge for (Counting only 1 set from each game) \n";
         }
         if(method.BuyCheckingAny()) { 
-          refloow.chatMessage(SENDER, "!buyanycheck command unavailable \n");
+          optionalMessages+= "!buyanycheck command unavailable \n";
         }
-                      refloow.chatMessage(SENDER, "‎-\n");
+                  
 
         if(method.UserBuying()) {
-           refloow.chatMessage(SENDER, "!buy [amount of keys] - use this to buy card sets with main bot currency which is set. \n");
-        }
+          
+        
+      optionalMessages+="!buy [amount of keys] - use this to buy card sets with main bot currency which is set. \n"
+    }
         if(method.UserBuyingAny()) { 
-           refloow.chatMessage(SENDER, "!buyany [amount of CS:GO keys] - use this to buy that amount of CS:GO keys for any sets, even from badges that has already been crafted, following the current bot rate \n");
-        }
-        if(method.UserBuyingOne()) { 
-           refloow.chatMessage(SENDER, "!buyone [amount of CS:GO keys] - only use this if you are a badge collector. The bot will send one set of each game, by the current bot rate \n");
+           
+       optionalMessages+="!buyany [amount of CS:GO keys] - use this to buy that amount of CS:GO keys for any sets, even from badges that has already been crafted, following the current bot rate \n"
         } 
-                       refloow.chatMessage(SENDER, "‎-\n");
+        if(method.UserBuyingOne()) { 
+         optionalMessages+= "!buyone [amount of CS:GO keys] - only use this if you are a badge collector. The bot will send one set of each game, by the current bot rate \n";
+        } 
+                
 
         if(method.UserBuyingWithRef()) {
-           refloow.chatMessage(SENDER, "!buyref [amount of REF] - use this to buy sets you have not crafted yet for that amount of ref, following the current bot rate \n");
+         optionalMessages+= "!buyref [amount of REF] - use this to buy sets you have not crafted yet for that amount of ref, following the current bot rate \n";
         }
         if(method.UserBuyingWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyhydra - info about bot \n");
+          
+      optionalMessages+="!buyhydra [amount of TF keys] - buy sets for your hydra key(s) \n";
         } 
         if(method.UserBuyingWithCSGO()) {  
-           refloow.chatMessage(SENDER, "!buycsgo - info about bot \n");
+          optionalMessages+= "!buycsgo [amount of TF keys] - buy sets for your CS:GO key(s) \n";
+     
         } 
         if(method.UserBuyingWithTF2()) {
-           refloow.chatMessage(SENDER, "!buytf2 [amount of TF keys] - the same as !buycsgo, but you pay with TF keys \n");
+          
+      optionalMessages+="!buytf2 [amount of TF keys] - buy sets for your TF key(s) \n";
         } 
         if(method.UserBuyingWithGems()) {  
-           refloow.chatMessage(SENDER, "!buygems - command unavailable \n");
+         optionalMessages+= "!buygems [amount of sets] - buy sets with your gems \n";
         } 
         if(method.UserBuyingWithPUBG()) {   
-           refloow.chatMessage(SENDER, "!buypubg - command unavailable \n");
+           optionalMessages+= "!buypubg - command unavailable \n";
         }
-                       refloow.chatMessage(SENDER, "‎-\n"); 
+                 
 
         if(method.UserBuyingOneWithRef()) {
-           refloow.chatMessage(SENDER, "!buyoneref - command unavailable \n");
+         optionalMessages+= "!buyoneref - command unavailable \n";
         }
         if(method.UserBuyingOneWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyonehydra - command unavailable \n");
+         optionalMessages+= "!buyonehydra - command unavailable \n";
         }
         if(method.UserBuyingOneWithCSGO()) { 
-           refloow.chatMessage(SENDER, "!buyonecsgo - command unavailable \n");
+           optionalMessages+= "!buyonecsgo - command unavailable \n";
         }
         if(method.UserBuyingOneWithTF2()) { 
-           refloow.chatMessage(SENDER, "!buyonetf2 - command unavailable \n");
+         optionalMessages+= "!buyonetf2 - command unavailable \n";
         }
         if(method.UserBuyingOneWithGems()) { 
-           refloow.chatMessage(SENDER, "!buyonegems - command unavailable \n");
+       optionalMessages+= "!buyonegems - command unavailable \n";
         }
         if(method.UserBuyingOneWithPUBG()) { 
-           refloow.chatMessage(SENDER, "!buyonepubg - command unavailable \n");
+         optionalMessages+= "!buyonepubg - command unavailable \n";
         }
-                       refloow.chatMessage(SENDER, "‎-\n");
-
-        if(method.UserBuyingAnyWithRef()) {
-           refloow.chatMessage(SENDER, "!buyanyref - command unavailable \n");
+    if(method.UserBuyingAnyWithRef()) {
+        optionalMessages+= "!buyanyref - command unavailable \n";
         }
         if(method.UserBuyingAnyWithHydra()) { 
-           refloow.chatMessage(SENDER, "!buyanyhydra - command unavailable \n");
+          optionalMessages+= "!buyanyhydra - command unavailable \n";
         }
         if(method.UserBuyingAnyWithCSGO()) { 
-           refloow.chatMessage(SENDER, "!buyanycsgo - command unavailable \n");
+           optionalMessages+= "!buyanycsgo - command unavailable \n";
         }
         if(method.UserBuyingAnyWithTF2()) { 
-           refloow.chatMessage(SENDER, "!buyanytf2 - command unavailable \n");
+          optionalMessages+= "!buyanytf2 - command unavailable \n";
         }
         if(method.UserBuyingAnyWithGems()) { 
-           refloow.chatMessage(SENDER, "!buyanygems - command unavailable \n");
+          optionalMessages+= "!buyanygems - command unavailable \n";
         }
         if(method.UserBuyingAnyWithPUBG()) { 
-           refloow.chatMessage(SENDER, "!buyanypubg - command unavailable \n");
-        } 
-                       refloow.chatMessage(SENDER, "‎-\n");
-
+         optionalMessages+= "!buyanypubg - command unavailable \n";
+        }
+    
+    optionalMessages+=             "\n<---------------------------- Selling  Commands ------------------------------>\n\n"
+    
+     if(method.SellChecking()) {
+          
+      optionalMessages+="!sellcheck command - info about bot \n";
+        }
         if(method.UserSell()) {
-           refloow.chatMessage(SENDER, "!sell - [amount of keys] - sell your sets for BOT MAIN CURRENCY key(s) \n");
+         
+      optionalMessages+="!sell - [amount of keys] - sell your sets for BOT MAIN CURRENCY key(s) \n";
         } 
         if(method.UserSellingWithRef()) {
-           refloow.chatMessage(SENDER, "!sellref - command unavailable \n");
+         optionalMessages+= "!sellref - command unavailable \n";
         } 
         if(method.UserSellingWithHydra()) { 
-           refloow.chatMessage(SENDER, "!sellhydra [amount of CS:GO Hydra keys] - sell your sets for CS:GO Hydra key(s) \n");
+         
+      optionalMessages+="!sellhydra [amount of CS:GO Hydra keys] - sell your sets for CS:GO Hydra key(s) \n";
         } 
         if(method.UserSellingWithCSGO()) {  
-           refloow.chatMessage(SENDER, "!sellcsgo [amount of CS:GO keys] - sell your sets for CS:GO key(s) \n");
+        
+     optionalMessages+="!sellcsgo [amount of CS:GO keys] - sell your sets for CS:GO key(s) \n";
         } 
         if(method.UserSellingWithTF2()) { 
-           refloow.chatMessage(SENDER, "!selltf2 [amount of TF keys] - sell your sets for TF key(s) \n");
+         
+     optionalMessages+="!selltf2 [amount of TF keys] - sell your sets for TF key(s) \n";
         } 
+    
         if(method.UserSellingWithGems()) {
-           refloow.chatMessage(SENDER, "!sellgems - command unavailable \n");
+        optionalMessages+= "!sellgems [amount of sets] - sell your sets for gems \n";
         } 
         if(method.UserSellingWithPUBG()) {  
-           refloow.chatMessage(SENDER, "!sellpubg - command unavailable \n");
+         optionalMessages+= "!sellpubg - command unavailable";
         }
-        break
-        break
+    refloow.chatMessage(SENDER,startMessage+optionalMessages);
+       
+       
       }
-
-  // !PRICE, !PRICES, !RATE commands
-
-  switch (MSG.toUpperCase()) { case "!PRICE": case "!PRICES": case "!RATE":
-
-        refloow.chatMessage(SENDER, `The current prices are:\n` +
-                                    CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + ` sets for 1 CS:GO key\n` +
-                                    CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + ` sets for 1 Hydra key\n` +
-                                    CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 + ` sets for 1 TF key\n\n` +
-
-                                    ` Also, we're buying ` + CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS + ` sets for 1 CS:GO key\n` +
-                                    CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSHYDRA + ` sets for 1 Hydra key\n` +
-                                    CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2 + ` sets for 1 TF key\n`);
-    break
-    
-    break
-    
-    break
-}
+    break 
+  }
 
 // !Owner command
 
@@ -459,21 +488,60 @@ if (MSG.toUpperCase() == "!OWNER") {
 
 }
 
+  // !PRICE, !PRICES, !RATE commands
+
+  else if(MSG.toUpperCase() == "!PRICE" || MSG.toUpperCase() == "!PRICES" || MSG.toUpperCase() == "!RATE")
+   {
+
+        refloow.chatMessage(SENDER, `/code The current prices are:\n` +
+                  "________________________\n"+
+                  "|____ME___|_____YOU_____|\n"+
+                                  "| " + CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + ` sets ` + "|"  + ` 1 CSGO key ` + " |\n" +
+                                "| " +    CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + ` sets ` + "|" + ` 1 Hydra key ` + "|\n" +
+                                 "| " +   CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 + ` sets ` + "|" + ` 1 TF 2 key ` + " |\n" +
+                 "| " +     `01 set ⠀` + "| " +  CONFIG.CARDS.BUY1GEMSFORAMOUNTOFSETS+ ` gems ` + "   |\n\n" +
+          
+                  "_________________________\n"+
+                  "|___YOU___|_____ME______|\n"+
+        
+                                 "| " +   CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS + ` sets ` + "|" + ` 1 CSGO key ` + " |\n" +
+                                "| "  +    CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSHYDRA + ` sets ` + "|" + ` 1 Hydra key ` + "|\n" +
+                                 "| " +   CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2 + ` sets ` + "|" + ` 1 TF 2 key ` + " |\n"+
+                  "| " +     `01 set ⠀` + "| " +  CONFIG.CARDS.GIVE1GEMSFORAMOUNTOFSETSGEMS+ ` gems ` + "   |\n" );
+    
+}
+
 // This will log when this commands were executed
 
 else if (MSG.toUpperCase() == "!PRICE") {
+  if(method.LogsCalledCommandsEnabled()) {
         logcolors.true('| [Refloow] |: Displaying prices, !PRICE command called by '  + SENDER.getSteamID64() ); 
-
+  }
 }
 
 else if (MSG.toUpperCase() == "!PRICES") {
+  if(method.LogsCalledCommandsEnabled()) {
         logcolors.true('| [Refloow] |: Displaying prices, !PRICES command called by '  + SENDER.getSteamID64() ); 
-
+  }
 }
 
 else if (MSG.toUpperCase() == "!RATE") {
+  if(method.LogsCalledCommandsEnabled()) {
         logcolors.true('| [Refloow] |: Displaying prices, !RATE command called by '  + SENDER.getSteamID64() ); 
+  }
+}
 
+else if (MSG.toUpperCase() == "!HELP") {
+  if(method.LogsCalledCommandsEnabled()) {
+        logcolors.true('| [Help] |: Displaying all commands, !help command called by '  + SENDER.getSteamID64() ); 
+  }
+
+}
+
+else if (MSG.toUpperCase() == "!COMMANDS") {
+  if(method.LogsCalledCommandsEnabled()) {
+        logcolors.true('| [Help] |: Displaying all commands, !commands command called by '  + SENDER.getSteamID64() ); 
+  }
 }
 
 // !Info command
@@ -490,11 +558,13 @@ else if (MSG.toUpperCase() === "!INFO") {
 
 else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
         let n = parseInt(MSG.toUpperCase().replace("!LEVEL ", ""));
+        if(method.LogsCalledCommandsEnabled()) {
+        logcolors.true('| [Refloow] |: !Level ' + n + ' command called by '  + SENDER.getSteamID64() ); 
+        }
         if (!isNaN(n) && parseInt(n) > 0) {
             if (n <= CONFIG.MAXLEVEL) {
                 Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA, CURRENTLEVEL, XPNEEDED) => {
                   logcolors.true('| [Refloow] |: Finished processing !level request, fun fact user is level ' + CURRENTLEVEL);
-                  logcolors.true('| [Refloow] |: User was looking how much would level ' + n + ' cost');
                     if (!ERR) {
                         if (DATA) {
                             if (n > CURRENTLEVEL) {
@@ -504,29 +574,33 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                     s += parseInt((CURRENTLEVEL + l) / 10) + 1;
                                     l++;
                                 }
-                                refloow.chatMessage(SENDER, "✔️ To get to level " + n + " you will need " + (s - Math.floor(XPNEEDED / 100)) + " sets. That would cost " + parseInt((s - Math.floor(XPNEEDED / 100)) / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " CS:GO keys OR " + parseInt((s - Math.floor(XPNEEDED / 100)) / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 * 100) / 100 + " TF2 keys OR " + parseInt((s - Math.floor(XPNEEDED / 100)) * CONFIG.CARDS.BUY1SETFORAMOUNTOFREF * 100) / 100 + " Refined Metal.");
+                                refloow.chatMessage(SENDER, "/pre ✔️ To get to level " + n + " you will need " + (s - Math.floor(XPNEEDED / 100)) + " sets. That would cost " + parseInt((s - Math.floor(XPNEEDED / 100)) / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " CS:GO keys OR " + parseInt((s - Math.floor(XPNEEDED / 100)) / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 * 100) / 100 + " TF2 keys OR " + parseInt((s - Math.floor(XPNEEDED / 100)) * CONFIG.CARDS.BUY1SETFORAMOUNTOFREF * 100) / 100 + " Refined Metal.");
                             } else {
-                                refloow.chatMessage(SENDER, "⚠️ Please provide a valid level.");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid level.");
                             }
                         } else {
-                            refloow.chatMessage(SENDER, "⚠️ Your level could not be retrieved. Make sure your Steam Profile is public and try again.");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ Your level could not be retrieved. Make sure your Steam Profile is public and try again.");
                         }
                     } else {
                         logcolors.fail("| [Steam] |: An error occurred while getting badge data: " + ERR);
-                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your badges. Please try again later.");
+                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your badges. Please try again later.");
                     }
                 });
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please try a lower level.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower level.");
             }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please provide a valid level.");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid level.");
         }
 
         } else if (MSG.toUpperCase() == "!STOCK") {
          logcolors.true('| [Refloow] |: Starting to process !stock request.'); 
+          if (Object.keys(botSets).length == 0)  {
+            refloow.chatMessage(SENDER, "/pre Bot doesn't have any sets at the moment, please check later.")
+            logcolors.true('| [Refloow] |: Finished processing !stock request bot doenst have any sets in the inventory');
+          };
           if (Object.keys(botSets).length > 0) {
-          refloow.chatMessage(SENDER, "⚆ Loading badges...");
+          refloow.chatMessage(SENDER, "/me ⚆ Loading badges...");
           Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
           logcolors.true('| [Refloow] |: Processing !stock request...');
         if (!ERR) {
@@ -538,7 +612,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
               }
             }
           } else {
-            refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
           }
           // console.log(b);
           // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
@@ -549,8 +623,9 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
             botNSets = 0;
           // Loop for sets he has partially completed
           for (let i = 0; i < Object.keys(b).length; i++) {
-            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-              hisMaxSets += 5 - b[Object.keys(b)[i]].length;
+            if (botSets[Object.keys(b)[i]] && Object.values(b)[i]>0) {
+              hisMaxSets += Math.min(5,botSets[Object.keys(b)[i]].length,Object.values(b)[i]);
+        console.log(Object.keys(b)[i]);
             }
           }
           // Loop for sets he has never crafted
@@ -566,14 +641,16 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
           }
           totalBotSets = botNSets;
           let playThis = CONFIG.PLAYGAMES;
-          if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-            playThis[0] = parseString(playThis[0], totalBotSets);
+          if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES) == "string") {
+        
+        
+            playThis = parseString(playThis, totalBotSets);
           }
           refloow.gamesPlayed(playThis);
           logcolors.true('| [Refloow] |: Finished processing of !stock request');
-          refloow.chatMessage(SENDER, "There are currently " + hisMaxSets + "/" + botNSets + " sets available which you have not fully crafted yet. Buying all of them will cost you " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
+          refloow.chatMessage(SENDER, "/pre There are currently " + hisMaxSets + "/" + botNSets + " sets available which you have not fully crafted yet. Buying all of them will cost you " + parseInt((hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 * 100) / 100) + " TF2 keys.");
         } else {
-          refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+          refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
           logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
         }
       });
@@ -584,9 +661,11 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
    // !checkone command
    
     else if (MSG.toUpperCase().indexOf("!CHECKONE") >= 0) {
-            refloow.chatMessage(SENDER, "Loading badges...");
+            refloow.chatMessage(SENDER, "/me Loading badges...");
             Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-              logcolors.true('| [Refloow] |: Processing !Checkone request');
+                if(method.LogsCalledCommandsEnabled()) {
+                logcolors.true('| [Refloow] |: Processing !Checkone request');
+                }
                 if (!ERR) {
                     let b = {}; // List with badges that CAN still be crafted
                     if (DATA) {
@@ -596,7 +675,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                             }
                         }
                     } else {
-                        refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                        refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
                     }
                     // console.log(b);
                     // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
@@ -626,9 +705,9 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                         playThis[0] = parseString(playThis[0], totalBotSets);
                     }
                     refloow.gamesPlayed(playThis);
-                    refloow.chatMessage(SENDER, "There are currently sets from " + Object.keys(botSets).length + " different games, of which you have not crafted " + hisMaxSets + ". This would cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
+                    refloow.chatMessage(SENDER, "/code There are currently sets from " + Object.keys(botSets).length + " different games, of which you have not crafted " + hisMaxSets + ". This would cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
                     logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
                 }
             });
@@ -637,13 +716,15 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 
     // !SELLCHECK COMMAND
 
-    else if (MSG.toUpperCase().indexOf("!CHECKSELL") >= 0 && (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64().toString()) >= 0 || CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(parseInt(SENDER.getSteamID64())) >= 0)) {
-        let n = parseInt(MSG.toUpperCase().replace("!CHECKSELL ", ""));
-        refloow.chatMessage(SENDER, "Loading inventory...");
+    else if (MSG.toUpperCase().indexOf("!SELLCHECK") >= 0 && (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64().toString()) >= 0 || CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(parseInt(SENDER.getSteamID64())) >= 0)) {
+        let n = parseInt(MSG.toUpperCase().replace("!SELLCHECK ", ""));
+        refloow.chatMessage(SENDER, "/me Loading inventory...");
 
         Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
-          logcolors.true('| [Refloow] |: Processing !checksell request');
-            logcolors.info("| [Debug] |: Inventory Loaded");
+         if(method.LogsCalledCommandsEnabled()) {
+         logcolors.true('| [Refloow] |: Processing !checksell requested by '   + SENDER.getSteamID64() );
+         }
+           logcolors.info("| [Debug] |: Inventory Loaded");
             if (!ERR) {
                 let s = DATA;
                 Utils.getSets(s, allCards, (ERR, DATA) => {
@@ -673,7 +754,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                             playThis[0] = parseString(playThis[0], totalBotSets);
                         }
                         refloow.gamesPlayed(playThis);
-                        refloow.chatMessage(SENDER, "You currently have " + botNSets + " sets available which the bot can buy. For all of them the bot will pay you " + parseInt(botNSets / CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS * 100) / 100 + " keys.");
+                        refloow.chatMessage(SENDER, "/pre You currently have " + botNSets + " sets available which the bot can buy. For all of them the bot will pay you " + parseInt(botNSets / CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS * 100) / 100 + " keys.");
                         logcolors.true('| [Refloow] |: User has ' + botNSets + ' sets available to sell');
                     } else {
                         logcolors.fail("| [Inventory] |: An error occurred while getting user sets: " + ERR);
@@ -691,11 +772,14 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 
       let n = parseInt(MSG.toUpperCase().replace("!CHECK ", ""));
           if (!isNaN(n) && parseInt(n) > 0) {
+              if(method.LogsCalledCommandsEnabled()) {
+              logcolors.true('| [Refloow] |: Processing !check requested by '   + SENDER.getSteamID64() );
+            }
             logcolors.true('| [Refloow] |: Finished processing !check request');
             logcolors.true('| [Refloow] |: User was looking rate for ' + n + ' key');
-            refloow.chatMessage(SENDER, "✔️ With " + n + " CS:GO keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + " sets and with " + n + " TF2 keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 +" sets. With " + n + " Operation Hydra Case keys can get you " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + " sets.");
+            refloow.chatMessage(SENDER, "/code ✔️ With " + n + " CS:GO keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + " sets and with " + n + " TF2 keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 +" sets. With " + n + " Operation Hydra Case keys can get you " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + " sets.");
           } else {
-            refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
             logcolors.true('| [Refloow] |: Command was sent without check number indicator');
           } 
     }
@@ -708,19 +792,19 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 					amountofsets = n;
 				if (!isNaN(n) && parseInt(n) > 0) {
 					if (n <= CONFIG.MAXSELL) {
-						refloow.chatMessage(SENDER, "Processing your request.");
+						refloow.chatMessage(SENDER, "/me Processing your request.");
 						let botKeys = [],
 							t = manager.createOffer(SENDER.getSteamID64());
 						t.getUserDetails((ERR, ME, THEM) => {
               logcolors.true('| [Refloow] |: Processing !donatesets request...');
 							if (ERR) {
 								logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-								refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+								refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
 							} else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
 								manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
 									if (ERR) {
 										logcolors.fail("| [Inventory] | An error occurred while getting bot inventory: " + ERR);
-										refloow.chatMessage(SENDER, "⚠️ An error occurred while loading the bot's inventory. Please try again.");
+										refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
 									} else {
 										let amountofB = amountofsets;
 											Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
@@ -759,7 +843,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 																}
 															});
 															if (amountofB > 0) {
-																refloow.chatMessage(SENDER, "⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
+																refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
 															} else {
 																logcolors.info("| [Debug] |: -SENDING");
 																t.addMyItems(botKeys);
@@ -768,10 +852,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 																t.data("amountofkeys", n);
 																t.send((ERR, STATUS) => {
 																	if (ERR) {
-																		refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+																		refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
 																		logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
 																	} else {
-																		refloow.chatMessage(SENDER, "Trade Sent! Confirming it...");
+																		refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
 																		logcolors.info("| [Steam] |: Trade offer sent!");
 																	}
 																});
@@ -787,17 +871,17 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 									}
 								});
 							} else {
-								refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+								refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
 							}
 						});
 					} else {
-						refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of sets.");
+						refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of sets.");
 					}
 				} else {
-					refloow.chatMessage(SENDER, "⚠️ Please enter a valid amount of sets.");
+					refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of sets.");
 				}
 		} else {
-			refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+			refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
 		}
 
 
@@ -835,14 +919,14 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                     t.getUserDetails((ERR, ME, THEM) => {
                         if (ERR) {
                             logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                            refloow.chatMessage(SENDER, "⚠️ Processing your request.");
+                            refloow.chatMessage(SENDER, "/me ⚠️ Processing your request.");
                            logcolors.true('| [Refloow] |: Processing of !buyany request');
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
                                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
                                 } else {
                                     let amountofB = amountofsets;
                                     for (let i = 0; i < INV.length; i++) {
@@ -851,7 +935,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                         }
                                     }
                                     if (theirKeys.length != n) {
-                                        refloow.chatMessage(SENDER, "⚠️ You do not have enough keys.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
                                     } else {
                                         sortSetsByAmount(botSets, (DATA) => {
                                             let setsSent = {};
@@ -887,7 +971,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                         });
                                     }
                                     if (amountofB > 0) {
-                                        refloow.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
                                     } else {
                                         logcolors.info("| [Debug] |: -SENDING");
                                         t.addTheirItems(theirKeys);
@@ -898,10 +982,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                         setsThatShouldntBeSent.push(t.itemsToGive);
                                         t.send((ERR, STATUS) => {
                                             if (ERR) {
-                                                refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                 logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                             } else {
-                                                refloow.chatMessage(SENDER, "⚠️ Trade Sent! Confirming it...");
+                                                refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                 logcolors.info("| [Steam] |: Trade offer sent!");
                                             }
                                         });
@@ -909,17 +993,17 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                 }
                             });
                         } else {
-                            refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                         }
                     });
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                 }
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -935,16 +1019,16 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                     t.getUserDetails((ERR, ME, THEM) => {
                         if (ERR) {
                             logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
                             logcolors.true('| [Refloow] |: Processing of !buyone request');
-                            refloow.chatMessage(SENDER, "⚠️ Processing your request.");
+                            refloow.chatMessage(SENDER, "/me ⚠️ Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
                                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
                                 } else {
                                     logcolors.info("| [Debug] |: Inventory Loaded");
                                     if (!ERR) {
@@ -955,7 +1039,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ You do not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
                                         } else {
                                             Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
                                                 if (!ERR) {
@@ -969,7 +1053,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             }
                                                         } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
                                                         }
                                                         console.log(DATA);
                                                         console.log(b);
@@ -1040,7 +1124,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     }
                                                                 }
                                                                 if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
                                                                 } else {
                                                                     logcolors.info("| [Debug] |: -SENDING");
                                                                     t.addTheirItems(theirKeys);
@@ -1051,45 +1135,45 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     setsThatShouldntBeSent.push(t.itemsToGive);
                                                                     t.send((ERR, STATUS) => {
                                                                         if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                             logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                         } else {
-                                                                           refloow.chatMessage(SENDER, "⚠️ Trade Sent! Confirming it...");
+                                                                           refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                             logcolors.info("| [Steam] |: Trade offer sent!");
                                                                         }
                                                                     });
                                                                 }
                                                             });
                                                         } else {
-                                                            refloow.chatMessage(SENDER, "⚠️ There are currently not enough sets that you have not used in stock for this amount of keys. Please try again later. If you want the bot to ignore your current badges use !buyany.");
+                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys. Please try again later. If you want the bot to ignore your current badges use !buyany.");
                                                         }
                                                     } else {
                                                         logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
                                                     }
                                                 } else {
-                                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
                                                     logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
                                                 }
                                             });
                                         }
                                     } else {
                                         logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
                                     }
                                 }
                             });
                         } else {
-                            refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                         }
                     });
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                 }
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -1107,7 +1191,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYREF ", ""),
                 amountofsets = parseInt(n) / CONFIG.CARDS.BUY1SETFORAMOUNTOFREF; 
-                refloow.chatMessage(SENDER, "You can get " + amountofsets + " set(s) for " + n + " Refined Metal");
+                refloow.chatMessage(SENDER, "/pre You can get " + amountofsets + " set(s) for " + n + " Refined Metal");
         if(method.UserBuyingWithRef()) {
             if (parseInt(n)%2 == 0) {   
                 if (!isNaN(n) && parseInt(n) > 0) {
@@ -1116,16 +1200,16 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                         t.getUserDetails((ERR, ME, THEM) => {
                             if (ERR) {
                                 logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                             } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                                 n = parseInt(n);
                                 let theirRef = [];
                                 logcolors.true('| [Refloow] |: Processing of !buyref request');
-                                refloow.chatMessage(SENDER, "Processing your request.");
+                                refloow.chatMessage(SENDER, "/me Processing your request.");
                                 manager.getUserInventoryContents(SENDER.getSteamID64(), 440, 2, true, (ERR, INV, CURR) => {
                                     if (ERR) {
                                         logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
                                     } else {
                                         logcolors.info("| [Debug] |: Inventory Loaded");
                                         if (!ERR) {
@@ -1136,7 +1220,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                 }
                                             }
                                             if (theirRef.length != n) {
-                                                refloow.chatMessage(SENDER, "⚠️ You do not have enough Refined Metal.");
+                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough Refined Metal.");
                                             } else {
                                                 Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
                                                     if (!ERR) {
@@ -1150,7 +1234,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     }
                                                                 }
                                                             } else {
-                                                                refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                                                                refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
                                                             }
                                                             console.log(DATA);
                                                             console.log(b);
@@ -1262,7 +1346,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                         }
                                                                     }
                                                                     if (hisMaxSets > 0) {
-                                                                        refloow.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
                                                                     } else {
                                                                         logcolors.info("| [Debug] |: -SENDING");
                                                                         t.addTheirItems(theirRef);
@@ -1273,49 +1357,49 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                         setsThatShouldntBeSent.push(t.itemsToGive);
                                                                         t.send((ERR, STATUS) => {
                                                                             if (ERR) {
-                                                                                refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                                 logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                             } else {
-                                                                                refloow.chatMessage(SENDER, "⚠️ Trade Sent! Confirming it...");
+                                                                                refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                                 logcolors.info("| [Steam] |: Trade offer sent!");
                                                                             }
                                                                         });
                                                                     }
                                                                 });
                                                             } else {
-                                                                refloow.chatMessage(SENDER, "⚠️ There are currently not enough sets that you have not used in stock for this amount of Refined Metal.");
+                                                                refloow.chatMessage(SENDER, "/pre There are currently not enough sets that you have not used in stock for this amount of Refined Metal.");
                                                             }
                                                             // TO HERE
                                                         } else {
                                                             logcolors.fail("| [Steam] |: An error occurred while getting badges: " + ERR);
                                                         }
                                                     } else {
-                                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
                                                         logcolors.fail("| [Steam] |: An error occurred while loading badges: " + ERR);
                                                     }
                                                 });
                                             }
                                         } else {
                                             logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                            refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
                                         }
                                     }
                                 });
                             } else {
-                                refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                             }
                         });
                     } else {
-                        refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of Refined Metal.");
+                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of Refined Metal.");
                     }
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of Refined Metal.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of Refined Metal.");
                 }
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Each set costs 2 ref. Try again using an even amount of Refined Metal.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Each set costs 2 ref. Try again using an even amount of Refined Metal.");
             }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -1331,16 +1415,16 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                     t.getUserDetails((ERR, ME, THEM) => {
                         if (ERR) {
                             logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
                             logcolors.true('| [Refloow] |: Processing of !buyhydra request');
-                            refloow.chatMessage(SENDER, "⚠️ Processing your request.");
+                            refloow.chatMessage(SENDER, "/me Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
                                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
                                 } else {
                                     logcolors.info("| [Debug] |: Inventory Loaded");
                                     if (!ERR) {
@@ -1351,7 +1435,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ You do not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
                                         } else {
                                             Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
                                                 if (!ERR) {
@@ -1365,7 +1449,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             }
                                                         } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
                                                         }
                                                         console.log(DATA);
                                                         console.log(b);
@@ -1477,7 +1561,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     }
                                                                 }
                                                                 if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
                                                                 } else {
                                                                     logcolors.info("| [Debug] |: -SENDING");
                                                                     t.addTheirItems(theirKeys);
@@ -1488,46 +1572,46 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     setsThatShouldntBeSent.push(t.itemsToGive);
                                                                     t.send((ERR, STATUS) => {
                                                                         if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                             logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                         } else {
-                                                                            refloow.chatMessage(SENDER, "⚠️ Trade Sent! Confirming it...");
+                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                             logcolors.info("| [Steam] |: Trade offer sent!");
                                                                         }
                                                                     });
                                                                 }
                                                             });
                                                         } else {
-                                                            refloow.chatMessage(SENDER, "⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
+                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
                                                         }
                                                         // TO HERE
                                                     } else {
                                                         logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
                                                     }
                                                 } else {
-                                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
                                                     logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
                                                 }
                                             });
                                         }
                                     } else {
                                         logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
                                     }
                                 }
                             });
                         } else {
-                            refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                         }
                     });
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                 }
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -1543,16 +1627,16 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                     t.getUserDetails((ERR, ME, THEM) => {
                         if (ERR) {
                             logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
                             logcolors.true('| [Refloow] |: Processing of !buycsgo request');
-                            refloow.chatMessage(SENDER, "⚠️ Processing your request.");
+                            refloow.chatMessage(SENDER, "/me Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
                                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
                                 } else {
                                     logcolors.info("| [Debug] |: Inventory Loaded");
                                     if (!ERR) {
@@ -1563,7 +1647,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ You do not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
                                         } else {
                                             Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
                                                 if (!ERR) {
@@ -1577,7 +1661,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             }
                                                         } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
                                                         }
                                                         console.log(DATA);
                                                         console.log(b);
@@ -1689,7 +1773,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     }
                                                                 }
                                                                 if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
                                                                 } else {
                                                                     logcolors.info("| [Debug] |: -SENDING");
                                                                     t.addTheirItems(theirKeys);
@@ -1700,46 +1784,46 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     setsThatShouldntBeSent.push(t.itemsToGive);
                                                                     t.send((ERR, STATUS) => {
                                                                         if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                             logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                         } else {
-                                                                            refloow.chatMessage(SENDER, "⚠️ Trade Sent! Confirming it...");
+                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                             logcolors.info("| [Steam] |: Trade offer sent!");
                                                                         }
                                                                     });
                                                                 }
                                                             });
                                                         } else {
-                                                            refloow.chatMessage(SENDER, "⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
+                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
                                                         }
                                                         // TO HERE
                                                     } else {
                                                         logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
                                                     }
                                                 } else {
-                                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
                                                     logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
                                                 }
                                             });
                                         }
                                     } else {
                                         logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
                                     }
                                 }
                             });
                         } else {
-                            refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                         }
                     });
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                 }
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -1754,16 +1838,16 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                     t.getUserDetails((ERR, ME, THEM) => {
                         if (ERR) {
                             logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
                             logcolors.true('| [Refloow] |: Processing of !buytf2 request');
-                            refloow.chatMessage(SENDER, "Processing your request.");
+                            refloow.chatMessage(SENDER, "/me Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), 440, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
                                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
                                 } else {
                                     logcolors.info("| [Debug] |: Inventory Loaded");
                                     if (!ERR) {
@@ -1774,7 +1858,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ You do not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
                                         } else {
                                             Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
                                                 if (!ERR) {
@@ -1788,7 +1872,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             }
                                                         } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
                                                         }
                                                         console.log(DATA);
                                                         console.log(b);
@@ -1900,7 +1984,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     }
                                                                 }
                                                                 if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
                                                                 } else {
                                                                     logcolors.info("| [Debug] |: -SENDING");
                                                                     t.addTheirItems(theirKeys);
@@ -1911,46 +1995,267 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     setsThatShouldntBeSent.push(t.itemsToGive);
                                                                     t.send((ERR, STATUS) => {
                                                                         if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                             logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                         } else {
-                                                                            refloow.chatMessage(SENDER, "✔️ Trade Sent! Confirming it...");
+                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                             logcolors.info("| [Steam] |: Trade offer sent!");
                                                                         }
                                                                     });
                                                                 }
                                                             });
                                                         } else {
-                                                            refloow.chatMessage(SENDER, "⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
+                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
                                                         }
                                                         // TO HERE
                                                     } else {
                                                         logcolors.fail("| [Steam] |: An error occurred while getting badges: " + ERR);
                                                     }
                                                 } else {
-                                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
                                                     logcolors.fail("| [Steam] |: An error occurred while loading badges: " + ERR);
                                                 }
                                             });
                                         }
                                     } else {
                                         logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
                                     }
                                 }
                             });
                         } else {
-                            refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                         }
                     });
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                 }
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+        }
+    }
+
+        } else if (MSG.toUpperCase().indexOf("!BUYGEMS") >= 0) {
+        if (botSets) {
+            let n = MSG.toUpperCase().replace("!BUYGEMS ", ""),
+                amountofgems = parseInt(n) * CONFIG.CARDS.BUY1GEMSFORAMOUNTOFSETS;
+        if(method.UserBuyingWithGems()) {
+            if (!isNaN(n) && parseInt(n) > 0) {
+                if (n <= CONFIG.MAXBUY) {
+                    let t = manager.createOffer(SENDER.getSteamID64());
+                    t.getUserDetails((ERR, ME, THEM) => {
+                        if (ERR) {
+                            logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
+                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
+                        } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
+                            n = parseInt(n);
+                            let theirGems = [];
+                            logcolors.true('| [Refloow] |: Processing of !buyGems request');
+                            refloow.chatMessage(SENDER, "/me Processing your request.");
+                            manager.getUserInventoryContents(SENDER.getSteamID64(), 753, 6, true, (ERR, INV, CURR) => {
+                                if (ERR) {
+                                    logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
+                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
+                                } else {
+                                    logcolors.info("| [Debug] |: Inventory Loaded");
+                                    if (!ERR) {
+                                        
+                                        INV = INV.filter((ITEM) => ITEM.getTag("item_class").internal_name == "item_class_7");
+                    if(INV==null || INV.length==0)
+                    {
+                    logcolors.info("| [Debug] |: User does not have any gems at all.");
+                    refloow.chatMessage(SENDER.getSteamID64(),"/pre ⚠️ Looks like your inventory doesn't have any gems at all. Please try after you have them.");
+                    }
+                    else{
+                    
+                      if (INV[0].amount < amountofgems) {
+                      logcolors.fail("| [Debug] |: User does not have enough gems." );
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you have enough unpacked gems.");
+
+                      } 
+                    
+                    else {
+                      INV[0].amount=amountofgems.toString();
+                      theirGems.push(INV[0]);
+                                            Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
+                                                if (!ERR) {
+                                                    logcolors.info("| [Debug] |: DEBUG#BADGE LOADED");
+                                                    if (!ERR) {
+                                                        let b = {}; // List with badges that CAN still be crafted
+                                                        if (DATA) {
+                                                            for (let i = 0; i < Object.keys(DATA).length; i++) {
+                                                                if (DATA[Object.keys(DATA)[i]] < 6) {
+                                                                    b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
+                                                                }
+                                                            }
+                                                        } else {
+                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
+                                                        }
+                                                        console.log(DATA);
+                                                        console.log(b);
+                                                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
+                                                        // 1: GET BOTS CARDS. DONE
+                                                        // 2: GET PLAYER's BADGES. DONE
+                                                        // 3: MAGIC
+                                                        let hisMaxSets = 0,
+                                                            botNSets = 0;
+                                                        // Loop for sets he has partially completed
+                                                        for (let i = 0; i < Object.keys(b).length; i++) {
+                                                            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
+                                                                hisMaxSets += 5 - b[Object.keys(b)[i]].length;
+                                                            }
+                                                        }
+                                                        logcolors.info("| [Debug] |: Loop 1 DONE");
+                                                        // Loop for sets he has never crafted
+                                                        for (let i = 0; i < Object.keys(botSets).length; i++) {
+                                                            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
+                                                                if (botSets[Object.keys(botSets)[i]].length >= 5) {
+                                                                    hisMaxSets += 5;
+                                                                } else {
+                                                                    hisMaxSets += botSets[Object.keys(botSets)[i]].length;
+                                                                }
+                                                            }
+                                                            botNSets += botSets[Object.keys(botSets)[i]].length;
+                                                        }
+                                                        logcolors.info("| [Debug] |: Loop 2 DONE");
+                                                        // HERE
+                                                        if (n <= hisMaxSets) {
+                                                            hisMaxSets = n;
+                                                            logcolors.info("| [Debug] |: Trade Created");
+                                                            sortSetsByAmount(botSets, (DATA) => {
+                                                                logcolors.info("| [Debug] |:" + DATA);
+                                                                logcolors.info("| [Debug] |: Sets Sorted");
+                                                                firstLoop: for (let i = 0; i < DATA.length; i++) {
+                                                                    if (b[DATA[i]] == 0) {
+                                                                        continue firstLoop;
+                                                                    } else {
+                                                                        logcolors.info("| [Debug] |: DEBUG#" + i);
+                                                                        logcolors.info("| [Debug] |: DEBUG FOR LOOP ITEMS");
+                                                                        if (hisMaxSets > 0) {
+                                                                            logcolors.info("| [Debug] |: DEBUG# MAXSETSMORETHAN1");
+                                                                            if (b[DATA[i]] && botSets[DATA[i]].length >= b[DATA[i]]) {
+                                                                                // BOT HAS ENOUGH SETS OF THIS KIND
+                                                                                logcolors.info("| [Debug] |: Loop 1");
+                                                                                sLoop: for (let j = 0; j < 5 - b[DATA[i]]; j++) {
+                                                                                    if (j + 1 < b[DATA[i]] && hisMaxSets > 0) {
+                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: ITEM ADD");
+                                                                                        logcolors.info("| [Debug] |: DEBUG#LOOP #1: " + botSets[DATA[i]][j]);
+                                                                                        t.addMyItems(botSets[DATA[i]][j]);
+                                                                                        hisMaxSets--;
+                                                                                        console.log(hisMaxSets);
+                                                                                    } else {
+                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
+                                                                                        continue firstLoop;
+                                                                                    }
+                                                                                }
+                                                                            } else if (b[DATA[i]] && botSets[DATA[i]].length < b[DATA[i]]) {
+                                                                                // BOT DOESNT HAVE ENOUGH SETS OF THIS KIND
+                                                                                logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
+                                                                                continue; // *
+                                                                            } else if (!b[DATA[i]] && botSets[DATA[i]].length < 5 && botSets[DATA[i]].length - b[DATA[i]] > 0) { // TODO NOT FOR LOOP WITH BOTSETS. IT SENDS ALL
+                                                                                // BOT HAS ENOUGH SETS AND USER NEVER CRAFTED THIS
+                                                                                bLoop: for (let j = 0; j < botSets[DATA[i]].length - b[DATA[i]]; j++) {
+                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
+                                                                                        t.addMyItems(botSets[DATA[i]][j]);
+                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
+                                                                                        hisMaxSets--;
+                                                                                    } else {
+                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
+                                                                                        continue firstLoop;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            else if (hisMaxSets < 5) {
+                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS 5 SETS:
+                                                                                logcolors.info("| [Debug] |: Loop 2");
+                                                                                tLoop: for (let j = 0; j != hisMaxSets; j++) {
+                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
+                                                                                        t.addMyItems(botSets[DATA[i]][j]);
+                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
+                                                                                        hisMaxSets--;
+                                                                                        console.log(hisMaxSets);
+                                                                                    } else {
+                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
+                                                                                        continue firstLoop;
+                                                                                    }
+                                                                                }
+                                                                            } else {
+                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS LESS THAN 5 SETS:
+                                                                                logcolors.info("| [Debug] |: Loop 2");
+                                                                                xLoop: for (let j = 0; j != 5; j++ && hisMaxSets > 0) {
+                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
+                                                                                        t.addMyItems(botSets[DATA[i]][j]);
+                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
+                                                                                        hisMaxSets--;
+                                                                                        console.log(hisMaxSets);
+                                                                                    } else {
+                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
+                                                                                        continue firstLoop;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            logcolors.info("| [Debug] |: RETURN");
+                                                                            break firstLoop;
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (hisMaxSets > 0) {
+                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
+                                                                } else {
+                                                                    logcolors.info("| [Debug] |: -SENDING");
+                                                                    t.addTheirItems(theirGems);
+                                                                    t.data("commandused", "BuyGems");
+                                                                    t.data("amountofGems", amountofgems);
+                                                                    t.data("amountofsets", n.toString());
+                                                                    t.data("index", setsThatShouldntBeSent.length);
+                                                                    setsThatShouldntBeSent.push(t.itemsToGive);
+                                                                    t.send((ERR, STATUS) => {
+                                                                        if (ERR) {
+                                                                            refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                            logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
+                                                                        } else {
+                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
+                                                                            logcolors.info("| [Steam] |: Trade offer sent!");
+                                                                        }
+                                                                    });
+                                                                }
+                                                            });
+                                                        } else {
+                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of Gems.");
+                                                        }
+                                                        // TO HERE
+                                                    } else {
+                                                        logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
+                                                    }
+                                                } else {
+                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
+                                                    logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
+                                                }
+                                            });
+                                         }
+                    }
+                                    } else {
+                                        logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                    }
+                                }
+                            });
+                        } else {
+                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
+                        }
+                    });
+                } else {
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of Gems.");
+                }
+            } else {
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of Sets.");
+            }
+        } else {
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -1965,16 +2270,16 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                     t.getUserDetails((ERR, ME, THEM) => {
                         if (ERR) {
                             logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                         } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                             n = parseInt(n);
                             let theirKeys = [];
                             logcolors.true('| [Refloow] |: Processing of !buy request');
-                            refloow.chatMessage(SENDER, "⚠️ Processing your request.");
+                            refloow.chatMessage(SENDER, "/me Processing your request.");
                             manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                 if (ERR) {
                                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory. Please try later");
+                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
                                 } else {
                                     logcolors.info("| [Debug] |: Inventory Loaded");
                                     if (!ERR) {
@@ -1985,7 +2290,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ You do not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
                                         } else {
                                             Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
                                                 if (!ERR) {
@@ -1999,7 +2304,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             }
                                                         } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "Your badges are empty, sending an offer without checking badges.");
+                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
                                                         }
                                                         console.log(DATA);
                                                         console.log(b);
@@ -2111,7 +2416,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     }
                                                                 }
                                                                 if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "⚠️ There are not enough sets. Please try again later.");
+                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
                                                                 } else {
                                                                     logcolors.info("| [Debug] |: -SENDING");
                                                                     t.addTheirItems(theirKeys);
@@ -2122,46 +2427,46 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     setsThatShouldntBeSent.push(t.itemsToGive);
                                                                     t.send((ERR, STATUS) => {
                                                                         if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                             logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                         } else {
-                                                                            refloow.chatMessage(SENDER, "⚠️ Trade Sent! Confirming it...");
+                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                             logcolors.info("| [Steam] |: Trade offer sent!");
                                                                         }
                                                                     });
                                                                 }
                                                             });
                                                         } else {
-                                                            refloow.chatMessage(SENDER, "⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
+                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
                                                         }
                                                         // TO HERE
                                                     } else {
                                                         logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
                                                     }
                                                 } else {
-                                                    refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your badges. Please try again.");
+                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
                                                     logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
                                                 }
                                             });
                                         }
                                     } else {
                                         logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
                                     }
                                 }
                             });
                         } else {
-                            refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                         }
                     });
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                 }
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please provide a valid amount of keys.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
             }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -2196,18 +2501,18 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
                       logcolors.true('| [Refloow] |: Processing of !sellhydra request');
-                        refloow.chatMessage(SENDER, "✔️ Processing your request.");
+                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
                         t.getUserDetails((ERR, ME, THEM) => {
                             if (ERR) {
                                 logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                             } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                                 manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                     if (ERR) {
                                         logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading the bot's inventory. Please try again.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
                                     } else {
                                         for (let i = 0; i < INV.length; i++) {
                                             if (botKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
@@ -2215,7 +2520,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (botKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ The bot does not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough keys.");
                                         } else {
                                             let amountofB = amountofsets;
                                             Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
@@ -2256,7 +2561,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             });
                                                             if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
+                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
                                                             } else {
                                                                 logcolors.info("| [Debug] |: -SENDING");
                                                                 t.addMyItems(botKeys);
@@ -2265,10 +2570,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 t.data("amountofkeys", n);
                                                                 t.send((ERR, STATUS) => {
                                                                     if (ERR) {
-                                                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                         logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                     } else {
-                                                                        refloow.chatMessage(SENDER, "Trade Sent! Confirming it...");
+                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                         logcolors.info("| [Steam] |: Trade offer sent!");
                                                                     }
                                                                 });
@@ -2285,17 +2590,17 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                     }
                                 });
                             } else {
-                                refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                             }
                         });
                     } else {
-                        refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                     }
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
                 }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -2309,18 +2614,18 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
                       logcolors.true('| [Refloow] |: Processing of !sellcsgo request');
-                        refloow.chatMessage(SENDER, "✔️ Processing your request.");
+                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
                         t.getUserDetails((ERR, ME, THEM) => {
                             if (ERR) {
                                 logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                             } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                                 manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                     if (ERR) {
                                         logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading the bot's inventory. Please try again.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
                                     } else {
                                         for (let i = 0; i < INV.length; i++) {
                                             if (botKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
@@ -2328,7 +2633,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (botKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ The bot does not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough keys.");
                                         } else {
                                             let amountofB = amountofsets;
                                             Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
@@ -2369,7 +2674,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             });
                                                             if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
+                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
                                                             } else {
                                                                 logcolors.info("| [Debug] |: -SENDING");
                                                                 t.addMyItems(botKeys);
@@ -2378,10 +2683,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 t.data("amountofkeys", n);
                                                                 t.send((ERR, STATUS) => {
                                                                     if (ERR) {
-                                                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                         logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                     } else {
-                                                                        refloow.chatMessage(SENDER, "Trade Sent! Confirming it...");
+                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                         logcolors.info("| [Steam] |: Trade offer sent!");
                                                                     }
                                                                 });
@@ -2398,17 +2703,17 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                     }
                                 });
                             } else {
-                                refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                             }
                         });
                     } else {
-                        refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                     }
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
                 }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -2422,18 +2727,18 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
                       logcolors.true('| [Refloow] |: Processing of !selltf2 request');
-                        refloow.chatMessage(SENDER, "✔️ Processing your request.");
+                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
                         t.getUserDetails((ERR, ME, THEM) => {
                             if (ERR) {
                                 logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                             } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                                 manager.getUserInventoryContents(refloow.steamID.getSteamID64(), 440, 2, true, (ERR, INV, CURR) => {
                                     if (ERR) {
                                         logcolors.fail("| [Debug] |: An error occurred while getting bot inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading the bot's inventory. Please try again.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
                                     } else {
                                         for (let i = 0; i < INV.length; i++) {
                                             if (botKeys.length < n && INV[i].market_hash_name == "Mann Co. Supply Crate Key") {
@@ -2441,7 +2746,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (botKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ The bot does not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough keys.");
                                         } else {
                                             let amountofB = amountofsets;
                                             Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
@@ -2480,7 +2785,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             });
                                                             if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
+                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
                                                             } else {
                                                                 logcolors.info("| [Debug] |: Sending");
                                                                 t.addMyItems(botKeys);
@@ -2489,10 +2794,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 t.data("amountofkeys", n);
                                                                 t.send((ERR, STATUS) => {
                                                                     if (ERR) {
-                                                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                         logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                     } else {
-                                                                        refloow.chatMessage(SENDER, "✔️ Trade Sent! Confirming it...");
+                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                         logcolors.info("| [Steam] |: Trade offer sent!");
                                                                     }
                                                                 });
@@ -2509,17 +2814,139 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                     }
                                 });
                             } else {
-                                refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                             }
                         });
                     } else {
-                        refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                     }
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
                 }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+        }
+    }
+
+      } else if (MSG.toUpperCase().indexOf("!SELLGEMS") >= 0) {
+        if (botSets) {
+               let n = parseInt(MSG.toUpperCase().replace("!SELLGEMS ", "")),
+                    amountofgems = n * CONFIG.CARDS.GIVE1GEMSFORAMOUNTOFSETSGEMS;
+            if(method.UserSell()) {
+                if (!isNaN(n) && parseInt(n) > 0) {
+                    if (n <= CONFIG.MAXSELL) {
+                      logcolors.true('| [Refloow] |: Processing of !sellgems request');
+                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
+                        let botGems = [],
+                            t = manager.createOffer(SENDER.getSteamID64());
+                        t.getUserDetails((ERR, ME, THEM) => {
+                            if (ERR) {
+                                logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
+                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
+                            } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
+                                manager.getUserInventoryContents(refloow.steamID.getSteamID64(), 753, 6, true, (ERR, INV, CURR) => {
+                                    if (ERR) {
+                                        logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
+                                    } else {
+                    
+                    INV = INV.filter((ITEM) => ITEM.getTag("item_class").internal_name == "item_class_7");
+                                        
+                                        if (INV[0]==null) {
+                      logcolors.info("| [Debug] |: We do not have enough gems for this trade");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough gems for this trade.");
+                                        } else {
+                      if(INV[0].amount>=amountofgems)
+                      {
+                      INV[0].amount=amountofgems;
+                      botGems.push(INV[0]);
+                                            let amountofB = n;
+                                            Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
+                                                if (!ERR) {
+                                                    let s = DATA;
+                                                    Utils.getSets(s, allCards, (ERR, DDATA) => {
+                                                        if (!ERR) {
+                                                            sortSetsByAmountB(s, (DATA) => {
+                                                                let setsSent = {};
+                                                                firsttLoop: for (let i = 0; i < DATA.length; i++) {
+                                                                    console.log(setsSent);
+                                                                    console.log(DATA[i]);
+                                                                    if (DDATA[DATA[i]]) {
+                                                                        for (let j = 0; j < DDATA[DATA[i]].length; j++) {
+                                                                            if (amountofB > 0) {
+                                                                                if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.CARDS.MAXSETSELL) || !setsSent[DATA[i]]) {
+                                                                                    t.addTheirItems(DDATA[DATA[i]][j]);
+                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
+                                                                                    amountofB--;
+                                                                                    if (!setsSent[DATA[i]]) {
+                                                                                        setsSent[DATA[i]] = 1;
+                                                                                    } else {
+                                                                                        setsSent[DATA[i]] += 1;
+                                                                                    }
+                                                                                } else {
+                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
+                                                                                    continue firsttLoop;
+                                                                                }
+                                                                            } else {
+                                                                                logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
+                                                                                continue firsttLoop;
+                                                                            }
+                                                                        }
+                                                                    } else {
+                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN 2");
+                                                                        continue firsttLoop;
+                                                                    }
+                                                                }
+                                                            });
+                                                            if (amountofB > 0) {
+                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
+                                                            } else {
+                                                                logcolors.info("| [Debug] |: -SENDING");
+                                                                t.addMyItems(botGems);
+                                                                t.data("commandused", "SellGems");
+                                                                t.data("amountofsets", n.toString());
+                                                                t.data("amountofGems", amountofgems);
+                                                                t.send((ERR, STATUS) => {
+                                                                    if (ERR) {
+                                                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                        logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
+                                                                    } else {
+                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
+                                                                        logcolors.info("| [Steam] |: Trade offer sent!");
+                                                                    }
+                                                                });
+                                                            }
+                                                        } else {
+                                                            logcolors.fail("| [Inventory] |: An error occurred while getting bot gems: " + ERR);
+                                                        }
+                                                    });
+                                                } else {
+                                                    logcolors.fail("| [Inventory] |: An error occurred while loading user inventory: " + ERR);
+                                                }
+                                            });
+                                        
+                      }
+                      else
+                      {
+                        logcolors.fail("| [Inventory] |: An error occurred while getting bot gems: " + ERR);
+                        refloow.chatMessage(SENDER, "/pre Bot does not have enough gems.Please try again later");
+                      }
+                      
+                      }
+                                    }
+                                });
+                            } else {
+                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
+                            }
+                        });
+                    } else {
+                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of sets.");
+                    }
+                } else {
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of sets!");
+                }
+        } else {
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
@@ -2534,18 +2961,18 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
                       logcolors.true('| [Refloow] |: Processing of !sell request');
-                        refloow.chatMessage(SENDER, "✔️ Processing your request.");
+                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
                         let botKeys = [],
                             t = manager.createOffer(SENDER.getSteamID64());
                         t.getUserDetails((ERR, ME, THEM) => {
                             if (ERR) {
                                 logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
                             } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                                 manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                                     if (ERR) {
                                         logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while loading the bot's inventory. Please try again.");
+                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
                                     } else {
                                         for (let i = 0; i < INV.length; i++) {
                                             if (botKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
@@ -2553,7 +2980,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                             }
                                         }
                                         if (botKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "⚠️ The bot does not have enough keys.");
+                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough keys.");
                                         } else {
                                             let amountofB = amountofsets;
                                             Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
@@ -2594,7 +3021,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             });
                                                             if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
+                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
                                                             } else {
                                                                 logcolors.info("| [Debug] |: -SENDING");
                                                                 t.addMyItems(botKeys);
@@ -2603,10 +3030,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 t.data("amountofkeys", n);
                                                                 t.send((ERR, STATUS) => {
                                                                     if (ERR) {
-                                                                        refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
                                                                         logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
                                                                     } else {
-                                                                        refloow.chatMessage(SENDER, "Trade Sent! Confirming it...");
+                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                         logcolors.info("| [Steam] |: Trade offer sent!");
                                                                     }
                                                                 });
@@ -2623,17 +3050,17 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                     }
                                 });
                             } else {
-                                refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
                             }
                         });
                     } else {
-                        refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
                     }
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
                 }
         } else {
-            refloow.chatMessage(SENDER, "⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
+            refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
     
@@ -2644,16 +3071,16 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
         if (MSG.toUpperCase().indexOf("!BLOCK") >= 0) {
             let n = MSG.toUpperCase().replace("!BLOCK ", "").toString();
             if (SID64REGEX.test(n)) {
-                refloow.chatMessage(SENDER, "✔️ User blocked.");
+                refloow.chatMessage(SENDER, "/me ✔️ User blocked.");
                 refloow.blockUser(n);
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please provide a valid SteamID64");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid SteamID64");
             }
         } else if (MSG.toUpperCase().indexOf("!USERCHECK") >= 0) {
             let n = MSG.toUpperCase().replace("!USERCHECK ", "").toString();
             if (SID64REGEX.test(n)) {
                 if (Object.keys(botSets).length > 0) {
-                    refloow.chatMessage(SENDER, "✔️Loading badges...");
+                    refloow.chatMessage(SENDER, "/me ✔️ Loading badges...");
                     Utils.getBadges(n, (ERR, DATA) => {
                         if (!ERR) {
                             let b = {}; // List with badges that CAN still be crafted
@@ -2690,25 +3117,25 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                 }
                                 botNSets += botSets[Object.keys(botSets)[i]].length;
                             }
-                            refloow.chatMessage(SENDER, "There are currently " + hisMaxSets + "/" + botNSets + " sets available which " + n + " has not fully crafted yet. Buying all of them will cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
+                            refloow.chatMessage(SENDER, "/pre There are currently " + hisMaxSets + "/" + botNSets + " sets available which " + n + " has not fully crafted yet. Buying all of them will cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
                         } else {
-                            refloow.chatMessage(SENDER, "⚠️ An error occurred while getting " + n + "'s badges. Please try again.");
+                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting " + n + "'s badges. Please try again.");
                             logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
                         }
                     });
                 } else {
-                    refloow.chatMessage(SENDER, "⚠️ Please try again later.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later.");
                 }
             } else {
-                refloow.chatMessage(SENDER, "⚠️ Please provide a valid SteamID64.");
+                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid SteamID64.");
             }
         } else if (MSG.toUpperCase() == "!WITHDRAW") {
             manager.getInventoryContents(CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
                 if (ERR) {
-                    refloow.chatMessage(SENDER, "⚠️ An error occurred while loading the bot's inventory.");
+                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory.");
                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
                 } else {
-					refloow.chatMessage(SENDER, "✔️ Bot's inventory loaded.");
+					refloow.chatMessage(SENDER, "/me ✔️ Bot's inventory loaded.");
                     logcolors.info("| [Inventory] |: Bot's inventory loaded.");
                     let t = manager.createOffer(SENDER);
                     for (let i = 0; i < INV.length; i++) {
@@ -2723,7 +3150,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
             });
       } else {
      // Command not recognized display for admins
-     refloow.chatMessage(SENDER, "⚠️ Command not recognized. Type !commands or !admincommands to see all the commands.");;
+     refloow.chatMessage(SENDER, "/pre ⚠️ Command not recognized. Type !commands or !admincommands to see all the commands.");;
     }
     
 	} else if (MSG.toUpperCase().indexOf("!DONATESETS") >= 0) {
@@ -2733,18 +3160,18 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 					if (!isNaN(n) && parseInt(n) > 0) {
 						if (n <= CONFIG.MAXSELL) {
               logcolors.true('| [RefloowAdmin] |: Processing of !donatesets request');
-							refloow.chatMessage(SENDER, "✔️ Processing your request.");
+							refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
 							let botKeys = [],
 								t = manager.createOffer(SENDER.getSteamID64());
 							t.getUserDetails((ERR, ME, THEM) => {
 								if (ERR) {
 									logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-									refloow.chatMessage(SENDER, "⚠️ An error occurred while getting your trade holds. Please try again");
+									refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
 								} else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
 									manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
 										if (ERR) {
 											logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
-											refloow.chatMessage(SENDER, "⚠️ An error occurred while loading the bot's inventory. Please try again.");
+											refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
 										} else {
 											let amountofB = amountofsets;
 												Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
@@ -2785,7 +3212,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 																	}
 																});
 																if (amountofB > 0) {
-																	refloow.chatMessage(SENDER, "⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
+																	refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
 																} else {
 																	logcolors.info("| [Debug] |: -SENDING");
 																	t.addMyItems(botKeys);
@@ -2794,10 +3221,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 																	t.data("amountofkeys", n);
 																	t.send((ERR, STATUS) => {
 																		if (ERR) {
-																			refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
+																			refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
 																			logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
 																		} else {
-																			refloow.chatMessage(SENDER, "✔️ Trade Sent! Confirming it...");
+																			refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
 																			logcolors.info("| [Steam] |: Trade offer sent!");
 																		}
 																	});
@@ -2813,20 +3240,20 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 										}
 									});
 								} else {
-									refloow.chatMessage(SENDER, "⚠️ Please make sure you don't have a trade hold!");
+									refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
 								}
 							});
 						} else {
-							refloow.chatMessage(SENDER, "⚠️ Please try a lower amount of keys.");
+							refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
 						}
 					} else {
-						refloow.chatMessage(SENDER, "⚠️ Please enter a valid amount of keys!");
+						refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
 					}
 			} else {
-				refloow.chatMessage(SENDER, "⚠️ Please try again later.");
+				refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later.");
 		}
             } else {
-     refloow.chatMessage(SENDER, "⚠️ Command not recognized. Type !commands or !help to see all the commands.");;
+     refloow.chatMessage(SENDER, "/pre ⚠️ Command not recognized. Type !commands or !help to see all the commands.");;
     } 
  });		
 
@@ -2868,7 +3295,7 @@ manager.on("sentOfferChanged", (OFFER, OLDSTATE) => {
         d += "\nSets: " + OFFER.data("amountofsets");
         d += "\nKeys: " + OFFER.data("amountofkeys");
         d += "\nSteamID: " + OFFER.partner.getSteamID64();
-        fs.writeFile("../TradesAccepted/" + OFFER.id + "-" + OFFER.partner.getSteamID64() + ".txt", d, (ERR) => {
+        fs.writeFile("./app/[DB] TradesAccepted/" + OFFER.id + "-" + OFFER.partner.getSteamID64() + ".txt", d, (ERR) => {
             if (ERR) {
                 logcolors.fail("| [Steam] |: An error occurred while writing trade file: " + ERR);
             }
@@ -2917,6 +3344,7 @@ manager.on("newOffer", (OFFER) => {
                         });
                     } else {
                         refloow.chatMessage(OFFER.partner, "Offer accepted!");
+                        logcolors.true("| [Offers] |: New offer has been accepted !");
                     }
                 });
             } else {
