@@ -46,9 +46,10 @@ t.maxSets = function(cardsFromSortedInventory) {
 
 t.getCardsInSets = (callback) => {
 
-            let c = require("./set_data.json"),
+            let c = require("./[DB] SetsData/set_data.json"),
                 d = {};
             for (let i = 0; i < c.sets.length; i++) {
+                d[c.sets[i].AppId] = { appid: c.sets[i].AppId, name: c.sets[i].Game, count: c.sets[i].Cards };
                 d[c.sets[i].appid] = { appid: c.sets[i].appid, name: c.sets[i].game, count: c.sets[i].true_count };
             }
             callback(null, d);
@@ -163,7 +164,9 @@ t.getSets = (INV, DATA, callback) => {
             name: "The Descendant",
             count: 5
         };
+
         let uc = Object.keys(c).length;
+        
         if (DATA[id.toString()] && uc == DATA[id.toString()].count) {
             r = t.maxSets(c);
             s[id.toString()] = [];
@@ -175,7 +178,15 @@ t.getSets = (INV, DATA, callback) => {
                 s[id.toString()].push(set);
             }
         } else if (!DATA[id.toString()]) {
-            console.log("## Card set non-existant, skipping it");
+            // If bot doesnt recognize the sets it will be stored in missing.txt
+            fs.appendFile('./app/[DB] SetsData/MissingData.txt',id.toString()+"\n",(err)=>
+            {
+                if (err) throw err;
+            }
+            )
+            logcolors.info("| [CardData] |: Card set non-existant, skipping it ID: " + id.toString());
+            logcolors.true("| [CardData] |: Placed non-existing sets in Missing.txt");
+            
         }
     });
     callback(null, s);
