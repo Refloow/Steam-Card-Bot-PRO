@@ -7,10 +7,9 @@ module.exports = {
   or main dev steam: https://steamcommunity.com/id/MajokingGames/
 
 */
+    //----------------|--A-C-C-O-U-N-T---C-R-E-D-E-N-T-I-A-L-S--|-----------------------------------------------------//
 
-    // Account Credentials AREA
-
-    //-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------//
 
     USERNAME: "", // Steam Bot Account Username
     PASSWORD: "", // Steam Bot Account Password
@@ -18,22 +17,38 @@ module.exports = {
     IDENTITYSECRET: "", // Code that can be found in {Steam64ID}maFile in SDA(Steam desktop Auth) 
     STEAMAPIKEY: "", // Code from steam in readme how to find it
 
+    //-----------------------------------------------------------------------------------------------//
 
-    //-----------------------------------------------------------------------------------------------
+    
+    //--------------------|--P-L-A-Y---&---A-D-M-I-N-S--|------------------------------------------------------------//
 
-    //-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------//
 
-    PLAYGAMES: ["// Your custom message here for played game", 440], // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
+    PLAYGAMES: [":sets: // Your custom message here for played game"], // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
     ADMINS: [""], // to add admin put steam64id 
 
+    //-----------------------------------------------------------------------------------------------//
+
+
+    // ---------------|   C-O-N-S-O-L-E---M-S-S-A-G-E-S   |--------------------------------------------------------//
+
+   
+        CalledCommandsLive: true,           // [true/false] Enable or disable | This feature shows in the logs which commands were called by which user.
+        RefloowChat_Enable: true,           // [true/false] Enable or disable | This feature show in dev logs all messages sent by users to bot
+
+
     //-----------------------------------------------------------------------------------------------
 
 
-    // VALUES configuration
+    //-------------------|--V-A-L-U-E-S  =  P-R-I-C-E-S---|---------------------------------------------------------//
+
+    //-----------------------------------------------------------------------------------------------//
 
     // THIS IS MAIN CURRENC USED FOR !BUY AND !SELL COMMANDS
 
     KEYSFROMGAME: 730, // 730 = CSGO, 440 = TF2
+
+     // We dont recommend changing currencies since calculations will still work with cs go keys, will be changed in next updates
 
     // Rate Settings
 
@@ -46,8 +61,8 @@ module.exports = {
         GIVE1KEYPERAMOUNTOFSETSTF2: 20, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
         
         BUY1SETFORAMOUNTOFREF: 3, // For instance; if set to 1 you sell 1 sets for 2 ref.
-        BUY1GEMSFORAMOUNTOFSETS: 4, // For instance; if set to 4 you sell 4 sets for 1 sack of gems.
-        GIVE1GEMSFORAMOUNTOFSETSGEMS: 10,
+        BUY1GEMSFORAMOUNTOFSETS: 4, // For instance; if set to 400,you sell 1 set for 400 gems.
+        GIVE1GEMSFORAMOUNTOFSETSGEMS: 300, // For instance; if set to 300,you sell 300 gems for 1 set.
         
         MAXSETSELL: 50, // The maximum amount of sets of a kind the bot will send when !sell is used
         PEOPLETHATCANSELL: ["STEAMID64", "STEAMID64"]
@@ -60,8 +75,6 @@ module.exports = {
     MAXSELL: 100, // Max keys you can sell sets for at a time
     MAXBUYGEMS: 1, // Max sack of gems you can buy sets for at a time
     MAXBUYREF: 100, // Max ref you can buy sets for at a time
-
-    //-----------------------------------------------------------------------------------------------
 
 
     // Here is list of keys that bot can accept
@@ -96,9 +109,9 @@ module.exports = {
             "Mann Co. Supply Crate Key"
     ],
 
-    //-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------//
 
-
+    
 // ----------------------------------------------------C-O-M-M-A-N-D-S------S-E-T-T-I-N-G-S--------------------------------------------//
 
 // After seting command to false, command wont apear on !commands info command and user wont be able to use that bot command.
@@ -138,7 +151,8 @@ module.exports = {
  /*2*/  buyhydra_enable: true,                  // [true/false] Enable or disable | !buyhydra command    (// This command when called sell sets for user hydra keys)
  /*3*/  buycsgo_enable: true,                   // [true/false] Enable or disable | !buycsgo command     (// This command when called sell sets to user for csgo keys)
  /*4*/  buytf2_enable: true,                    // [true/false] Enable or disable | !buytf2 command      (// This command when called sell sets to user for tf2 keys)
- /*5*/  buygems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  buygems_enable: true,                   // [true/false] Enable or disable | !buygems command     (// This command when called sell sets to user for gems)
+
  /*6*/  buypubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
 
 
@@ -179,7 +193,8 @@ module.exports = {
  /*2*/  sellhydra_enable: true,                    // [true/false] Enable or disable | !sellhydra command   (// This command when called sell hydra cs go keys for sets to user)
  /*3*/  sellcsgo_enable: true,                     // [true/false] Enable or disable | !sellcsgo command    (// This command when called sell csgo keys for sets to user)
  /*4*/  selltf2_enable: true,                      // [true/false] Enable or disable | !selltf2 command     (// This command when called sell tf2 keys for sets to user)
- /*5*/  sellgems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  sellgems_enable: true,                     // [true/false] Enable or disable | !sellgems command    (// This command when called sell gems for sets to user)
+ 
  /*6*/  sellpubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
 
 
@@ -189,9 +204,8 @@ module.exports = {
 
 
     //-SETTINGS: MESSAGES
-    RefloowChat_Enable: true,               // [true/false] Enable or disable | This feature show in dev logs all messages sent by users to bot
     EnableWelcomeMessage: true,             // [true/false] Enable or disable | Bot sending welcome message uppon accepting friend request
-    WELCOME: "Hello ! This is Refloow's Level Up Bot use: !help or !commands to see all available commands !", // Welcome message.
+    WELCOME: "/code Hello ! This is Refloow's Level Up Bot use: !help or !commands to see all available commands !", // Welcome message.
 
         //IFNO COMMANDS
 
@@ -207,7 +221,7 @@ module.exports = {
     bot_clearing_friend_list: true,         // [true/false] Enable or disable | bot removing inactive users for clearing friend list
     message_inactive_friend_removed: true,  // [true/false] Enable or disable | sending chat message to user that got removed after being inactive for too long.
     MAXHOURSADDED: 168,                     //  Time in hours before bot remove inactive user.
-    REMOVEDINACTIVE: 'Im cleaning my friendlist and removing inactive friends, please if you will use our service again re add me thanks.', // This message shows when user get cleared from friendlist.
+    REMOVEDINACTIVE: '/pre Im cleaning my friendlist and removing inactive friends, please if you will use our service again re add me thanks.', // This message shows when user get cleared from friendlist.
 
     //-SETTINGS:  BOT ANTI SPAM PROTECTION (Removing user after spaming)
 
