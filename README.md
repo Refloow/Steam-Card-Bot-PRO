@@ -56,6 +56,7 @@ Enable feature by setting `true` or disable it by setting `false` in `config.js`
 ### Auto accepting friend request
   1. Uppon accepting friend request sending an welcome message        (Message can be set or disabled in config)
   2. Uppon accepting friend request adding user to the selected group (Group can be set or inviting disabled inside of the config)
+  3. Checks for offline friend requests
 
 ### Chat spam protection (can be disabled or enabled in config)
   1. Uppon removing user sending him message (message can be set or disabled in config)
@@ -69,6 +70,9 @@ Enable feature by setting `true` or disable it by setting `false` in `config.js`
 ### CHAT LOGS
   1. Daily chat logs (can be disabled in config)
   2. Chat logs per user (can be disabled in config)
+  
+### TRADE LOGS
+ 1. Saves logs of trades
   
 ### Responding to incoming group invites (can be totaly disabled in config)
   1. Auto declining incoming group invites
@@ -101,54 +105,47 @@ Enable feature by setting `true` or disable it by setting `false` in `config.js`
 
 - !level dream_level
 
-
 ## BUY COMMANDS:
 
-- !buy - - - (can be disabled in config) - - - - (// This command when called sell sets for keys (main currecy that you set default is cs go keys) following current bot rate)
-- !buyany - - - (can be disabled in config) - - - - (// This command when called sell any sets for keys to user without checking badges)
-- !buyone - - - (can be disabled in config) - - - - (// This command when called sell sets for keys but (gives user 1 set from each game that he hasnt crafted) - For badge collectors
+- !buy - - - (can be disabled in config) - - - - (// Sells sets for following rate using main currency)
+- !buyany - - - (can be disabled in config) - - - - (// sells any sets for keys to user without checking badges)
+- !buyone - - - (can be disabled in config) - - - - (// sells sets for keys but (gives user 1 set from each game that he hasnt crafted) - For badge collectors
+
+#### CURRENCY SPECIFIC COMMANDS
 
 - !buyref - - - (can be disabled in config) - - - - (// This command when called sell sets to user for ref metal)
 - !buyhydra - - - (can be disabled in config) - - - - (// This command when called sell sets for user hydra keys)
 - !buycsgo - - - (can be disabled in config) - - - - (// This command when called sell sets to user for csgo keys)
 - !buytf2 - - - (can be disabled in config) - - - - (// This command when called sell sets to user for tf2 keys)
-- !buygems - - - (can be disabled in config) -soon (next update)
-- !buypubg - - - (can be disabled in config) -soon (next update)
+- !buygems - - - (can be disabled in config) - - - - (// This command when called sell sets to user for gems)
 
 - !buyoneref - - - (can be disabled in config) -soon (next update)
 - !buyonehydra - - - (can be disabled in config) -soon (next update)
 - !buyonecsgo - - - (can be disabled in config) -soon (next update)
 - !buyonetf2 - - - (can be disabled in config) -soon (next update)
 - !buyonegems - - - (can be disabled in config) -soon (next update)
-- !buyonepubg - - - (can be disabled in config) -soon (next update)
 
 - !buyanyref - - - (can be disabled in config) -soon (next update)
 - !buyanyhydra - - - (can be disabled in config) -soon (next update)
 - !buyanycsgo - - - (can be disabled in config) -soon (next update)
 - !buyanytf2 - - - (can be disabled in config) -soon (next update)
 - !buyanygems - - - (can be disabled in config) -soon (next update)
-- !buyanypubg - - - (can be disabled in config) -soon (next update)
 
 ## SELL COMMANDS:
 
 - !sell - - - (can be disabled in config) - - - -  (// This command when called sell keys for sets) - Uses main currency set at: KEYSFROMGAME
 
-- !sellref - - - (can be disabled in config)
-- !sellhydra - - - (can be disabled in config) - - - - (// This command when called sell hydra cs go keys for sets to user)
-- !sellcsgo - - - (can be disabled in config) - - - - (// This command when called sell csgo keys for sets to user)
-- !selltf2 - - - (can be disabled in config) - - - - (// This command when called sell tf2 keys for sets to user)
-- !sellgems - - - (can be disabled in config) -soon (next update)
-- !sellpubg - - - (can be disabled in config) -soon (next update)
+- !sellref - - - (can be disabled in config) - - - - - (//This command when called bot will buy sets from user using ref metal)
+- !sellhydra - - - (can be disabled in config) - - - - (// This command when called bot will buy sets from user using csgo hydra key)
+- !sellcsgo - - - (can be disabled in config) - - - - (// This command when called bot will buy sets from user using csgo keys)
+- !selltf2 - - - (can be disabled in config) - - - - (// This command when called bot will buy sets from user using tf2 keys)
+- !sellgems - - - (can be disabled in config) - - - (// This command when called bot will buy sets from user using gems)
 
 ## Admin commands:
 
 - !block user_id (admin command to block user from using bot due spaming)
 - !usercheck
 - !withdraw (command for admin to withdraw keys)
-- !donatesets
-
-## Others
-
 - !donatesets
 
 
