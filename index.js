@@ -68,18 +68,10 @@ mongoose.connect(url,connectionParams)
         console.log(`| [OSL-Works] |: Hello, thanks for downloading our software !` .green);
         console.log(`| [OSL-Works] |: Looks like there is some issues with connecting to database. \n\n` .green);
         console.log(`| [Whitelist] |: Access to the app denied. \n` .red);
+        console.log(`| [APP] |: If you made changes to app, unexpected error happened please check err message down below` .red)
 
-   //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//
-   //                                              //
-   //                W A R N I N G                 //
-   //                                              //
-   //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//
-
-   // IF YOU MADE CHANGES OR YOU ARE DEBUGING CODE
-   // UNCOMMENT LINE DOWN BELOW
 
     console.log(err);
-
 
 
 
