@@ -78,7 +78,7 @@ mongoose.connect(url,connectionParams)
    // IF YOU MADE CHANGES OR YOU ARE DEBUGING CODE
    // UNCOMMENT LINE DOWN BELOW
 
-    //  console.log(err);
+    console.log(err);
 
 
 
