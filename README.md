@@ -194,7 +194,8 @@ If there is any questions feel free to ask me on: https://steamcommunity.com/id/
 - If you like the project and the fact that is free you can support us by giving an donation.
 - We are accepting donations on:
 
-1. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
+1. Ko-fi: https://ko-fi.com/refloow
+2. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
 
 
 # Want Improvements ?
