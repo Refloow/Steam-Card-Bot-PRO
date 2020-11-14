@@ -37,6 +37,13 @@ Project is made open source and free for all. We cant prohibit reselling of our 
 
 https://discord.gg/XxvjjPs
 
+# Support the project
+- If you like the project and the fact that is free you can support us by giving an donation.
+- We are accepting donations on:
+
+1. Ko-fi: https://ko-fi.com/refloow
+2. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
+
 # Unique Features
 
 - Endless customization
@@ -189,13 +196,6 @@ Step 5 (run the bot)
 - Click start.bat file to run bot.
 
 If there is any questions feel free to ask me on: https://steamcommunity.com/id/MajokingGames/
-
-# Support the project
-- If you like the project and the fact that is free you can support us by giving an donation.
-- We are accepting donations on:
-
-1. Ko-fi: https://ko-fi.com/refloow
-2. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
 
 
 # Want Improvements ?
