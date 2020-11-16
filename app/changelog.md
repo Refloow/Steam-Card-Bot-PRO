@@ -1,5 +1,11 @@
 # Changelog
 
+# Release v1.5.0
+
+This version contains everything from previous version (Nothing changed) but due some user feedback new version has been drafted which will have new fixed code from the master branch. (Some error handling display is added)
+
+If scrip works fine for you there is no need for downloading this release, unless you are running on the older version.
+
 # Release 1.5.0
 
 ## Fixes
