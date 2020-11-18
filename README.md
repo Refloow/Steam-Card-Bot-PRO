@@ -159,7 +159,7 @@ Enable feature by setting `true` or disable it by setting `false` in `config.js`
 
 
 # Prerequisites (What bot require to start)
-- Node.js (https://nodejs.org/en/)
+- Node.js (Version recommended for most users) (https://nodejs.org/en/)
 - Text editor (recommend sublime: https://www.sublimetext.com/3)
 
 # Essentials
