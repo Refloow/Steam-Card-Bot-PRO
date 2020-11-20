@@ -22,8 +22,11 @@ Steam Card Bot PRO is free open source, fully automated Level Up Bot with all fe
 [![Language](https://img.shields.io/badge/language-JavaScript-yellow.svg)](https://en.wikipedia.org/wiki/JavaScript)
 [![Steam](https://img.shields.io/badge/steam-donate-yellow.svg)](https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti)
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/P5P02ONAC)
-
+<p align= "center">
+  <a href="https://ko-fi.com/P5P02ONAC">
+  <img src="https://www.ko-fi.com/img/githubbutton_sm.svg">
+  </a>
+</p>
 
 # Note:
 To everyone who plan to sell our project by stating that they coded it or that they sell edited version. Project is licensed under the MIT license
