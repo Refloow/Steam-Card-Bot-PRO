@@ -12,15 +12,31 @@ Steam Card Bot PRO is free open source, fully automated Level Up Bot with all fe
 
 - This project will receive constant updates and new features added !
 
-
-![GitHub package version](https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg)
-[![GitHub forks](https://img.shields.io/github/forks/Refloow/Steam-Card-Bot-PRO.svg?style=plastic)](https://github.com/Refloow/Steam-Card-Bot-PRO/network)
-[![GitHub stars](https://img.shields.io/github/stars/Refloow/Steam-Card-Bot-PRO.svg?style=plastic)](https://github.com/Refloow/Steam-Card-Bot-PRO/stargazers)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)](https://raw.githubusercontent.com/Refloow/Steam-Card-Bot-PRO/master/LICENSE) 
-[![Support](https://img.shields.io/discord/690327113039085600)](https://discord.gg/XxvjjPs)
-[![Language](https://img.shields.io/badge/Uses-Node.js-green)](https://en.wikipedia.org/wiki/Node.js)
-[![Language](https://img.shields.io/badge/language-JavaScript-yellow.svg)](https://en.wikipedia.org/wiki/JavaScript)
-[![Steam](https://img.shields.io/badge/steam-donate-yellow.svg)](https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti)
+<p align= "center">
+  <img src="https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg" alt="GitHub package version">
+  </a>
+    <a href="https://github.com/Refloow/Steam-Card-Bot-PRO/network">
+  <img src="https://img.shields.io/github/forks/Refloow/Steam-Card-Bot-PRO.svg?style=plastic" alt="GitHub forks">
+  </a>
+    <a href="https://github.com/Refloow/Steam-Card-Bot-PRO/stargazers">
+  <img src="https://img.shields.io/github/stars/Refloow/Steam-Card-Bot-PRO.svg?style=plastic" alt="GitHub stars">
+  </a>
+    <a href="https://raw.githubusercontent.com/Refloow/Steam-Card-Bot-PRO/master/LICENSE">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg?style=plastic" alt="GitHub license">
+  </a>
+    <a href="https://discord.gg/XxvjjPs">
+  <img src="https://img.shields.io/discord/690327113039085600" alt="Support">
+  </a>
+    <a href="https://en.wikipedia.org/wiki/Node.js">
+  <img src="https://img.shields.io/badge/Uses-Node.js-green" alt="Language">
+  </a>
+    <a href="https://en.wikipedia.org/wiki/JavaScript">
+  <img src="https://img.shields.io/badge/language-JavaScript-yellow.svg" alt="Language">
+  </a>
+    <a href="https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti">
+  <img src="https://img.shields.io/badge/steam-donate-yellow.svg" alt="Steam">
+  </a>
+</p>
 
 <p align= "center">
   <a href="https://ko-fi.com/P5P02ONAC">
