@@ -251,7 +251,12 @@ module.exports = {
 
     //-SETTINGS: BOT COMMENTING AFTER TRADE
 
-    After_Trade_Comment_enable: true,       // [true/false] Enable or disable | posting coments after trade
+	// Make sure that commends don't contain any words such as rep, reputation, cash, trading, etc.
+	
+	/* steam is recently changing its policy and marks accounts that talk with certain trigger words as hijacked and community lock them for 15 days.
+	Make sure that in the commands that bot left isn't any words such as +rep, trusted, cash, trade, etc. */
+	
+    After_Trade_Comment_enable: false,       // [true/false] Enable or disable | posting coments after trade
     COMMENTAFTERTRADE: "Thanks for trading with our level up service!",
 
     //-SETTINGS: INVITING TO THE GROUP
