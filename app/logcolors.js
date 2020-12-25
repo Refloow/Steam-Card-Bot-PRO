@@ -23,14 +23,17 @@ const level ={
   true: 1,
   fail: 2,
   new: 3,
-  info: 4
+  info: 4,
+  summary:5
 };
 const colors = {
     false: 'bold red',
     true: 'bold green',
     fail: 'red',
     new: 'underline gray',
-    info: 'yellow'};
+    info: 'yellow',
+	summary: 'cyan'
+	};
 
 winston.addColors(colors);
 const logger = module.exports = winston.createLogger({
@@ -43,7 +46,7 @@ const logger = module.exports = winston.createLogger({
     winston.format.printf(info => `${info.timestamp}: ${info.message}`)
   ),
   transports: [
-    new winston.transports.Console()
+    new winston.transports.Console({level:'summary'})
   ],
   level: 'info'
 });
