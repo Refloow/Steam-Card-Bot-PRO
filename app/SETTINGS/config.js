@@ -7,9 +7,10 @@ module.exports = {
   or main dev steam: https://steamcommunity.com/id/MajokingGames/
 
 */
-    //----------------|--A-C-C-O-U-N-T---C-R-E-D-E-N-T-I-A-L-S--|-----------------------------------------------------//
 
-    //-----------------------------------------------------------------------------------------------//
+    // Account Credentials AREA
+
+    //-----------------------------------------------------------------------------------------------
 
     USERNAME: "", // Steam Bot Account Username
     PASSWORD: "", // Steam Bot Account Password
@@ -17,19 +18,15 @@ module.exports = {
     IDENTITYSECRET: "", // Code that can be found in {Steam64ID}maFile in SDA(Steam desktop Auth) 
     STEAMAPIKEY: "", // Code from steam in readme how to find it
 
-    //-----------------------------------------------------------------------------------------------//
 
-    
-    //--------------------|--P-L-A-Y---&---A-D-M-I-N-S--|------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------------------
 
-    PLAYGAMES: [":sets: // Your custom message here for played game"], // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
+    PLAYGAMES: ":sets: sets - 35:1 CSGO / 18:1 TF2 / 350:1 Gems", // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
     ADMINS: [""], // to add admin put steam64id 
 
-    //-----------------------------------------------------------------------------------------------//
-
-
+    //-----------------------------------------------------------------------------------------------
     // ---------------|   C-O-N-S-O-L-E---M-S-S-A-G-E-S   |--------------------------------------------------------//
 
    
@@ -37,36 +34,43 @@ module.exports = {
         RefloowChat_Enable: true,           // [true/false] Enable or disable | This feature show in dev logs all messages sent by users to bot
 
 
-    //-----------------------------------------------------------------------------------------------
-
-
-    //-------------------|--V-A-L-U-E-S  =  P-R-I-C-E-S---|---------------------------------------------------------//
-
-    //-----------------------------------------------------------------------------------------------//
+    // VALUES configuration
 
     // THIS IS MAIN CURRENC USED FOR !BUY AND !SELL COMMANDS
 
-    KEYSFROMGAME: 730, // 730 = CSGO, 440 = TF2
-
-     // We dont recommend changing currencies since calculations will still work with cs go keys, will be changed in next updates
+    KEYSFROMGAME: 440, // 730 = CSGO, 440 = TF2
 
     // Rate Settings
 
     CARDS: {
-        BUY1KEYFORAMOUNTOFSETS: 26, // For instance; if set to 9 you sell 9 sets for 1 key.
-        GIVE1KEYPERAMOUNTOFSETS: 60, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
-        BUY1KEYFORAMOUNTOFSETSHYDRA: 12, // For instance; if set to 9 you sell 9 sets for 1 key.
-        GIVE1KEYPERAMOUNTOFSETSHYDRA: 60, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
-        BUY1KEYFORAMOUNTOFSETSTF2: 16, // For instance; if set to 9 you sell 9 sets for 1 key.
-        GIVE1KEYPERAMOUNTOFSETSTF2: 20, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
+        BUY1KEYFORAMOUNTOFSETS: 35, // For instance; if set to 9 you sell 9 sets for 1 key.
+        GIVE1KEYPERAMOUNTOFSETS: 40, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
+        BUY1KEYFORAMOUNTOFSETSHYDRA: 20, // For instance; if set to 9 you sell 9 sets for 1 key.
+        GIVE1KEYPERAMOUNTOFSETSHYDRA: 1, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
+        BUY1KEYFORAMOUNTOFSETSTF2: 18, // For instance; if set to 9 you sell 9 sets for 1 key.
+        GIVE1KEYPERAMOUNTOFSETSTF2: 22, // For instance; if set to 6 you give people that have access to the !sell command 1 key for 6 of their sets.
         
         BUY1SETFORAMOUNTOFREF: 3, // For instance; if set to 1 you sell 1 sets for 2 ref.
-        BUY1GEMSFORAMOUNTOFSETS: 4, // For instance; if set to 400,you sell 1 set for 400 gems.
+        BUY1GEMSFORAMOUNTOFSETS: 350, // For instance; if set to 400,you sell 1 set for 400 gems.
         GIVE1GEMSFORAMOUNTOFSETSGEMS: 300, // For instance; if set to 300,you sell 300 gems for 1 set.
         
         MAXSETSELL: 50, // The maximum amount of sets of a kind the bot will send when !sell is used
-        PEOPLETHATCANSELL: ["STEAMID64", "STEAMID64"]
+        //PEOPLETHATCANSELL: ["76561198151942857", "STEAMID64"]
+		
     },
+	
+	GEMS:
+	{
+		
+		BUY1KEYFORAMOUNTOFGEMSCSGO : 15000, // For instance; if you set to 6000 , you sell 6000 gems for 1 CS:GO Key.
+		BUY1KEYFORAMOUNTOFGEMSHYDRA : 5900, // For instance; if you set to 10000 , you sell 10000 gems for 1 HYDRA Key.
+		BUY1KEYFORAMOUNTOFGEMSTF2 : 8000, // For instance; if you set to 8000 , you sell 8000 gems for 1 TF 2 Key.
+		
+		GIVE1KEYPERAMOUNTOFGEMSCSGO : 17000, // For instance; if you set to 6000 , you give 1 CS:GO key for 5000 gems.
+		GIVE1KEYPERAMOUNTOFGEMSHYDRA : 6100, // For instance; if you set to 12000 , you give 1 HYDRA Key for 9000 gems.
+		GIVE1KEYPERAMOUNTOFGEMSTF2 : 9000, // For instance; if you set to 9000 , you give 1 TF2 Key for 7000 gems.
+	},
+	
 
     // Limits
 
@@ -75,6 +79,9 @@ module.exports = {
     MAXSELL: 100, // Max keys you can sell sets for at a time
     MAXBUYGEMS: 1, // Max sack of gems you can buy sets for at a time
     MAXBUYREF: 100, // Max ref you can buy sets for at a time
+	MAXSTOCKSETSPERGAME:1, //Max sets bot will keep in stock, so user cannot sell too many same sets again
+	MAXSETSELL:50,
+    //-----------------------------------------------------------------------------------------------
 
 
     // Here is list of keys that bot can accept
@@ -98,8 +105,8 @@ module.exports = {
             "Operation Phoenix Case Key",
             "Gamma Case Key",
             "Gamma 2 Case Key",
-            "Glove Case Key",
-            "Operation Hydra Case Key"
+            "Glove Case Key"
+            
     ], // These are all keys ^ //Mann Co. Supply Crate Key//
 
 
@@ -108,10 +115,17 @@ module.exports = {
     [
             "Mann Co. Supply Crate Key"
     ],
+	
+	HYDRAKEY:
+	[
+		"Operation Hydra Case Key"
+	],
+	
+	
 
-    //-----------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------------------
 
-    
+
 // ----------------------------------------------------C-O-M-M-A-N-D-S------S-E-T-T-I-N-G-S--------------------------------------------//
 
 // After seting command to false, command wont apear on !commands info command and user wont be able to use that bot command.
@@ -139,22 +153,21 @@ module.exports = {
 
 // ----------------------------SIMPLE BUY (!buy, !buyany, !buyone commands)
 
-    buy_enable: true,                          // [ture/false] Enable or disable | !buy command         (// This command when called sell sets for keys (main currecy that you set default is cs go keys) following current bot rate)
-    buyany_enable: true,                       // [true/false] Enable or disable | !buyany command      (// This command when called sell any sets for keys to user without checking badges) 
-    buyone_enable: true,                       // [true/false] Enable or disable | !buyone command      (// This command when called sell sets for keys but (gives user 1 set from each game that he hasnt crafted) - For badge collectors
-
-
+    buy_enable: false,                          // [ture/false] Enable or disable | !buy command         (// This command when called sell sets for keys (main currecy that you set default is cs go keys) following current bot rate)
+    buyany_enable: false,                       // [true/false] Enable or disable | !buyany command      (// This command when called sell any sets for keys to user without checking badges) 
+    buyone_enable: false,                       // [true/false] Enable or disable | !buyone command      (// This command when called sell sets for keys but (gives user 1 set from each game that he hasnt crafted) - For badge collectors
+	
+	
 // ----------------------------CURRENCYS BUY (!buyref, !buyhydra, !buycsgo, !buytf2, !buygems, !buypubg)
 
 
- /*1*/  buyref_enable: true,                    // [true/false] Enable or disable | !buyref command      (// This command when called sell sets to user for ref metal)
+ /*1*/  buyref_enable: false,                    // [true/false] Enable or disable | !buyref command      (// This command when called sell sets to user for ref metal)
  /*2*/  buyhydra_enable: true,                  // [true/false] Enable or disable | !buyhydra command    (// This command when called sell sets for user hydra keys)
  /*3*/  buycsgo_enable: true,                   // [true/false] Enable or disable | !buycsgo command     (// This command when called sell sets to user for csgo keys)
  /*4*/  buytf2_enable: true,                    // [true/false] Enable or disable | !buytf2 command      (// This command when called sell sets to user for tf2 keys)
- /*5*/  buygems_enable: true,                   // [true/false] Enable or disable | !buygems command     (// This command when called sell sets to user for gems)
-
+ /*5*/  buygems_enable: true,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
  /*6*/  buypubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
-
+		buygemsforkey_enable: false,
 
 // ----------------------------CURRENCYS BUY ONE (!buyoneref, !buyonehydra, !buyonecsgo, !buyonetf2, !buyonegems, !buyonepubg)
 
@@ -176,16 +189,16 @@ module.exports = {
  /*4*/  buyanytf2_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
  /*5*/  buyanygems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
  /*6*/  buyanypubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
-
+		
 //-----------------------------------------------------------------------------------------------------------------------------------//
 
 //-----------------------------SELL COMMANDS------------------------------------------------------------------------------------------//
 
 // ----------------------------SIMPLE SELL (!sell)
+	sellcheck_enable:true,
 
-
-    sell_enable: true,                             // [true/false] Enable or disable | !sell command       (// This command when called sell keys for sets) - Uses main currency set at: KEYSFROMGAME
-
+    sell_enable: false,                             // [true/false] Enable or disable | !sell command       (// This command when called sell keys for sets) - Uses main currency set at: KEYSFROMGAME
+	
 
 // ----------------------------SIMPLE CURRENCYS (!sellref, !sellhydra, !sellcsgo, !selltf2, !sellgems, !sellpubg)
 
@@ -193,10 +206,9 @@ module.exports = {
  /*2*/  sellhydra_enable: true,                    // [true/false] Enable or disable | !sellhydra command   (// This command when called sell hydra cs go keys for sets to user)
  /*3*/  sellcsgo_enable: true,                     // [true/false] Enable or disable | !sellcsgo command    (// This command when called sell csgo keys for sets to user)
  /*4*/  selltf2_enable: true,                      // [true/false] Enable or disable | !selltf2 command     (// This command when called sell tf2 keys for sets to user)
- /*5*/  sellgems_enable: true,                     // [true/false] Enable or disable | !sellgems command    (// This command when called sell gems for sets to user)
- 
+ /*5*/  sellgems_enable: true,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
  /*6*/  sellpubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
-
+		sellgemsforkey_enable:false,
 
 //-------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -204,13 +216,14 @@ module.exports = {
 
 
     //-SETTINGS: MESSAGES
+    RefloowChat_Enable: true,               // [true/false] Enable or disable | This feature show in dev logs all messages sent by users to bot
     EnableWelcomeMessage: true,             // [true/false] Enable or disable | Bot sending welcome message uppon accepting friend request
-    WELCOME: "/code Hello ! This is Refloow's Level Up Bot use: !help or !commands to see all available commands !", // Welcome message.
+    WELCOME: "/quote Hello ! Welcome to Baba Yaga's Level Up Bot \nuse: !help or !commands to see list of all available commands.", // Welcome message.
 
         //IFNO COMMANDS
 
-    INFO: "Use these commands to get information about the card set bot: \n!stock [card sets in stock] \n!owner [profile]", //Info command message
-    OWNER: "/me https://steamcommunity.com/id/", // owner command message
+    INFO: "/code Use these commands to get information about the bot: \n!stock [card sets in stock] \n!owner [profile]", //Info command message
+    OWNER: "/me https://steamcommunity.com/profiles/76561198151942857/", // owner command message
     SELLHELP: "You are also able to sell sets. You can do this by using !sell [amount of keys].", // sellhelp command message
 
 
@@ -221,7 +234,7 @@ module.exports = {
     bot_clearing_friend_list: true,         // [true/false] Enable or disable | bot removing inactive users for clearing friend list
     message_inactive_friend_removed: true,  // [true/false] Enable or disable | sending chat message to user that got removed after being inactive for too long.
     MAXHOURSADDED: 168,                     //  Time in hours before bot remove inactive user.
-    REMOVEDINACTIVE: '/pre Im cleaning my friendlist and removing inactive friends, please if you will use our service again re add me thanks.', // This message shows when user get cleared from friendlist.
+    REMOVEDINACTIVE: 'Im cleaning my friendlist and removing inactive friends, please if you will use our service again re add me thanks.', // This message shows when user get cleared from friendlist.
 
     //-SETTINGS:  BOT ANTI SPAM PROTECTION (Removing user after spaming)
 
@@ -229,7 +242,7 @@ module.exports = {
     spam_remove_message_enable: true,       // [true/false] Enable or disable | sending chat message to user that got removed for spaming too many messages per sec.
     spam_admin_notification_enable: true,   // [true/false] Enable or disable | notifing admin with id of user who got remove for spaming
     MAXMSGPERSEC: 3,                        // The amount of messages users can send every second without getting removed. (Spam Protection)
-    SPAMREMOVEMESSAGE: `You got removed since you spammed admin is notified please do not spam or on your next alert you will get blocked.`, // This is message that is shown to user when get removed from friends when he spams.
+    SPAMREMOVEMESSAGE: `You Spammed and Stabbed The Devil In The Back. To Him, This Isn’t Vengeance; This Is Justice, You have been removed.`, // This is message that is shown to user when get removed from friends when he spams.
 
     //-SETTINGS:  BOT SAVING LOGS SETTINGS
 
@@ -239,12 +252,12 @@ module.exports = {
     //-SETTINGS: BOT COMMENTING AFTER TRADE
 
     After_Trade_Comment_enable: true,       // [true/false] Enable or disable | posting coments after trade
-    COMMENTAFTERTRADE: "Thanks for trading with our level up service! ",
+    COMMENTAFTERTRADE: "Thanks for trading with our level up service!",
 
     //-SETTINGS: INVITING TO THE GROUP
 
     friend_group_inviting: true,            // [true/false] Enable or disable | Inviting user to the selected group on friend request
-    INVITETOGROUPID: "",                    // Invite users to this group
+    INVITETOGROUPID: "103582791468034120",                    // Invite users to this group
 
 
 
@@ -266,7 +279,7 @@ module.exports = {
 
     // SETTINGS: AUTO DECLINING RANDOM GROUP INVITES
 
-    decline_random_group_inv: true,         // [true/false] Enable or disable | Auto declining all incoming random group invites.
+    decline_random_group_inv: false,         // [true/false] Enable or disable | Auto declining all incoming random group invites.
     accept_random_group_inv: false,         // [true/false] Enable or disable | Auto accepting all incoming random group invites.
 
 }
