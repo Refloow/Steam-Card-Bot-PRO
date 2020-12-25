@@ -1,4 +1,10 @@
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
 
+/* 
+  Here is contact info: refloowlibrarycontact@gmail.com
+  or main dev steam: https://steamcommunity.com/id/MajokingGames/
+
+*/
 
 let Utils = require("../app/utils.js"),
 	CONFIG = require("../app/SETTINGS/config.js"),
@@ -617,3 +623,11 @@ function sortSetsByAmountB(SETS, callback) {
 }
 
 module.exports=f;
+
+// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+/* 
+  Here is contact info: refloowlibrarycontact@gmail.com
+  or main dev steam: https://steamcommunity.com/id/MajokingGames/
+
+*/
