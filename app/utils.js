@@ -166,7 +166,7 @@ t.getSets = (INV, DATA, callback) => {
         };
 
         let uc = Object.keys(c).length;
-        
+       
         if (DATA[id.toString()] && uc == DATA[id.toString()].count) {
             r = t.maxSets(c);
             s[id.toString()] = [];
@@ -197,10 +197,11 @@ t.getBadges = (SID, callback) => {
         if (!ERR && RES.statusCode == 200 && BODY.response) {
             let badges = BODY.response,
                 b = {};
+				//console.log(badges);
             logcolors.info("| [Refloow] |: Checking badges request sent by #" + SID + "");
             if (badges.badges) {
                 badges.badges.forEach(function(badge) {
-                    if ('appid' in badge && (!badge.badge_border_color || badge.border_color !== 1)) {
+                    if ('appid' in badge && badge.border_color == 0) {
                         b[badge.appid] = badge.level;
                     }
                 });
