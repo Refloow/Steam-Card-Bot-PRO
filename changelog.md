@@ -1,5 +1,64 @@
 # Changelog
 
+# Release v1.6.0
+## - Admin commands update
+
+## Improved
+
+- Improved bots stability due steam servers being unstable.
+- Improved error handling
+
+## Changed
+
+- Command !buycsgo, !sellcsgo has been changed to !buycs and !sellcs
+  (Done to match !buytf and !selltf)
+- Reworked readme.md file (added about all current bot features)
+
+## Added
+
+- Added new user command !reminder
+  - !reminder on 
+  - !reminder off
+  (Admin command !broadcast <message> will send that message only to users who turned on reminder)
+    (we recommend using this to announce that bot has been refiled with new sets)
+
+- Added new admin commands:
+
+  - !withdraw - withdraw all TF2 keys
+  - !restart - restarts the bot
+  - !exit - stops the bot and exits gracefully (Shod be used to remotely shutdown the bot)
+  - !refresh - refreshes the bot (Refreshes bots :sets: status playing message)
+
+  - Pause commands shod be used in case you want to pause bot and then start it again remotely
+
+  - !pause5m - pauses bot for 5 min and then proceed with an restart
+  - !pause10m - pauses bot for 10 min and then proceed with an restart
+  - !pause1h - pauses bot for 1 hour and then proceed with an restart
+  - !pause2h - pauses bot for 2 hours and then proceed with an restart
+  
+  - !broadcastall - any message after this command will be sent to all users in bots's friendlist
+  - !broadcast - only send message to users who have, done !reminder ON (Reminder can be set to anything, but we recommend going with message that shod be sent when new sets were added to the bot.)
+
+- Added more games to the game database [Total of 100015]
+- Added option to run bot and auto restart after the crash [Added forever module and StartForever (Restarts Uppon crash).bat]
+
+## Removed [hate to see it]
+
+- Removed !info command since no one used it like ever.
+
+## File localization
+
+- Removed repeating functions for clearer code inside of the app.js and exported functions to functions.js file
+- [DB] UserData - added reminder.json (database for users who turned the reminder on)
+
+
+## Non-Important but read anyway
+
+- Added new admin commands to !admincommands list of admin commands
+- Renamed StartCode (Launch) to Start
+- Added & changed some comments inside of the app.js file
+- Added explanation why 1.5.0 and v1.5.0 exists here in changelog
+
 # Release v1.5.0
 
 This version contains everything from previous version (Nothing changed) but due some user feedback new version has been drafted which will have new fixed code from the master branch. (Some error handling display is added)
