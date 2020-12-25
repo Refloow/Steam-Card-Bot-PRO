@@ -223,7 +223,7 @@ module.exports = {
         //IFNO COMMANDS
 
     INFO: "/code Use these commands to get information about the bot: \n!stock [card sets in stock] \n!owner [profile]", //Info command message
-    OWNER: "/me https://steamcommunity.com/profiles//", // owner command message
+    OWNER: "/me https://steamcommunity.com/profiles/ID/", // owner command message
     SELLHELP: "You are also able to sell sets. You can do this by using !sell [amount of keys].", // sellhelp command message
 
 
@@ -257,7 +257,7 @@ module.exports = {
     //-SETTINGS: INVITING TO THE GROUP
 
     friend_group_inviting: true,            // [true/false] Enable or disable | Inviting user to the selected group on friend request
-    INVITETOGROUPID: "103582791468034120",                    // Invite users to this group
+    INVITETOGROUPID: "",                    // Invite users to this group
 
 
 
