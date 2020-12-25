@@ -23,7 +23,7 @@ module.exports = {
 
     //-----------------------------------------------------------------------------------------------
 
-    PLAYGAMES: ":sets: sets - 35:1 CSGO / 18:1 TF2 / 350:1 Gems", // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
+    PLAYGAMES: ":sets: sets - XX:X CSGO / XX:X TF2 / XX:X Gems", // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
     ADMINS: [""], // to add admin put steam64id 
 
     //-----------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ module.exports = {
         GIVE1GEMSFORAMOUNTOFSETSGEMS: 300, // For instance; if set to 300,you sell 300 gems for 1 set.
         
         MAXSETSELL: 50, // The maximum amount of sets of a kind the bot will send when !sell is used
-        //PEOPLETHATCANSELL: ["76561198151942857", "STEAMID64"]
+        //PEOPLETHATCANSELL: ["STEAMID64", "STEAMID64"]
 		
     },
 	
@@ -218,12 +218,12 @@ module.exports = {
     //-SETTINGS: MESSAGES
     RefloowChat_Enable: true,               // [true/false] Enable or disable | This feature show in dev logs all messages sent by users to bot
     EnableWelcomeMessage: true,             // [true/false] Enable or disable | Bot sending welcome message uppon accepting friend request
-    WELCOME: "/quote Hello ! Welcome to Baba Yaga's Level Up Bot \nuse: !help or !commands to see list of all available commands.", // Welcome message.
+    WELCOME: "/quote Hello ! Welcome to X \nuse: !help or !commands to see list of all available commands.", // Welcome message.
 
         //IFNO COMMANDS
 
     INFO: "/code Use these commands to get information about the bot: \n!stock [card sets in stock] \n!owner [profile]", //Info command message
-    OWNER: "/me https://steamcommunity.com/profiles/76561198151942857/", // owner command message
+    OWNER: "/me https://steamcommunity.com/profiles//", // owner command message
     SELLHELP: "You are also able to sell sets. You can do this by using !sell [amount of keys].", // sellhelp command message
 
 
