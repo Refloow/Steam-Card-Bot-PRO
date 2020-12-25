@@ -37,6 +37,7 @@ t = module.exports = {
         };
         function look(error, JSONresponse, body) {
             var page = JSON.parse(body)
+		
             const v = package.version;
             if(page.version != v)
                 console.log(`\n [GitHub] | VERSION |:  ${'New update available for '+package.name+ ' v'+page.version.green+'! You\'re currently only running version '+v.yellow+''}\n${` [GitHub] | VERSION |: Go to https://github.com/Refloow/Steam-Card-Bot-PRO to update now!`}\n\n`)
