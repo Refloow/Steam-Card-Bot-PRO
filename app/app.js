@@ -19,7 +19,7 @@ try {
     // Checking if module steamcommunity is correctly installed 
     SteamCommunity = require("steamcommunity");
     // Checking if module fs is correctly installed
-    fs = require("fs");
+    fs = require("graceful-fs");
 // Catching error    
 } catch (ex) {
   // Loging error 
@@ -34,6 +34,7 @@ let Utils = require("../app/utils.js"),
     method = require('./methods'),
     CONFIG = require("../app/SETTINGS/config.js"),
     logcolors = require("../app/logcolors.js"),
+    f = require("../app/functions.js"),
     allCards = {},
     botSets = {},
     users = {},
@@ -41,8 +42,10 @@ let Utils = require("../app/utils.js"),
     SID64REGEX = new RegExp(/^[0-9]{17}$/),
     chatLogs = "",
     userLogs = {},
+    logid=1,
     totalBotSets = 0,
     setsThatShouldntBeSent = [];
+
 
 // Setting client
 
@@ -56,11 +59,15 @@ let refloow = new SteamUser(),
     community = new SteamCommunity();
 
 // Checking for correct version (updates) for bot on github (On app start)
+
 method.check();
+
 // Checking for new version every 2 hours and display alert only if update available.
+
 setInterval(function(){ method.checkaswego(); }, 7200000);
 
 // Running validatelogininfo method to check if username and password were set in config
+
 method.validatelogininfo();
 
 // Reading users data from users file to remove inactive friends
@@ -84,18 +91,24 @@ Utils.getCardsInSets((ERR, DATA) => {
     }
 });
 
-
 // Loging on
 
-var logid=1;
+function logon() {
+logid+=1;
 refloow.logOn({
     accountName: CONFIG.USERNAME,
     password: CONFIG.PASSWORD,
     twoFactorCode: SteamTotp.getAuthCode(CONFIG.SHAREDSECRET),
   logonID:logid
 });
+}
 
-// Logged on
+// Calling the login function
+
+logon();
+
+
+// Logged on events
 
 refloow.on("loggedOn", (details, parental) => {
     refloow.getPersonas([refloow.steamID], (personas) => {
@@ -120,8 +133,9 @@ refloow.on("webSession", (sessionID, cookies) => {
             logcolors.info('/////////////////////////////////////////////////////////////////////////// \n');
 
         }
-    }); 
-    // Add people that added the bot while it was online.
+    
+    // Add people that added the bot while bot was offline.
+
     logcolors.info(`| [Start] |: Checking for offline friend requests.`);
     for (let i = 0; i < Object.keys(refloow.myFriends).length; i++) {
         if (refloow.myFriends[Object.keys(refloow.myFriends)[i]] == 2) {
@@ -145,19 +159,20 @@ refloow.on("webSession", (sessionID, cookies) => {
                     }
                     totalBotSets = botNSets;
                     let playThis = CONFIG.PLAYGAMES;
-                    if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-                        playThis[0] = parseString(playThis[0], totalBotSets);
+                    if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES) == "string") {
+                        playThis = parseString(playThis, totalBotSets);
                     }
                     refloow.gamesPlayed(playThis);
                     logcolors.true(`| [Start] |: Successfully checked for offline friend requests.`)
                 } else {
                     logcolors.fail("| [Inventory] |: An error occurred while getting bot sets: " + ERR);
-                    process.exit();
+                    logon();
                 }
             });
         } else {
             logcolors.fail("| [Inventory] |: An error occurred while getting bot inventory: " + ERR);
-        }
+	   }
+	});
     });
 });
 
@@ -170,17 +185,21 @@ community.on("sessionExpired", (ERR) => {
     logcolors.info("| [WebSession] |: Session Expired. Relogging.");
     refloow.webLogOn();
   }
-  else
-  {
-    refloow.logOn({
+ 
+});
+  
+    
+refloow.on("error",(SteamID,ERR) =>
+{
+	logid+=1;
+	refloow.logOn({
     accountName: CONFIG.USERNAME,
     password: CONFIG.PASSWORD,
     twoFactorCode: SteamTotp.getAuthCode(CONFIG.SHAREDSECRET),
-  logonID:logid
+	logonID:logid
 });
-  }
-    
 });
+
 
 // Responding to the friend requests and inviting user to the selected group
 
@@ -246,7 +265,7 @@ if(method.removingInactiveFriendsEnabled()) {
     }, 1000 * 60 * 60);
 }
 
-// Declining random group invites
+// Code for declining random group invites
 
 if(method.DecliningRandomGroupInvites()) {
   refloow.on('groupRelationship', function(sid, REL) {
@@ -258,7 +277,7 @@ if(method.DecliningRandomGroupInvites()) {
   });
 }
 
-// Accepting random group invites
+// Code for accepting random group invites
 
 if(method.AcceptingRandomGroupInvites()) {
   refloow.on('groupRelationship', function(sid, REL) {
@@ -343,20 +362,21 @@ refloow.on("friendMessage", (SENDER, MSG) => {
     case "!COMMANDS":
     case "!HELP": 
     {
-        var startMessage="/code <----------------------------- General Commands ------------------------------>\n\n";
+        var startMessage="/code <--------------------------- General Commands --------------------------->\n\n";
           
        
-       startMessage+="!commands - display list of available commands\n";
-       startMessage+="!help - display list of available commands\n";
+       
        startMessage+="!owner - display owner profile\n";
-       startMessage+="!info - info about bot \n";
+       startMessage+="!stats - get current bot stock for all currencies\n";
        startMessage+="!rate - current bot prices\n";
        startMessage+="!price - current bot prices\n";
-       startMessage+="!level [your dream level] - calculates how many sets and how many keys it will cost to reach your desired level\n";
-       startMessage+="!check [amount] - shows how many sets and which level you will reach for a specific amount of CS:GO keys\n";
+       startMessage+="!level [your dream level] - calculates how many sets and how many keys, gems it will cost to reach your desired level\n";
+	     startMessage+="!check - shows how many sets the bot has available for you and also total bot sets and price in TF2 key\n";
+       startMessage+="!check [amount] - shows how many sets and which level you will reach for a specific amount of any keys\n";
+	     startMessage+="!reminder on/off - turning this on, you will receive notification whenever new sets are added\n";
      
       
-      startMessage+=             "\n<----------------------------- Buying  Commands ------------------------------>\n\n"
+      startMessage+=             "\n<--------------------------- Buying  Commands --------------------------->\n\n"
             
        var optionalMessages="";
        
@@ -372,7 +392,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
           
         
       optionalMessages+="!buy [amount of keys] - use this to buy card sets with main bot currency which is set. \n"
-    }
+        }
         if(method.UserBuyingAny()) { 
            
        optionalMessages+="!buyany [amount of CS:GO keys] - use this to buy that amount of CS:GO keys for any sets, even from badges that has already been crafted, following the current bot rate \n"
@@ -387,15 +407,15 @@ refloow.on("friendMessage", (SENDER, MSG) => {
         }
         if(method.UserBuyingWithHydra()) { 
           
-      optionalMessages+="!buyhydra [amount of TF keys] - buy sets for your hydra key(s) \n";
+      optionalMessages+="!buyhydra [amount of CS:GO Hydra keys] - buy sets for your hydra key(s) \n";
         } 
         if(method.UserBuyingWithCSGO()) {  
-          optionalMessages+= "!buycsgo [amount of TF keys] - buy sets for your CS:GO key(s) \n";
+          optionalMessages+= "!buycs [amount of CS:GO keys] - buy sets for your CS:GO key(s) \n";
      
         } 
         if(method.UserBuyingWithTF2()) {
           
-      optionalMessages+="!buytf2 [amount of TF keys] - buy sets for your TF key(s) \n";
+      optionalMessages+="!buytf [amount of TF keys] - buy sets for your TF key(s) \n";
         } 
         if(method.UserBuyingWithGems()) {  
          optionalMessages+= "!buygems [amount of sets] - buy sets with your gems \n";
@@ -442,7 +462,7 @@ refloow.on("friendMessage", (SENDER, MSG) => {
          optionalMessages+= "!buyanypubg - command unavailable \n";
         }
     
-    optionalMessages+=             "\n<---------------------------- Selling  Commands ------------------------------>\n\n"
+    optionalMessages+=             "\n<-------------------------- Selling  Commands --------------------------->\n\n";
     
      if(method.SellChecking()) {
           
@@ -457,15 +477,15 @@ refloow.on("friendMessage", (SENDER, MSG) => {
         } 
         if(method.UserSellingWithHydra()) { 
          
-      optionalMessages+="!sellhydra [amount of CS:GO Hydra keys] - sell your sets for CS:GO Hydra key(s) \n";
+      optionalMessages+="!sellhydra [amount of CS:GO Hydra keys] - sell your sets for Hydra key(s) \n";
         } 
         if(method.UserSellingWithCSGO()) {  
         
-     optionalMessages+="!sellcsgo [amount of CS:GO keys] - sell your sets for CS:GO key(s) \n";
+     optionalMessages+="!sellcs [amount of CS:GO keys] - sell your sets for CS:GO key(s) \n";
         } 
         if(method.UserSellingWithTF2()) { 
          
-     optionalMessages+="!selltf2 [amount of TF keys] - sell your sets for TF key(s) \n";
+     optionalMessages+="!selltf [amount of TF keys] - sell your sets for TF key(s) \n";
         } 
     
         if(method.UserSellingWithGems()) {
@@ -494,20 +514,20 @@ if (MSG.toUpperCase() == "!OWNER") {
    {
 
         refloow.chatMessage(SENDER, `/code The current prices are:\n` +
-                  "________________________\n"+
-                  "|____ME___|_____YOU_____|\n"+
+									"________________________\n"+
+									"|____ME___|_____YOU_____|\n"+
                                   "| " + CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + ` sets ` + "|"  + ` 1 CSGO key ` + " |\n" +
                                 "| " +    CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + ` sets ` + "|" + ` 1 Hydra key ` + "|\n" +
                                  "| " +   CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 + ` sets ` + "|" + ` 1 TF 2 key ` + " |\n" +
-                 "| " +     `01 set ⠀` + "| " +  CONFIG.CARDS.BUY1GEMSFORAMOUNTOFSETS+ ` gems ` + "   |\n\n" +
-          
-                  "_________________________\n"+
-                  "|___YOU___|_____ME______|\n"+
-        
+								 "| " +     `01 set ⠀` + "| " +  CONFIG.CARDS.BUY1GEMSFORAMOUNTOFSETS+ ` gems ` + "   |\n\n" +
+					
+									"_________________________\n"+
+									"|___YOU___|_____ME______|\n"+
+				
                                  "| " +   CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS + ` sets ` + "|" + ` 1 CSGO key ` + " |\n" +
                                 "| "  +    CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSHYDRA + ` sets ` + "|" + ` 1 Hydra key ` + "|\n" +
                                  "| " +   CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2 + ` sets ` + "|" + ` 1 TF 2 key ` + " |\n"+
-                  "| " +     `01 set ⠀` + "| " +  CONFIG.CARDS.GIVE1GEMSFORAMOUNTOFSETSGEMS+ ` gems ` + "   |\n" );
+									"| " +     `01 set ⠀` + "| " +  CONFIG.CARDS.GIVE1GEMSFORAMOUNTOFSETSGEMS+ ` gems ` + "   |\n" );
     
 }
 
@@ -544,14 +564,11 @@ else if (MSG.toUpperCase() == "!COMMANDS") {
   }
 }
 
-// !Info command
+// !Stats command
 
-else if (MSG.toUpperCase() === "!INFO") {
-        refloow.chatMessage(SENDER, CONFIG.INFO);
-        if (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64()) >= 0) {
-            refloow.chatMessage(SENDER, CONFIG.SELLHELP);
-        } 
-    
+else if (MSG.toUpperCase() === "!STATS") {
+		logcolors.info("| [Refloow] |: !stats command called by " + SENDER.getSteamID64());
+        f.getCurrencyStocks(manager,SENDER,refloow);
 } 
 
 // !Level command
@@ -563,92 +580,40 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
         }
         if (!isNaN(n) && parseInt(n) > 0) {
             if (n <= CONFIG.MAXLEVEL) {
-                Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA, CURRENTLEVEL, XPNEEDED) => {
-                  logcolors.true('| [Refloow] |: Finished processing !level request, fun fact user is level ' + CURRENTLEVEL);
-                    if (!ERR) {
-                        if (DATA) {
-                            if (n > CURRENTLEVEL) {
-                                let s = 0,
-                                    l = 0;
-                                for (let i = 0; i < (n - CURRENTLEVEL); i++) {
-                                    s += parseInt((CURRENTLEVEL + l) / 10) + 1;
-                                    l++;
-                                }
-                                refloow.chatMessage(SENDER, "/pre ✔️ To get to level " + n + " you will need " + (s - Math.floor(XPNEEDED / 100)) + " sets. That would cost " + parseInt((s - Math.floor(XPNEEDED / 100)) / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " CS:GO keys OR " + parseInt((s - Math.floor(XPNEEDED / 100)) / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 * 100) / 100 + " TF2 keys OR " + parseInt((s - Math.floor(XPNEEDED / 100)) * CONFIG.CARDS.BUY1SETFORAMOUNTOFREF * 100) / 100 + " Refined Metal.");
-                            } else {
-                                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid level.");
-                            }
-                        } else {
-                            refloow.chatMessage(SENDER, "/pre ⚠️ Your level could not be retrieved. Make sure your Steam Profile is public and try again.");
-                        }
-                    } else {
-                        logcolors.fail("| [Steam] |: An error occurred while getting badge data: " + ERR);
-                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your badges. Please try again later.");
-                    }
-                });
+				 f.getBadges(SENDER,n , (response) =>{
+				 
+				refloow.chatMessage(SENDER,response);
+				 });
             } else {
                 refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower level.");
             }
         } else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid level.");
         }
-
-        } else if (MSG.toUpperCase() == "!STOCK") {
-         logcolors.true('| [Refloow] |: Starting to process !stock request.'); 
+     } 
+		
+		else if (MSG.toUpperCase() == "!CHECK") {
+         logcolors.true('| [Refloow] |: Starting to process !check request.'); 
           if (Object.keys(botSets).length == 0)  {
             refloow.chatMessage(SENDER, "/pre Bot doesn't have any sets at the moment, please check later.")
-            logcolors.true('| [Refloow] |: Finished processing !stock request bot doenst have any sets in the inventory');
-          };
+            logcolors.true('| [Refloow] |: Finished processing !check request bot doenst have any sets in the inventory');
+          }
           if (Object.keys(botSets).length > 0) {
           refloow.chatMessage(SENDER, "/me ⚆ Loading badges...");
           Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-          logcolors.true('| [Refloow] |: Processing !stock request...');
+			  //console.log(DATA);
+          logcolors.true('| [Refloow] |: Processing !check request...');
         if (!ERR) {
-          let b = {}; // List with badges that CAN still be crafted
-          if (DATA) {
-            for (let i = 0; i < Object.keys(DATA).length; i++) {
-              if (DATA[Object.keys(DATA)[i]] < 6) {
-                b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
-              }
-            }
-          } else {
-            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
-          }
-          // console.log(b);
-          // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-          // 1: GET BOTS CARDS. DONE
-          // 2: GET PLAYER's BADGES. DONE
-          // 3: MAGIC
-          let hisMaxSets = 0,
-            botNSets = 0;
-          // Loop for sets he has partially completed
-          for (let i = 0; i < Object.keys(b).length; i++) {
-            if (botSets[Object.keys(b)[i]] && Object.values(b)[i]>0) {
-              hisMaxSets += Math.min(5,botSets[Object.keys(b)[i]].length,Object.values(b)[i]);
-        console.log(Object.keys(b)[i]);
-            }
-          }
-          // Loop for sets he has never crafted
-          for (let i = 0; i < Object.keys(botSets).length; i++) {
-            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-              if (botSets[Object.keys(botSets)[i]].length >= 5) {
-                hisMaxSets += 5;
-              } else {
-                hisMaxSets += botSets[Object.keys(botSets)[i]].length;
-              }
-            }
-            botNSets += botSets[Object.keys(botSets)[i]].length;
-          }
+		  f.MaxSets(DATA,botSets , (hisMaxSets,botNSets) => {
+			  
           totalBotSets = botNSets;
-          let playThis = CONFIG.PLAYGAMES;
-          if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES) == "string") {
-        
-        
-            playThis = parseString(playThis, totalBotSets);
-          }
-          refloow.gamesPlayed(playThis);
-          logcolors.true('| [Refloow] |: Finished processing of !stock request');
-          refloow.chatMessage(SENDER, "/pre There are currently " + hisMaxSets + "/" + botNSets + " sets available which you have not fully crafted yet. Buying all of them will cost you " + parseInt((hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 * 100) / 100) + " TF2 keys.");
+		  
+          logcolors.true('| [Refloow] |: Finished processing of !check request');
+		  logcolors.summary('| [Summary] |: Bot has '+hisMaxSets+'/'+botNSets + ' sets for him');
+		refloow.chatMessage(SENDER, "/pre There are currently " + hisMaxSets + "/" + botNSets + " sets available which you have not fully crafted yet.Buying all of them will cost you -\n" 
+		+ "- "+parseInt((hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 )) + " TF2 keys.\n"
+		+ "- "+parseInt((hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS )) + " CS:GO keys.\n"
+		+ "- "+parseInt((hisMaxSets * CONFIG.CARDS.BUY1GEMSFORAMOUNTOFSETS )) + " Gems.")});
         } else {
           refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
           logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
@@ -665,58 +630,117 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
             Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
                 if(method.LogsCalledCommandsEnabled()) {
                 logcolors.true('| [Refloow] |: Processing !Checkone request');
-                }
+                
                 if (!ERR) {
-                    let b = {}; // List with badges that CAN still be crafted
-                    if (DATA) {
-                        for (let i = 0; i < Object.keys(DATA).length; i++) {
-                            if (DATA[Object.keys(DATA)[i]] < 6) {
-                                b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
-                            }
-                        }
-                    } else {
-                        refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
-                    }
-                    // console.log(b);
-                    // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                    // 1: GET BOTS CARDS. DONE
-                    // 2: GET PLAYER's BADGES. DONE
-                    // 3: MAGIC
-                    let hisMaxSets = 0,
-                        botNSets = 0;
-                    // Loop for sets he has partially completed
-                    for (let i = 0; i < Object.keys(b).length; i++) {
-                        if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-                            hisMaxSets += 5 - b[Object.keys(b)[i]].length;
-                        }
-                    }
-                    // Loop for sets he has never crafted
-                    for (let i = 0; i < Object.keys(botSets).length; i++) {
-                        if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-                            if (botSets[Object.keys(botSets)[i]].length >= 1) {
-                                hisMaxSets += 1;
-                            }
-                        }
+                    
+                    f.MaxSets(DATA,botSets , (hisMaxSets,botNSets) => {
                         botNSets += botSets[Object.keys(botSets)[i]].length;
-                    }
+                    
                     totalBotSets = botNSets;
-                    let playThis = CONFIG.PLAYGAMES;
-                    if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-                        playThis[0] = parseString(playThis[0], totalBotSets);
-                    }
-                    refloow.gamesPlayed(playThis);
-                    refloow.chatMessage(SENDER, "/code There are currently sets from " + Object.keys(botSets).length + " different games, of which you have not crafted " + hisMaxSets + ". This would cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.");
+                    
+				refloow.chatMessage(SENDER, "/code There are currently sets from " + Object.keys(botSets).length + " different games, of which you have not crafted " + hisMaxSets + ". This would cost " + parseInt(hisMaxSets / CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS * 100) / 100 + " keys.")});
+				
                 } else {
                     refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
                     logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
                 }
+				}
+				else
+				{
+					refloow.chatMessage(SENDER,"/pre ⚠️ An error occurred, command has been disabled by admin");
+				}
             });
+			
         }
+
+  // Reminder command
+		
+	else if(MSG.toUpperCase().indexOf("!REMINDER") >= 0)
+	{
+		var type = MSG.toUpperCase().replace("!REMINDER ","");
+		logcolors.info("| [Refloow] |: Processing !reminder " + type + " command by " + SENDER.getSteamID64());
+		if(type=="ON")
+		{
+			fs.readFile("./app/[DB] UserData/reminder.json",(ERR,DATA) => 
+			{
+				if(ERR)
+					logcolors.fail("| [Debug] | An error occurred while reading file " + ERR );
+				else
+				{
+				  try{
+						let ids = JSON.parse(DATA);
+						ids.IDS.push(SENDER.getSteamID64());
+						ids.IDS = ids.IDS.filter(function(item,pos) {
+								return ids.IDS.indexOf(item)== pos;
+							});
+						let jsonString = JSON.stringify(ids);
+						fs.writeFile("./app/[DB] UserData/reminder.json",jsonString,(ERR) =>
+							{
+								if(ERR)
+									logcolors.fail("| [Debug] | An error occurred while writing to file " + ERR );
+								else
+									refloow.chatMessage(SENDER.getSteamID64(),"/pre Successfully added your steamID to list!");
+							}
+						);
+						
+					}
+					catch(err)
+					{
+						logcolors.fail("| [Debug] | An error occurred while parsing string " + err);
+					}
+				}
+			});
+		}
+		else if(type=="OFF")
+		{
+			fs.readFile("./app/[DB] UserData/reminder.json",(ERR,DATA) => 
+			{ 
+				let bool = false;
+				if(ERR)
+					logcolors.fail("| [Debug] | An error occurred while reading file " + ERR );
+				else
+				{
+				  try{
+						let ids = JSON.parse(DATA);
+						for( let i =0 ;i< ids.IDS.length ; i++)
+						{
+							if(ids.IDS[i]==SENDER.getSteamID64())
+							{
+								ids.IDS.splice(i,1);
+								bool=true;
+							}
+						}
+						if(bool)
+						{
+							let jsonString = JSON.stringify(ids);
+							fs.writeFile("./app/[DB] UserData/reminder.json",jsonString,(ERR) =>
+							{
+								if(ERR)
+									logcolors.fail("| [Debug] | An error occurred while writing to file " + ERR );
+								else
+									refloow.chatMessage(SENDER.getSteamID64(),"/pre Successfully removed your steamID from list!");
+							});
+						}
+						else
+							refloow.chatMessage(SENDER.getSteamID64(),"/pre Could not find your steamID in list");
+					}
+					catch(err)
+					{
+						logcolors.fail("| [Debug] | An error occurred while parsing string " + err);
+					}
+				}
+			});
+		}
+		else
+		{
+			refloow.chatMessage(SENDER.getSteamID64(),"/pre Please select valid option!");
+		}
+	}
 
 
     // !SELLCHECK COMMAND
 
-    else if (MSG.toUpperCase().indexOf("!SELLCHECK") >= 0 && (CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(SENDER.getSteamID64().toString()) >= 0 || CONFIG.CARDS.PEOPLETHATCANSELL.indexOf(parseInt(SENDER.getSteamID64())) >= 0)) {
+    else if (MSG.toUpperCase().indexOf("!SELLCHECK") >= 0) {
         let n = parseInt(MSG.toUpperCase().replace("!SELLCHECK ", ""));
         refloow.chatMessage(SENDER, "/me Loading inventory...");
 
@@ -730,34 +754,54 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                 Utils.getSets(s, allCards, (ERR, DATA) => {
                     logcolors.info("| [Debug] |: Sets Loaded");
                     if (!ERR) {
-
-                        // console.log(b);
-                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                        // 1: GET BOTS CARDS. DONE
-                        // 2: GET PLAYER's BADGES. DONE
-                        // 3: MAGIC
-                        let hisMaxSets = 0,
-                            botNSets = 0;
-                        // Loop for sets he has partially completed
-                        // Loop for sets he has never crafted
-                        for (let i = 0; i < Object.keys(DATA).length; i++) {
-                            if (DATA[Object.keys(DATA)[i]].length >= 5) {
-                                hisMaxSets += 5;
-                            } else {
-                                hisMaxSets += DATA[Object.keys(DATA)[i]].length;
-                            }
-                            botNSets += DATA[Object.keys(DATA)[i]].length;
+                        botNSets =0;
+                    for (let i = 0; i < Object.keys(DATA).length; i++) {
+						
+						if(botSets[Object.keys(DATA)[i]])
+						{
+							if(botSets[Object.keys(DATA)[i]].length >=CONFIG.MAXSTOCKSETSPERGAME)
+							{
+								continue;
+							}
+							var total = botSets[Object.keys(DATA)[i]].length + DATA[Object.keys(DATA)[i]].length;
+							if(total>CONFIG.MAXSTOCKSETSPERGAME)
+							{
+								if(DATA[Object.keys(DATA)[i]].length >= CONFIG.MAXSTOCKSETSPERGAME)
+								{
+									botNSets= CONFIG.MAXSTOCKSETSPERGAME-botSets[Object.keys(DATA)[i]].length;
+								}
+								else
+								{
+									var left = CONFIG.MAXSTOCKSETSPERGAME - DATA[Object.keys(DATA)[i]].length;
+									botNSets = (left>DATA[Object.keys(DATA)[i]].length) ? DATA[Object.keys(DATA)[i]].length:left;
+									
+								}
+						    }
+							else
+							{
+							
+								botNSets+=DATA[Object.keys(DATA)[i]].length;
+																				
+							}
                         }
-                        totalBotSets = botNSets;
-                        let playThis = CONFIG.PLAYGAMES;
-                        if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-                            playThis[0] = parseString(playThis[0], totalBotSets);
-                        }
-                        refloow.gamesPlayed(playThis);
-                        refloow.chatMessage(SENDER, "/pre You currently have " + botNSets + " sets available which the bot can buy. For all of them the bot will pay you " + parseInt(botNSets / CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS * 100) / 100 + " keys.");
+						else
+						{
+							
+								botNSets += Math.min(DATA[Object.keys(DATA)[i]].length,CONFIG.MAXSTOCKSETSPERGAME);
+							
+						}
+                    }
+					var remain = botNSets - ( botNSets % CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2);
+                        refloow.chatMessage(SENDER, "/pre You currently have " + botNSets + " sets available which I can buy. I will pay you:\n" 
+						+ (parseInt(botNSets / CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2)) + " TF2 keys" + " for " + (botNSets - ( botNSets % CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2)) + " sets " + "("+(CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2)+":1)\n"
+						+ (parseInt(botNSets / CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS)) + " CS:GO keys" + " for " + (botNSets - ( botNSets % CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS)) + " sets " + "("+(CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS)+":1)\n"
+						+ (parseInt(botNSets * CONFIG.CARDS.GIVE1GEMSFORAMOUNTOFSETSGEMS)) + " Gems" + " for " + (botNSets) + " sets " +"("+(CONFIG.CARDS.GIVE1GEMSFORAMOUNTOFSETSGEMS)+":1)" );
                         logcolors.true('| [Refloow] |: User has ' + botNSets + ' sets available to sell');
+						
+						f.getCurrencyStocks(manager,SENDER,refloow);
                     } else {
                         logcolors.fail("| [Inventory] |: An error occurred while getting user sets: " + ERR);
+						refloow.chatMessage("An error occurred while getting your inventory. Please try again later");
                     }
                 });
             } else {
@@ -774,11 +818,20 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
           if (!isNaN(n) && parseInt(n) > 0) {
               if(method.LogsCalledCommandsEnabled()) {
               logcolors.true('| [Refloow] |: Processing !check requested by '   + SENDER.getSteamID64() );
-            }
-            logcolors.true('| [Refloow] |: Finished processing !check request');
-            logcolors.true('| [Refloow] |: User was looking rate for ' + n + ' key');
-            refloow.chatMessage(SENDER, "/code ✔️ With " + n + " CS:GO keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + " sets and with " + n + " TF2 keys you can get " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 +" sets. With " + n + " Operation Hydra Case keys can get you " + n * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + " sets.");
-          } else {
+            
+			Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA, CURRENTLEVEL, XPNEEDED) => {
+				
+				f.levelReached(n,CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS,CURRENTLEVEL, (cslevel) => {
+					f.levelReached(n,CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2,CURRENTLEVEL, (tflevel) => {
+						f.levelReached(n,CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA,CURRENTLEVEL, (hydralevel) => {
+							refloow.chatMessage(SENDER, "/code ✔️ With " + n + " CS:GO keys you can get " + n*CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS + " sets and reach level " + cslevel +
+							"\n✔️ With " + n + " TF2 keys you can get " + n*CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2 + " sets and reach level " + tflevel +
+							"\n✔️ With " + n + " Hydra keys you can get " + n*CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA + " sets and reach level " + hydralevel );
+						});
+					});
+				});
+			});
+          }} else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
             logcolors.true('| [Refloow] |: Command was sent without check number indicator');
           } 
@@ -790,102 +843,17 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 		if (botSets) {
 			   let n = parseInt(MSG.toUpperCase().replace("!DONATESETS ", "")),
 					amountofsets = n;
-				if (!isNaN(n) && parseInt(n) > 0) {
-					if (n <= CONFIG.MAXSELL) {
-						refloow.chatMessage(SENDER, "/me Processing your request.");
-						let botKeys = [],
-							t = manager.createOffer(SENDER.getSteamID64());
-						t.getUserDetails((ERR, ME, THEM) => {
-              logcolors.true('| [Refloow] |: Processing !donatesets request...');
-							if (ERR) {
-								logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-								refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-							} else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-								manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
-									if (ERR) {
-										logcolors.fail("| [Inventory] | An error occurred while getting bot inventory: " + ERR);
-										refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
-									} else {
-										let amountofB = amountofsets;
-											Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
-												if (!ERR) {
-													let s = DATA;
-													Utils.getSets(s, allCards, (ERR, DDATA) => {
-														if (!ERR) {
-															sortSetsByAmountB(s, (DATA) => {
-																let setsSent = {};
-																firsttLoop: for (let i = 0; i < DATA.length; i++) {
-																	if (DDATA[DATA[i]]) {
-																		for (let j = 0; j < DDATA[DATA[i]].length; j++) {
-																			if (amountofB > 0) {
-																				if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.CARDS.MAXSETSELL) || !setsSent[DATA[i]]) {
-																					t.addTheirItems(DDATA[DATA[i]][j]);
-																					logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-																					amountofB--;
-																					if (!setsSent[DATA[i]]) {
-																						setsSent[DATA[i]] = 1;
-																					} else {
-																						setsSent[DATA[i]] += 1;
-																					}
-																				} else {
-																					logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-																					continue firsttLoop;
-																				}
-																			} else {
-																				logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-																				continue firsttLoop;
-																			}
-																		}
-																	} else {
-																		logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN 2");
-																		continue firsttLoop;
-																	}
-																}
-															});
-															if (amountofB > 0) {
-																refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
-															} else {
-																logcolors.info("| [Debug] |: -SENDING");
-																t.addMyItems(botKeys);
-																t.data("commandused", "Sell");
-																t.data("amountofsets", amountofsets.toString());
-																t.data("amountofkeys", n);
-																t.send((ERR, STATUS) => {
-																	if (ERR) {
-																		refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-																		logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-																	} else {
-																		refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-																		logcolors.info("| [Steam] |: Trade offer sent!");
-																	}
-																});
-															}
-														} else {
-															logcolors.fail("| [Inventory] |: An error occurred while getting bot sets: " + ERR);
-														}
-													});
-												} else {
-													logcolors.fail("| [Steam] |: An error occurred while getting user inventory: " + ERR);
-												}
-											});
-									}
-								});
-							} else {
-								refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-							}
-						});
-					} else {
-						refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of sets.");
-					}
-				} else {
-					refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of sets.");
-				}
-		} else {
+					
+					f.donateSets(n,manager,SENDER,amountofsets,setsThatShouldntBeSent,refloow,community,allCards,(callback) => {
+							logcolors.true('| [Refloow] |: Finished processing !donateSets request');
+		});
+				 
+  }else {
 			refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
 		}
 
 
-
+  }
 
 
 
@@ -906,7 +874,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 // HERE IS SECTION WITH SIMPLE BUY COMMANDS USING MAIN BOT CURRENCY SET IN CONFIG (!BUY, !BUYANY, !BUYONE)
 
 
-        } else if (MSG.toUpperCase().indexOf("!BUYANY") >= 0) {
+         else if (MSG.toUpperCase().indexOf("!BUYANY") >= 0) {
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUYANY ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
@@ -1082,11 +1050,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                             botNSets += botSets[Object.keys(botSets)[i]].length;
                                                         }
                                                         totalBotSets = botNSets;
-                                                        let playThis = CONFIG.PLAYGAMES;
-                                                        if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-                                                            playThis[0] = parseString(playThis[0], totalBotSets);
-                                                        }
-                                                        refloow.gamesPlayed(playThis);
+                                                        
                                                         logcolors.info("| [Debug] |: Loop 2 DONE");
                                                         // HERE
                                                         if (amountofsets <= hisMaxSets) {
@@ -1409,630 +1373,50 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
             let n = MSG.toUpperCase().replace("!BUYHYDRA ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSHYDRA;
         if(method.UserBuyingWithHydra()) {
-            if (!isNaN(n) && parseInt(n) > 0) {
-                if (n <= CONFIG.MAXBUY) {
-                    let t = manager.createOffer(SENDER.getSteamID64());
-                    t.getUserDetails((ERR, ME, THEM) => {
-                        if (ERR) {
-                            logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-                        } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                            n = parseInt(n);
-                            let theirKeys = [];
-                            logcolors.true('| [Refloow] |: Processing of !buyhydra request');
-                            refloow.chatMessage(SENDER, "/me Processing your request.");
-                            manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
-                                if (ERR) {
-                                    logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
-                                } else {
-                                    logcolors.info("| [Debug] |: Inventory Loaded");
-                                    if (!ERR) {
-                                        logcolors.info("| [Debug] |: Inventory Loaded 2");
-                                        for (let i = 0; i < INV.length; i++) {
-                                            if (theirKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
-                                                theirKeys.push(INV[i]);
-                                            }
-                                        }
-                                        if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
-                                        } else {
-                                            Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-                                                if (!ERR) {
-                                                    logcolors.info("| [Debug] |: DEBUG#BADGE LOADED");
-                                                    if (!ERR) {
-                                                        let b = {}; // List with badges that CAN still be crafted
-                                                        if (DATA) {
-                                                            for (let i = 0; i < Object.keys(DATA).length; i++) {
-                                                                if (DATA[Object.keys(DATA)[i]] < 6) {
-                                                                    b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
-                                                                }
-                                                            }
-                                                        } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
-                                                        }
-                                                        console.log(DATA);
-                                                        console.log(b);
-                                                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                                                        // 1: GET BOTS CARDS. DONE
-                                                        // 2: GET PLAYER's BADGES. DONE
-                                                        // 3: MAGIC
-                                                        let hisMaxSets = 0,
-                                                            botNSets = 0;
-                                                        // Loop for sets he has partially completed
-                                                        for (let i = 0; i < Object.keys(b).length; i++) {
-                                                            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-                                                                hisMaxSets += 5 - b[Object.keys(b)[i]].length;
-                                                            }
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 1 DONE");
-                                                        // Loop for sets he has never crafted
-                                                        for (let i = 0; i < Object.keys(botSets).length; i++) {
-                                                            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-                                                                if (botSets[Object.keys(botSets)[i]].length >= 5) {
-                                                                    hisMaxSets += 5;
-                                                                } else {
-                                                                    hisMaxSets += botSets[Object.keys(botSets)[i]].length;
-                                                                }
-                                                            }
-                                                            botNSets += botSets[Object.keys(botSets)[i]].length;
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 2 DONE");
-                                                        // HERE
-                                                        if (amountofsets <= hisMaxSets) {
-                                                            hisMaxSets = amountofsets;
-                                                            logcolors.info("| [Debug] |: Trade Created");
-                                                            sortSetsByAmount(botSets, (DATA) => {
-                                                                logcolors.info("| [Debug] |:" + DATA);
-                                                                logcolors.info("| [Debug] |: Sets Sorted");
-                                                                firstLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    if (b[DATA[i]] == 0) {
-                                                                        continue firstLoop;
-                                                                    } else {
-                                                                        logcolors.info("| [Debug] |: DEBUG#" + i);
-                                                                        logcolors.info("| [Debug] |: DEBUG FOR LOOP ITEMS");
-                                                                        if (hisMaxSets > 0) {
-                                                                            logcolors.info("| [Debug] |: DEBUG# MAXSETSMORETHAN1");
-                                                                            if (b[DATA[i]] && botSets[DATA[i]].length >= b[DATA[i]]) {
-                                                                                // BOT HAS ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: Loop 1");
-                                                                                sLoop: for (let j = 0; j < 5 - b[DATA[i]]; j++) {
-                                                                                    if (j + 1 < b[DATA[i]] && hisMaxSets > 0) {
-                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: ITEM ADD");
-                                                                                        logcolors.info("| [Debug] |: DEBUG#LOOP #1: " + botSets[DATA[i]][j]);
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else if (b[DATA[i]] && botSets[DATA[i]].length < b[DATA[i]]) {
-                                                                                // BOT DOESNT HAVE ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                continue; // *
-                                                                            } else if (!b[DATA[i]] && botSets[DATA[i]].length < 5 && botSets[DATA[i]].length - b[DATA[i]] > 0) { // TODO NOT FOR LOOP WITH BOTSETS. IT SENDS ALL
-                                                                                // BOT HAS ENOUGH SETS AND USER NEVER CRAFTED THIS
-                                                                                bLoop: for (let j = 0; j < botSets[DATA[i]].length - b[DATA[i]]; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            else if (hisMaxSets < 5) {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                tLoop: for (let j = 0; j != hisMaxSets; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS LESS THAN 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                xLoop: for (let j = 0; j != 5; j++ && hisMaxSets > 0) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            logcolors.info("| [Debug] |: RETURN");
-                                                                            break firstLoop;
-                                                                        }
-                                                                    }
-                                                                }
-                                                                if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
-                                                                } else {
-                                                                    logcolors.info("| [Debug] |: -SENDING");
-                                                                    t.addTheirItems(theirKeys);
-                                                                    t.data("commandused", "Buy");
-                                                                    t.data("amountofkeys", n);
-                                                                    t.data("amountofsets", amountofsets.toString());
-                                                                    t.data("index", setsThatShouldntBeSent.length);
-                                                                    setsThatShouldntBeSent.push(t.itemsToGive);
-                                                                    t.send((ERR, STATUS) => {
-                                                                        if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-                                                                            logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-                                                                        } else {
-                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-                                                                            logcolors.info("| [Steam] |: Trade offer sent!");
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
-                                                        } else {
-                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
-                                                        }
-                                                        // TO HERE
-                                                    } else {
-                                                        logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
-                                                    }
-                                                } else {
-                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
-                                                    logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
-                                    }
-                                }
-                            });
-                        } else {
-                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-                        }
-                    });
-                } else {
-                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-                }
-            } else {
-                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
-            }
+			
+           var marketName=CONFIG.HYDRAKEY;
+		   
+							f.getHisKeys(n,manager,SENDER,730,2,botSets,amountofsets,setsThatShouldntBeSent,refloow,marketName,MSG,(callback) =>
+							{
+								logcolors.true('| [Refloow] |: Finished processing of buyhydra command!');
+								
+							});
+                        
         } else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
+		
     }
 
 		
-	} else if (MSG.toUpperCase().indexOf("!BUYCSGO") >= 0) {
+	} else if (MSG.toUpperCase().indexOf("!BUYCS") >= 0) {
         if (botSets) {
-            let n = MSG.toUpperCase().replace("!BUYCSGO ", ""),
+            let n = MSG.toUpperCase().replace("!BUYCS ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
         if(method.UserBuyingWithCSGO()) {
-            if (!isNaN(n) && parseInt(n) > 0) {
-                if (n <= CONFIG.MAXBUY) {
-                    let t = manager.createOffer(SENDER.getSteamID64());
-                    t.getUserDetails((ERR, ME, THEM) => {
-                        if (ERR) {
-                            logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-                        } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                            n = parseInt(n);
-                            let theirKeys = [];
-                            logcolors.true('| [Refloow] |: Processing of !buycsgo request');
-                            refloow.chatMessage(SENDER, "/me Processing your request.");
-                            manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
-                                if (ERR) {
-                                    logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
-                                } else {
-                                    logcolors.info("| [Debug] |: Inventory Loaded");
-                                    if (!ERR) {
-                                        logcolors.info("| [Debug] |: Inventory Loaded 2");
-                                        for (let i = 0; i < INV.length; i++) {
-                                            if (theirKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
-                                                theirKeys.push(INV[i]);
-                                            }
-                                        }
-                                        if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
-                                        } else {
-                                            Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-                                                if (!ERR) {
-                                                    logcolors.info("| [Debug] |: DEBUG#BADGE LOADED");
-                                                    if (!ERR) {
-                                                        let b = {}; // List with badges that CAN still be crafted
-                                                        if (DATA) {
-                                                            for (let i = 0; i < Object.keys(DATA).length; i++) {
-                                                                if (DATA[Object.keys(DATA)[i]] < 6) {
-                                                                    b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
-                                                                }
-                                                            }
-                                                        } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
-                                                        }
-                                                        console.log(DATA);
-                                                        console.log(b);
-                                                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                                                        // 1: GET BOTS CARDS. DONE
-                                                        // 2: GET PLAYER's BADGES. DONE
-                                                        // 3: MAGIC
-                                                        let hisMaxSets = 0,
-                                                            botNSets = 0;
-                                                        // Loop for sets he has partially completed
-                                                        for (let i = 0; i < Object.keys(b).length; i++) {
-                                                            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-                                                                hisMaxSets += 5 - b[Object.keys(b)[i]].length;
-                                                            }
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 1 DONE");
-                                                        // Loop for sets he has never crafted
-                                                        for (let i = 0; i < Object.keys(botSets).length; i++) {
-                                                            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-                                                                if (botSets[Object.keys(botSets)[i]].length >= 5) {
-                                                                    hisMaxSets += 5;
-                                                                } else {
-                                                                    hisMaxSets += botSets[Object.keys(botSets)[i]].length;
-                                                                }
-                                                            }
-                                                            botNSets += botSets[Object.keys(botSets)[i]].length;
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 2 DONE");
-                                                        // HERE
-                                                        if (amountofsets <= hisMaxSets) {
-                                                            hisMaxSets = amountofsets;
-                                                            logcolors.info("| [Debug] |: Trade Created");
-                                                            sortSetsByAmount(botSets, (DATA) => {
-                                                                logcolors.info("| [Debug] |:" + DATA);
-                                                                logcolors.info("| [Debug] |: Sets Sorted");
-                                                                firstLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    if (b[DATA[i]] == 0) {
-                                                                        continue firstLoop;
-                                                                    } else {
-                                                                        logcolors.info("| [Debug] |: DEBUG#" + i);
-                                                                        logcolors.info("| [Debug] |: DEBUG FOR LOOP ITEMS");
-                                                                        if (hisMaxSets > 0) {
-                                                                            logcolors.info("| [Debug] |: DEBUG# MAXSETSMORETHAN1");
-                                                                            if (b[DATA[i]] && botSets[DATA[i]].length >= b[DATA[i]]) {
-                                                                                // BOT HAS ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: Loop 1");
-                                                                                sLoop: for (let j = 0; j < 5 - b[DATA[i]]; j++) {
-                                                                                    if (j + 1 < b[DATA[i]] && hisMaxSets > 0) {
-                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: ITEM ADD");
-                                                                                        logcolors.info("| [Debug] |: DEBUG#LOOP #1: " + botSets[DATA[i]][j]);
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else if (b[DATA[i]] && botSets[DATA[i]].length < b[DATA[i]]) {
-                                                                                // BOT DOESNT HAVE ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                continue; // *
-                                                                            } else if (!b[DATA[i]] && botSets[DATA[i]].length < 5 && botSets[DATA[i]].length - b[DATA[i]] > 0) { // TODO NOT FOR LOOP WITH BOTSETS. IT SENDS ALL
-                                                                                // BOT HAS ENOUGH SETS AND USER NEVER CRAFTED THIS
-                                                                                bLoop: for (let j = 0; j < botSets[DATA[i]].length - b[DATA[i]]; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            else if (hisMaxSets < 5) {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                tLoop: for (let j = 0; j != hisMaxSets; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS LESS THAN 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                xLoop: for (let j = 0; j != 5; j++ && hisMaxSets > 0) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            logcolors.info("| [Debug] |: RETURN");
-                                                                            break firstLoop;
-                                                                        }
-                                                                    }
-                                                                }
-                                                                if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
-                                                                } else {
-                                                                    logcolors.info("| [Debug] |: -SENDING");
-                                                                    t.addTheirItems(theirKeys);
-                                                                    t.data("commandused", "Buy");
-                                                                    t.data("amountofkeys", n);
-                                                                    t.data("amountofsets", amountofsets.toString());
-                                                                    t.data("index", setsThatShouldntBeSent.length);
-                                                                    setsThatShouldntBeSent.push(t.itemsToGive);
-                                                                    t.send((ERR, STATUS) => {
-                                                                        if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-                                                                            logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-                                                                        } else {
-                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-                                                                            logcolors.info("| [Steam] |: Trade offer sent!");
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
-                                                        } else {
-                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
-                                                        }
-                                                        // TO HERE
-                                                    } else {
-                                                        logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
-                                                    }
-                                                } else {
-                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
-                                                    logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
-                                    }
-                                }
-                            });
-                        } else {
-                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-                        }
-                    });
-                } else {
-                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-                }
-            } else {
-                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
-            }
-        } else {
+			var marketName=CONFIG.ACCEPTEDKEYS;
+		   
+							f.getHisKeys(n,manager,SENDER,730,2,botSets,amountofsets,setsThatShouldntBeSent,refloow,marketName,MSG,(callback) =>
+							{
+								logcolors.true('| [Refloow] |: Finished processing of buycs command!');
+							});
+		}
+            else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
 
-        } else if (MSG.toUpperCase().indexOf("!BUYTF2") >= 0) {
+        } else if (MSG.toUpperCase().indexOf("!BUYTF") >= 0) {
         if (botSets) {
-            let n = MSG.toUpperCase().replace("!BUYTF2 ", ""),
+            let n = MSG.toUpperCase().replace("!BUYTF ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETSTF2;
         if(method.UserBuyingWithTF2()) {
-            if (!isNaN(n) && parseInt(n) > 0) {
-                if (n <= CONFIG.MAXBUY) {
-                    let t = manager.createOffer(SENDER.getSteamID64());
-                    t.getUserDetails((ERR, ME, THEM) => {
-                        if (ERR) {
-                            logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-                        } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                            n = parseInt(n);
-                            let theirKeys = [];
-                            logcolors.true('| [Refloow] |: Processing of !buytf2 request');
-                            refloow.chatMessage(SENDER, "/me Processing your request.");
-                            manager.getUserInventoryContents(SENDER.getSteamID64(), 440, 2, true, (ERR, INV, CURR) => {
-                                if (ERR) {
-                                    logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
-                                } else {
-                                    logcolors.info("| [Debug] |: Inventory Loaded");
-                                    if (!ERR) {
-                                        logcolors.info("| [Debug] |: Inventory Loaded 2");
-                                        for (let i = 0; i < INV.length; i++) {
-                                            if (theirKeys.length < n && INV[i].market_hash_name == "Mann Co. Supply Crate Key") {
-                                                theirKeys.push(INV[i]);
-                                            }
-                                        }
-                                        if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
-                                        } else {
-                                            Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-                                                if (!ERR) {
-                                                    logcolors.info("| [Debug] |: Badges Loaded");
-                                                    if (!ERR) {
-                                                        let b = {}; // List with badges that CAN still be crafted
-                                                        if (DATA) {
-                                                            for (let i = 0; i < Object.keys(DATA).length; i++) {
-                                                                if (DATA[Object.keys(DATA)[i]] < 6) {
-                                                                    b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
-                                                                }
-                                                            }
-                                                        } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
-                                                        }
-                                                        console.log(DATA);
-                                                        console.log(b);
-                                                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                                                        // 1: GET BOTS CARDS. DONE
-                                                        // 2: GET PLAYER's BADGES. DONE
-                                                        // 3: MAGIC
-                                                        let hisMaxSets = 0,
-                                                            botNSets = 0;
-                                                        // Loop for sets he has partially completed
-                                                        for (let i = 0; i < Object.keys(b).length; i++) {
-                                                            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-                                                                hisMaxSets += 5 - b[Object.keys(b)[i]].length;
-                                                            }
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 1 DONE");
-                                                        // Loop for sets he has never crafted
-                                                        for (let i = 0; i < Object.keys(botSets).length; i++) {
-                                                            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-                                                                if (botSets[Object.keys(botSets)[i]].length >= 5) {
-                                                                    hisMaxSets += 5;
-                                                                } else {
-                                                                    hisMaxSets += botSets[Object.keys(botSets)[i]].length;
-                                                                }
-                                                            }
-                                                            botNSets += botSets[Object.keys(botSets)[i]].length;
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 2 DONE");
-                                                        // HERE
-                                                        if (amountofsets <= hisMaxSets) {
-                                                            hisMaxSets = amountofsets;
-                                                            logcolors.info("| [Debug] |: Trade Created");
-                                                            sortSetsByAmount(botSets, (DATA) => {
-                                                                logcolors.info("| [Debug] |:" + DATA);
-                                                                logcolors.info("| [Debug] |: Sets Sorted");
-                                                                firstLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    if (b[DATA[i]] == 0) {
-                                                                        continue firstLoop;
-                                                                    } else {
-                                                                        logcolors.info("| [Debug] |: DEBUG#" + i);
-                                                                        logcolors.info("| [Debug] |: DEBUG FOR LOOP ITEMS");
-                                                                        if (hisMaxSets > 0) {
-                                                                            logcolors.info("| [Debug] |: DEBUG# MAXSETSMORETHAN1");
-                                                                            if (b[DATA[i]] && botSets[DATA[i]].length >= b[DATA[i]]) {
-                                                                                // BOT HAS ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: Loop 1");
-                                                                                sLoop: for (let j = 0; j < 5 - b[DATA[i]]; j++) {
-                                                                                    if (j + 1 < b[DATA[i]] && hisMaxSets > 0) {
-                                                                                        logcolors.info("| [Debug] |: loop 1 CONTINUE: ITEM ADD");;
-                                                                                        logcolors.info("[Debug] |: DEBUG#LOOP #1: " + botSets[DATA[i]][j]);
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else if (b[DATA[i]] && botSets[DATA[i]].length < b[DATA[i]]) {
-                                                                                // BOT DOESNT HAVE ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: loop #1 CONTINUE");
-                                                                                continue; // *
-                                                                            } else if (!b[DATA[i]] && botSets[DATA[i]].length < 5 && botSets[DATA[i]].length - b[DATA[i]] > 0) { // TODO NOT FOR LOOP WITH BOTSETS. IT SENDS ALL
-                                                                                // BOT HAS ENOUGH SETS AND USER NEVER CRAFTED THIS
-                                                                                bLoop: for (let j = 0; j < botSets[DATA[i]].length - b[DATA[i]]; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            else if (hisMaxSets < 5) {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                tLoop: for (let j = 0; j != hisMaxSets; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS LESS THAN 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                xLoop: for (let j = 0; j != 5; j++ && hisMaxSets > 0) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            logcolors.info("| [Debug] |: RETURN");
-                                                                            break firstLoop;
-                                                                        }
-                                                                    }
-                                                                }
-                                                                if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
-                                                                } else {
-                                                                    logcolors.info("| [Debug] |: -SENDING");
-                                                                    t.addTheirItems(theirKeys);
-                                                                    t.data("commandused", "Buy");
-                                                                    t.data("amountofkeys", n);
-                                                                    t.data("amountofsets", amountofsets.toString());
-                                                                    t.data("index", setsThatShouldntBeSent.length);
-                                                                    setsThatShouldntBeSent.push(t.itemsToGive);
-                                                                    t.send((ERR, STATUS) => {
-                                                                        if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-                                                                            logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-                                                                        } else {
-                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-                                                                            logcolors.info("| [Steam] |: Trade offer sent!");
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
-                                                        } else {
-                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
-                                                        }
-                                                        // TO HERE
-                                                    } else {
-                                                        logcolors.fail("| [Steam] |: An error occurred while getting badges: " + ERR);
-                                                    }
-                                                } else {
-                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
-                                                    logcolors.fail("| [Steam] |: An error occurred while loading badges: " + ERR);
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
-                                    }
-                                }
-                            });
-                        } else {
-                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-                        }
-                    });
-                } else {
-                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-                }
-            } else {
-                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
-            }
+            var marketName=CONFIG.TF2KEY;
+		   
+							f.getHisKeys(n,manager,SENDER,440,2,botSets,amountofsets,setsThatShouldntBeSent,refloow,marketName,MSG,(callback) =>
+							{
+								logcolors.true('| [Refloow] |: Finished processing of buytf command!');
+							});
         } else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
@@ -2094,32 +1478,39 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                         } else {
                                                             refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
                                                         }
-                                                        console.log(DATA);
-                                                        console.log(b);
-                                                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                                                        // 1: GET BOTS CARDS. DONE
-                                                        // 2: GET PLAYER's BADGES. DONE
-                                                        // 3: MAGIC
-                                                        let hisMaxSets = 0,
-                                                            botNSets = 0;
-                                                        // Loop for sets he has partially completed
-                                                        for (let i = 0; i < Object.keys(b).length; i++) {
-                                                            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-                                                                hisMaxSets += 5 - b[Object.keys(b)[i]].length;
-                                                            }
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 1 DONE");
-                                                        // Loop for sets he has never crafted
-                                                        for (let i = 0; i < Object.keys(botSets).length; i++) {
-                                                            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-                                                                if (botSets[Object.keys(botSets)[i]].length >= 5) {
-                                                                    hisMaxSets += 5;
-                                                                } else {
-                                                                    hisMaxSets += botSets[Object.keys(botSets)[i]].length;
-                                                                }
-                                                            }
-                                                            botNSets += botSets[Object.keys(botSets)[i]].length;
-                                                        }
+                                                        
+                                                        
+                                                        
+          // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
+          // 1: GET BOTS CARDS. DONE
+          // 2: GET PLAYER's BADGES. DONE
+          // 3: MAGIC
+          let hisMaxSets = 0,
+            botNSets = 0;
+          // Loop for sets he has partially completed
+		  
+          for (let i = 0; i < Object.keys(b).length; i++) {
+			 
+            if (botSets[Object.keys(b)[i]] && Object.values(b)[i]>0) {
+              hisMaxSets += Math.min(5,botSets[Object.keys(b)[i]].length,Object.values(b)[i]);
+        
+            }
+          }
+          // Loop for sets he has never crafted
+          for (let i = 0; i < Object.keys(botSets).length; i++) {
+			   
+            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
+              if (botSets[Object.keys(botSets)[i]].length >= 5) {
+                hisMaxSets += 5;
+              } else {
+                hisMaxSets += botSets[Object.keys(botSets)[i]].length;
+              }
+            }
+            botNSets += botSets[Object.keys(botSets)[i]].length;
+          }
+		  //console.log("Number of sets:"+n);
+		  //console.log("His max sets:"+hisMaxSets);
+		  //logcolors.info("| [Debug] |: Number of sets:"+n ");
                                                         logcolors.info("| [Debug] |: Loop 2 DONE");
                                                         // HERE
                                                         if (n <= hisMaxSets) {
@@ -2129,6 +1520,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 logcolors.info("| [Debug] |:" + DATA);
                                                                 logcolors.info("| [Debug] |: Sets Sorted");
                                                                 firstLoop: for (let i = 0; i < DATA.length; i++) {
+																	
                                                                     if (b[DATA[i]] == 0) {
                                                                         continue firstLoop;
                                                                     } else {
@@ -2137,27 +1529,34 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                         if (hisMaxSets > 0) {
                                                                             logcolors.info("| [Debug] |: DEBUG# MAXSETSMORETHAN1");
                                                                             if (b[DATA[i]] && botSets[DATA[i]].length >= b[DATA[i]]) {
+																				
                                                                                 // BOT HAS ENOUGH SETS OF THIS KIND
                                                                                 logcolors.info("| [Debug] |: Loop 1");
-                                                                                sLoop: for (let j = 0; j < 5 - b[DATA[i]]; j++) {
-                                                                                    if (j + 1 < b[DATA[i]] && hisMaxSets > 0) {
+                                                                                sLoop: for (let j = 0; j < b[DATA[i]]; j++) {
+                                                                                   if(hisMaxSets>0){
                                                                                         logcolors.info("| [Debug] |: loop #1 CONTINUE: ITEM ADD");
                                                                                         logcolors.info("| [Debug] |: DEBUG#LOOP #1: " + botSets[DATA[i]][j]);
                                                                                         t.addMyItems(botSets[DATA[i]][j]);
                                                                                         hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
+																				   }
+                                                                                        
+                                                                                    
                                                                                 }
                                                                             } else if (b[DATA[i]] && botSets[DATA[i]].length < b[DATA[i]]) {
                                                                                 // BOT DOESNT HAVE ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                continue; // *
-                                                                            } else if (!b[DATA[i]] && botSets[DATA[i]].length < 5 && botSets[DATA[i]].length - b[DATA[i]] > 0) { // TODO NOT FOR LOOP WITH BOTSETS. IT SENDS ALL
+                                                                                sLoop: for (let j = 0; j < botSets[DATA[i]].length; j++) {
+                                                                                   if(hisMaxSets>0){
+                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: ITEM ADD");
+                                                                                        logcolors.info("| [Debug] |: DEBUG#LOOP #1: " + botSets[DATA[i]][j]);
+                                                                                        t.addMyItems(botSets[DATA[i]][j]);
+                                                                                        hisMaxSets--;
+																				   }
+                                                                                    
+                                                                                } // *
+                                                                            } else if (!b[DATA[i]]) { // TODO NOT FOR LOOP WITH BOTSETS. IT SENDS ALL
                                                                                 // BOT HAS ENOUGH SETS AND USER NEVER CRAFTED THIS
-                                                                                bLoop: for (let j = 0; j < botSets[DATA[i]].length - b[DATA[i]]; j++) {
+																				
+                                                                                bLoop: for (let j = 0; j < Math.min(5,botSets[DATA[i]].length); j++) {
                                                                                     if (botSets[DATA[i]][j] && hisMaxSets > 0) {
                                                                                         t.addMyItems(botSets[DATA[i]][j]);
                                                                                         logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
@@ -2168,48 +1567,20 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                                     }
                                                                                 }
                                                                             }
-                                                                            else if (hisMaxSets < 5) {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                tLoop: for (let j = 0; j != hisMaxSets; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS LESS THAN 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                xLoop: for (let j = 0; j != 5; j++ && hisMaxSets > 0) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
+                                                                            
                                                                         } else {
                                                                             logcolors.info("| [Debug] |: RETURN");
                                                                             break firstLoop;
                                                                         }
-                                                                    }
+																	}
                                                                 }
                                                                 if (hisMaxSets > 0) {
                                                                     refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
                                                                 } else {
                                                                     logcolors.info("| [Debug] |: -SENDING");
                                                                     t.addTheirItems(theirGems);
-                                                                    t.data("commandused", "BuyGems");
-                                                                    t.data("amountofGems", amountofgems);
+                                                                    t.data("commandused", MSG);
+                                                                    t.data("quantity", amountofgems);
                                                                     t.data("amountofsets", n.toString());
                                                                     t.data("index", setsThatShouldntBeSent.length);
                                                                     setsThatShouldntBeSent.push(t.itemsToGive);
@@ -2220,6 +1591,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                         } else {
                                                                             refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                             logcolors.info("| [Steam] |: Trade offer sent!");
+																			logcolors.summary("| [Summary] |: Bot sent " + n + " set(s) for his " + amountofgems + " gems");
                                                                         }
                                                                     });
                                                                 }
@@ -2260,212 +1632,18 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
     }
 
         } else if (MSG.toUpperCase().indexOf("!BUY") >= 0) {
+			
         if (botSets) {
             let n = MSG.toUpperCase().replace("!BUY ", ""),
                 amountofsets = parseInt(n) * CONFIG.CARDS.BUY1KEYFORAMOUNTOFSETS;
         if(method.UserBuying()) {
-            if (!isNaN(n) && parseInt(n) > 0) {
-                if (n <= CONFIG.MAXBUY) {
-                    let t = manager.createOffer(SENDER.getSteamID64());
-                    t.getUserDetails((ERR, ME, THEM) => {
-                        if (ERR) {
-                            logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-                        } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                            n = parseInt(n);
-                            let theirKeys = [];
-                            logcolors.true('| [Refloow] |: Processing of !buy request');
-                            refloow.chatMessage(SENDER, "/me Processing your request.");
-                            manager.getUserInventoryContents(SENDER.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
-                                if (ERR) {
-                                    logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory. Please try later");
-                                } else {
-                                    logcolors.info("| [Debug] |: Inventory Loaded");
-                                    if (!ERR) {
-                                        logcolors.info("| [Debug] |: Inventory Loaded 2");
-                                        for (let i = 0; i < INV.length; i++) {
-                                            if (theirKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
-                                                theirKeys.push(INV[i]);
-                                            }
-                                        }
-                                        if (theirKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough keys.");
-                                        } else {
-                                            Utils.getBadges(SENDER.getSteamID64(), (ERR, DATA) => {
-                                                if (!ERR) {
-                                                    logcolors.info("| [Debug] |: DEBUG#BADGE LOADED");
-                                                    if (!ERR) {
-                                                        let b = {}; // List with badges that CAN still be crafted
-                                                        if (DATA) {
-                                                            for (let i = 0; i < Object.keys(DATA).length; i++) {
-                                                                if (DATA[Object.keys(DATA)[i]] < 6) {
-                                                                    b[Object.keys(DATA)[i]] = 5 - DATA[Object.keys(DATA)[i]];
-                                                                }
-                                                            }
-                                                        } else {
-                                                            refloow.chatMessage(SENDER.getSteamID64(), "/pre Your badges are empty, sending an offer without checking badges.");
-                                                        }
-                                                        console.log(DATA);
-                                                        console.log(b);
-                                                        // TODO: COUNT AMOUNT OF SETS BOT CAN GIVE HIM
-                                                        // 1: GET BOTS CARDS. DONE
-                                                        // 2: GET PLAYER's BADGES. DONE
-                                                        // 3: MAGIC
-                                                        let hisMaxSets = 0,
-                                                            botNSets = 0;
-                                                        // Loop for sets he has partially completed
-                                                        for (let i = 0; i < Object.keys(b).length; i++) {
-                                                            if (botSets[Object.keys(b)[i]] && botSets[Object.keys(b)[i]].length >= 5 - b[Object.keys(b)[i]].length) {
-                                                                hisMaxSets += 5 - b[Object.keys(b)[i]].length;
-                                                            }
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 1 DONE");
-                                                        // Loop for sets he has never crafted
-                                                        for (let i = 0; i < Object.keys(botSets).length; i++) {
-                                                            if (Object.keys(b).indexOf(Object.keys(botSets)[i]) < 0) {
-                                                                if (botSets[Object.keys(botSets)[i]].length >= 5) {
-                                                                    hisMaxSets += 5;
-                                                                } else {
-                                                                    hisMaxSets += botSets[Object.keys(botSets)[i]].length;
-                                                                }
-                                                            }
-                                                            botNSets += botSets[Object.keys(botSets)[i]].length;
-                                                        }
-                                                        logcolors.info("| [Debug] |: Loop 2 DONE");
-                                                        // HERE
-                                                        if (amountofsets <= hisMaxSets) {
-                                                            hisMaxSets = amountofsets;
-                                                            logcolors.info("| [Debug] |: Trade Created");
-                                                            sortSetsByAmount(botSets, (DATA) => {
-                                                                logcolors.info("| [Debug] |:" + DATA);
-                                                                logcolors.info("| [Debug] |: Sets Sorted");
-                                                                firstLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    if (b[DATA[i]] == 0) {
-                                                                        continue firstLoop;
-                                                                    } else {
-                                                                        logcolors.info("| [Debug] |: DEBUG#" + i);
-                                                                        logcolors.info("| [Debug] |: DEBUG FOR LOOP ITEMS");
-                                                                        if (hisMaxSets > 0) {
-                                                                            logcolors.info("| [Debug] |: DEBUG# MAXSETSMORETHAN1");
-                                                                            if (b[DATA[i]] && botSets[DATA[i]].length >= b[DATA[i]]) {
-                                                                                // BOT HAS ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: Loop 1");
-                                                                                sLoop: for (let j = 0; j < 5 - b[DATA[i]]; j++) {
-                                                                                    if (j + 1 < b[DATA[i]] && hisMaxSets > 0) {
-                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: ITEM ADD");
-                                                                                        logcolors.info("| [Debug] |: DEBUG#LOOP #1: " + botSets[DATA[i]][j]);
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else if (b[DATA[i]] && botSets[DATA[i]].length < b[DATA[i]]) {
-                                                                                // BOT DOESNT HAVE ENOUGH SETS OF THIS KIND
-                                                                                logcolors.info("| [Debug] |: loop #1 CONTINUE: RETURN");
-                                                                                continue; // *
-                                                                            } else if (!b[DATA[i]] && botSets[DATA[i]].length < 5 && botSets[DATA[i]].length - b[DATA[i]] > 0) { // TODO NOT FOR LOOP WITH BOTSETS. IT SENDS ALL
-                                                                                // BOT HAS ENOUGH SETS AND USER NEVER CRAFTED THIS
-                                                                                bLoop: for (let j = 0; j < botSets[DATA[i]].length - b[DATA[i]]; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            else if (hisMaxSets < 5) {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                tLoop: for (let j = 0; j != hisMaxSets; j++) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            } else {
-                                                                                // BOT DOESNT HAVE CARDS USER AREADY CRAFTED, IF USER STILL NEEDS LESS THAN 5 SETS:
-                                                                                logcolors.info("| [Debug] |: Loop 2");
-                                                                                xLoop: for (let j = 0; j != 5; j++ && hisMaxSets > 0) {
-                                                                                    if (botSets[DATA[i]][j] && hisMaxSets > 0) {
-                                                                                        t.addMyItems(botSets[DATA[i]][j]);
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                        hisMaxSets--;
-                                                                                        console.log(hisMaxSets);
-                                                                                    } else {
-                                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                        continue firstLoop;
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            logcolors.info("| [Debug] |: RETURN");
-                                                                            break firstLoop;
-                                                                        }
-                                                                    }
-                                                                }
-                                                                if (hisMaxSets > 0) {
-                                                                    refloow.chatMessage(SENDER, "/pre ⚠️ There are not enough sets. Please try again later.");
-                                                                } else {
-                                                                    logcolors.info("| [Debug] |: -SENDING");
-                                                                    t.addTheirItems(theirKeys);
-                                                                    t.data("commandused", "Buy");
-                                                                    t.data("amountofkeys", n);
-                                                                    t.data("amountofsets", amountofsets.toString());
-                                                                    t.data("index", setsThatShouldntBeSent.length);
-                                                                    setsThatShouldntBeSent.push(t.itemsToGive);
-                                                                    t.send((ERR, STATUS) => {
-                                                                        if (ERR) {
-                                                                            refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-                                                                            logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-                                                                        } else {
-                                                                            refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-                                                                            logcolors.info("| [Steam] |: Trade offer sent!");
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
-                                                        } else {
-                                                            refloow.chatMessage(SENDER, "/pre ⚠️ There are currently not enough sets that you have not used in stock for this amount of keys.");
-                                                        }
-                                                        // TO HERE
-                                                    } else {
-                                                        logcolors.fail(SENDER, "| [Steam] |: An error occurred while getting badges: " + ERR);
-                                                    }
-                                                } else {
-                                                    refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your badges. Please try again.");
-                                                    logcolors.fail(SENDER, "| [Steam] |: An error occurred while loading badges: " + ERR);
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading your inventory, please make sure it's set to public.");
-                                    }
-                                }
-                            });
-                        } else {
-                            refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-                        }
-                    });
-                } else {
-                    refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-                }
-            } else {
-                refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid amount of keys.");
-            }
-        } else {
+            var marketName=CONFIG.ACCEPTEDKEYS;
+		   
+							f.getHisKeys(n,manager,SENDER,730,2,botSets,amountofsets,setsThatShouldntBeSent,refloow,marketName,(callback) =>
+							{
+								logcolors.true('| [Refloow] |: Finished processing of buy command!');
+							});
+		}							else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
@@ -2498,107 +1676,12 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                let n = parseInt(MSG.toUpperCase().replace("!SELLHYDRA ", "")),
                     amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSHYDRA;
             if(method.UserSellingWithHydra()) {
-                if (!isNaN(n) && parseInt(n) > 0) {
-                    if (n <= CONFIG.MAXSELL) {
-                      logcolors.true('| [Refloow] |: Processing of !sellhydra request');
-                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
-                        let botKeys = [],
-                            t = manager.createOffer(SENDER.getSteamID64());
-                        t.getUserDetails((ERR, ME, THEM) => {
-                            if (ERR) {
-                                logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-                            } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                                manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
-                                    if (ERR) {
-                                        logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
-                                    } else {
-                                        for (let i = 0; i < INV.length; i++) {
-                                            if (botKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
-                                                botKeys.push(INV[i]);
-                                            }
-                                        }
-                                        if (botKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough keys.");
-                                        } else {
-                                            let amountofB = amountofsets;
-                                            Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
-                                                if (!ERR) {
-                                                    let s = DATA;
-                                                    Utils.getSets(s, allCards, (ERR, DDATA) => {
-                                                        if (!ERR) {
-                                                            sortSetsByAmountB(s, (DATA) => {
-                                                                let setsSent = {};
-                                                                firsttLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    console.log(setsSent);
-                                                                    console.log(DATA[i]);
-                                                                    if (DDATA[DATA[i]]) {
-                                                                        for (let j = 0; j < DDATA[DATA[i]].length; j++) {
-                                                                            if (amountofB > 0) {
-                                                                                if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.CARDS.MAXSETSELL) || !setsSent[DATA[i]]) {
-                                                                                    t.addTheirItems(DDATA[DATA[i]][j]);
-                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                    amountofB--;
-                                                                                    if (!setsSent[DATA[i]]) {
-                                                                                        setsSent[DATA[i]] = 1;
-                                                                                    } else {
-                                                                                        setsSent[DATA[i]] += 1;
-                                                                                    }
-                                                                                } else {
-                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                    continue firsttLoop;
-                                                                                }
-                                                                            } else {
-                                                                                logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                continue firsttLoop;
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN 2");
-                                                                        continue firsttLoop;
-                                                                    }
-                                                                }
-                                                            });
-                                                            if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
-                                                            } else {
-                                                                logcolors.info("| [Debug] |: -SENDING");
-                                                                t.addMyItems(botKeys);
-                                                                t.data("commandused", "Sell");
-                                                                t.data("amountofsets", amountofsets.toString());
-                                                                t.data("amountofkeys", n);
-                                                                t.send((ERR, STATUS) => {
-                                                                    if (ERR) {
-                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-                                                                        logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-                                                                    } else {
-                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-                                                                        logcolors.info("| [Steam] |: Trade offer sent!");
-                                                                    }
-                                                                });
-                                                            }
-                                                        } else {
-                                                            logcolors.fail("| [Inventory] |: An error occurred while getting bot sets: " + ERR);
-                                                        }
-                                                    });
-                                                } else {
-                                                    logcolors.fail("| [Inventory] |: An error occurred while loading user inventory: " + ERR);
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            } else {
-                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-                            }
-                        });
-                    } else {
-                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-                    }
-                } else {
-                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
-                }
+                var marketName=CONFIG.HYDRAKEY;
+		   
+							f.getHisSets(n,manager,SENDER,730,2,botSets,amountofsets,setsThatShouldntBeSent,refloow,marketName,community,allCards,MSG,(callback) =>
+							{
+								logcolors.true('| [Refloow] |: Finished processing of sellhydra command!');
+							});
         } else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
@@ -2606,112 +1689,17 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 
 // !SELLCSGO COMMAND THAT USES CS GO KEYS AS CURRENCY TO PAY WITH      
 
-        } else if (MSG.toUpperCase().indexOf("!SELLCSGO") >= 0) {
+        } else if (MSG.toUpperCase().indexOf("!SELLCS") >= 0) {
         if (botSets) {
-               let n = parseInt(MSG.toUpperCase().replace("!SELLCSGO ", "")),
+               let n = parseInt(MSG.toUpperCase().replace("!SELLCS ", "")),
                     amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS;
             if(method.UserSellingWithCSGO()) {
-                if (!isNaN(n) && parseInt(n) > 0) {
-                    if (n <= CONFIG.MAXSELL) {
-                      logcolors.true('| [Refloow] |: Processing of !sellcsgo request');
-                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
-                        let botKeys = [],
-                            t = manager.createOffer(SENDER.getSteamID64());
-                        t.getUserDetails((ERR, ME, THEM) => {
-                            if (ERR) {
-                                logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-                            } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                                manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
-                                    if (ERR) {
-                                        logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
-                                    } else {
-                                        for (let i = 0; i < INV.length; i++) {
-                                            if (botKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
-                                                botKeys.push(INV[i]);
-                                            }
-                                        }
-                                        if (botKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough keys.");
-                                        } else {
-                                            let amountofB = amountofsets;
-                                            Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
-                                                if (!ERR) {
-                                                    let s = DATA;
-                                                    Utils.getSets(s, allCards, (ERR, DDATA) => {
-                                                        if (!ERR) {
-                                                            sortSetsByAmountB(s, (DATA) => {
-                                                                let setsSent = {};
-                                                                firsttLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    console.log(setsSent);
-                                                                    console.log(DATA[i]);
-                                                                    if (DDATA[DATA[i]]) {
-                                                                        for (let j = 0; j < DDATA[DATA[i]].length; j++) {
-                                                                            if (amountofB > 0) {
-                                                                                if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.CARDS.MAXSETSELL) || !setsSent[DATA[i]]) {
-                                                                                    t.addTheirItems(DDATA[DATA[i]][j]);
-                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                    amountofB--;
-                                                                                    if (!setsSent[DATA[i]]) {
-                                                                                        setsSent[DATA[i]] = 1;
-                                                                                    } else {
-                                                                                        setsSent[DATA[i]] += 1;
-                                                                                    }
-                                                                                } else {
-                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                    continue firsttLoop;
-                                                                                }
-                                                                            } else {
-                                                                                logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                continue firsttLoop;
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN 2");
-                                                                        continue firsttLoop;
-                                                                    }
-                                                                }
-                                                            });
-                                                            if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
-                                                            } else {
-                                                                logcolors.info("| [Debug] |: -SENDING");
-                                                                t.addMyItems(botKeys);
-                                                                t.data("commandused", "Sell");
-                                                                t.data("amountofsets", amountofsets.toString());
-                                                                t.data("amountofkeys", n);
-                                                                t.send((ERR, STATUS) => {
-                                                                    if (ERR) {
-                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-                                                                        logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-                                                                    } else {
-                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-                                                                        logcolors.info("| [Steam] |: Trade offer sent!");
-                                                                    }
-                                                                });
-                                                            }
-                                                        } else {
-                                                            logcolors.fail("| [Inventory] |: An error occurred while getting bot sets: " + ERR);
-                                                        }
-                                                    });
-                                                } else {
-                                                    logcolors.fail("| [Inventory] |: An error occurred while loading user inventory: " + ERR);
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            } else {
-                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-                            }
-                        });
-                    } else {
-                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-                    }
-                } else {
-                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
-                }
+               var marketName=CONFIG.ACCEPTEDKEYS;
+		   
+							f.getHisSets(n,manager,SENDER,730,2,botSets,amountofsets,setsThatShouldntBeSent,refloow,marketName,community,allCards,MSG,(callback) =>
+							{
+								logcolors.true('| [Refloow] |: Finished processing of sellcs command!');
+							});
         } else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
@@ -2719,110 +1707,18 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 
 // !SELLTF2 COMMAND THAT USES TF2 KEYS AS CURRENCY TO PAY WITH  
 
-    } else if (MSG.toUpperCase().indexOf("!SELLTF2") >= 0) {
+    } else if (MSG.toUpperCase().indexOf("!SELLTF") >= 0) {
         if (botSets) {
-                let n = parseInt(MSG.toUpperCase().replace("!SELLTF2 ", "")),
+                let n = parseInt(MSG.toUpperCase().replace("!SELLTF ", "")),
                     amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETSTF2;
+			
             if(method.UserSellingWithTF2()) {
-                if (!isNaN(n) && parseInt(n) > 0) {
-                    if (n <= CONFIG.MAXSELL) {
-                      logcolors.true('| [Refloow] |: Processing of !selltf2 request');
-                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
-                        let botKeys = [],
-                            t = manager.createOffer(SENDER.getSteamID64());
-                        t.getUserDetails((ERR, ME, THEM) => {
-                            if (ERR) {
-                                logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-                            } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                                manager.getUserInventoryContents(refloow.steamID.getSteamID64(), 440, 2, true, (ERR, INV, CURR) => {
-                                    if (ERR) {
-                                        logcolors.fail("| [Debug] |: An error occurred while getting bot inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
-                                    } else {
-                                        for (let i = 0; i < INV.length; i++) {
-                                            if (botKeys.length < n && INV[i].market_hash_name == "Mann Co. Supply Crate Key") {
-                                                botKeys.push(INV[i]);
-                                            }
-                                        }
-                                        if (botKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough keys.");
-                                        } else {
-                                            let amountofB = amountofsets;
-                                            Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
-                                                if (!ERR) {
-                                                    let s = DATA;
-                                                    Utils.getSets(s, allCards, (ERR, DDATA) => {
-                                                        if (!ERR) {
-                                                            sortSetsByAmountB(s, (DATA) => {
-                                                                let setsSent = {};
-                                                                firsttLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    if (DDATA[DATA[i]]) {
-                                                                        for (let j = 0; j < DDATA[DATA[i]].length; j++) {
-                                                                            if (amountofB > 0) {
-                                                                                if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.CARDS.MAXSETSELL) || !setsSent[DATA[i]]) {
-                                                                                    t.addTheirItems(DDATA[DATA[i]][j]);
-                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                    amountofB--;
-                                                                                    if (!setsSent[DATA[i]]) {
-                                                                                        setsSent[DATA[i]] = 1;
-                                                                                    } else {
-                                                                                        setsSent[DATA[i]] += 1;
-                                                                                    }
-                                                                                } else {
-                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: CONTINUE");
-                                                                                    continue firsttLoop;
-                                                                                }
-                                                                            } else {
-                                                                                logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                continue firsttLoop;
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN 2");
-                                                                        continue firsttLoop;
-                                                                    }
-                                                                }
-                                                            });
-                                                            if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
-                                                            } else {
-                                                                logcolors.info("| [Debug] |: Sending");
-                                                                t.addMyItems(botKeys);
-                                                                t.data("commandused", "Sell");
-                                                                t.data("amountofsets", amountofsets.toString());
-                                                                t.data("amountofkeys", n);
-                                                                t.send((ERR, STATUS) => {
-                                                                    if (ERR) {
-                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-                                                                        logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-                                                                    } else {
-                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-                                                                        logcolors.info("| [Steam] |: Trade offer sent!");
-                                                                    }
-                                                                });
-                                                            }
-                                                        } else {
-                                                            logcolors.fail("| [Inventory] |: An error occurred while getting bot sets: " + ERR);
-                                                        }
-                                                    });
-                                                } else {
-                                                    logcolors.fail("| [Steam] |: An error occurred while getting user inventory: " + ERR);
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            } else {
-                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-                            }
-                        });
-                    } else {
-                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-                    }
-                } else {
-                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
-                }
+                var marketName=CONFIG.TF2KEY;
+		   
+							f.getHisSets(n,manager,SENDER,440,2,botSets,amountofsets,setsThatShouldntBeSent,refloow,marketName,community,allCards,MSG,(callback) =>
+							{
+								logcolors.true('| [Refloow] |: Finished processing of selltf command!');
+							});
         } else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
@@ -2832,7 +1728,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
         if (botSets) {
                let n = parseInt(MSG.toUpperCase().replace("!SELLGEMS ", "")),
                     amountofgems = n * CONFIG.CARDS.GIVE1GEMSFORAMOUNTOFSETSGEMS;
-            if(method.UserSell()) {
+            if(method.UserSellingWithGems) {
                 if (!isNaN(n) && parseInt(n) > 0) {
                     if (n <= CONFIG.MAXSELL) {
                       logcolors.true('| [Refloow] |: Processing of !sellgems request');
@@ -2850,10 +1746,10 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                         refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
                                     } else {
                     
-                    INV = INV.filter((ITEM) => ITEM.getTag("item_class").internal_name == "item_class_7");
+										INV = INV.filter((ITEM) => ITEM.getTag("item_class").internal_name == "item_class_7");
                                         
                                         if (INV[0]==null) {
-                      logcolors.info("| [Debug] |: We do not have enough gems for this trade");
+											logcolors.info("| [Debug] |: We do not have enough gems for this trade");
                                             refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough gems for this trade.");
                                         } else {
                       if(INV[0].amount>=amountofgems)
@@ -2867,14 +1763,48 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                     Utils.getSets(s, allCards, (ERR, DDATA) => {
                                                         if (!ERR) {
                                                             sortSetsByAmountB(s, (DATA) => {
+															
                                                                 let setsSent = {};
                                                                 firsttLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    console.log(setsSent);
-                                                                    console.log(DATA[i]);
+                                                                   // console.log(setsSent);
+                                                                    //console.log(DATA[i]);
+																	var loop;
                                                                     if (DDATA[DATA[i]]) {
-                                                                        for (let j = 0; j < DDATA[DATA[i]].length; j++) {
+																		if(botSets[DATA[i]])
+																		{	
+																			if(botSets[DATA[i]].length>=CONFIG.MAXSTOCKSETSPERGAME)
+																			{
+																				continue;
+																			}
+																			else
+																			{
+																				var total = botSets[DATA[i]].length + DDATA[DATA[i]].length;
+																				if(total>CONFIG.MAXSTOCKSETSPERGAME)
+																				{
+																					if(DDATA[DATA[i]].length >= CONFIG.MAXSTOCKSETSPERGAME)
+																						{
+																							loop= CONFIG.MAXSTOCKSETSPERGAME-botSets[DATA[i]].length;
+																						}
+																					else
+																					{
+																						var left = CONFIG.MAXSTOCKSETSPERGAME - DDATA[DATA[i]].length;
+																						loop = (left>DDATA[DATA[i]].length) ? DDATA[DATA[i]].length:left;
+																					}
+																				}
+																				else
+																				{
+																					loop=DDATA[DATA[i]].length;
+																				}
+																			}
+																		}
+																		else
+																		{
+																			loop = Math.min(DDATA[DATA[i]].length,CONFIG.MAXSTOCKSETSPERGAME);
+																		}
+																			
+                                                                        for (let j = 0; j < loop; j++) {
                                                                             if (amountofB > 0) {
-                                                                                if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.CARDS.MAXSETSELL) || !setsSent[DATA[i]]) {
+                                                                                if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.MAXSETSELL ) || !setsSent[DATA[i]]) {
                                                                                     t.addTheirItems(DDATA[DATA[i]][j]);
                                                                                     logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
                                                                                     amountofB--;
@@ -2899,13 +1829,13 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                 }
                                                             });
                                                             if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
+                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only keeps total "+ CONFIG.MAXSTOCKSETSPERGAME+" games in stock at a time ). Please try again later.");
                                                             } else {
                                                                 logcolors.info("| [Debug] |: -SENDING");
                                                                 t.addMyItems(botGems);
-                                                                t.data("commandused", "SellGems");
+                                                                t.data("commandused", MSG);
                                                                 t.data("amountofsets", n.toString());
-                                                                t.data("amountofGems", amountofgems);
+                                                                t.data("quantity", amountofgems);
                                                                 t.send((ERR, STATUS) => {
                                                                     if (ERR) {
                                                                         refloow.chatMessage(SENDER, "⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
@@ -2913,6 +1843,7 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                                                                     } else {
                                                                         refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
                                                                         logcolors.info("| [Steam] |: Trade offer sent!");
+																		logcolors.summary("| [Summary] |: Bot sent " + amountofgems + " gems for his " + n + " set(s)");
                                                                     }
                                                                 });
                                                             }
@@ -2958,111 +1889,20 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
                let n = parseInt(MSG.toUpperCase().replace("!SELL ", "")),
                     amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS;
             if(method.UserSell()) {
-                if (!isNaN(n) && parseInt(n) > 0) {
-                    if (n <= CONFIG.MAXSELL) {
-                      logcolors.true('| [Refloow] |: Processing of !sell request');
-                        refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
-                        let botKeys = [],
-                            t = manager.createOffer(SENDER.getSteamID64());
-                        t.getUserDetails((ERR, ME, THEM) => {
-                            if (ERR) {
-                                logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-                                refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-                            } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-                                manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
-                                    if (ERR) {
-                                        logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
-                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
-                                    } else {
-                                        for (let i = 0; i < INV.length; i++) {
-                                            if (botKeys.length < n && CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
-                                                botKeys.push(INV[i]);
-                                            }
-                                        }
-                                        if (botKeys.length != n) {
-                                            refloow.chatMessage(SENDER, "/pre ⚠️ The bot does not have enough keys.");
-                                        } else {
-                                            let amountofB = amountofsets;
-                                            Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
-                                                if (!ERR) {
-                                                    let s = DATA;
-                                                    Utils.getSets(s, allCards, (ERR, DDATA) => {
-                                                        if (!ERR) {
-                                                            sortSetsByAmountB(s, (DATA) => {
-                                                                let setsSent = {};
-                                                                firsttLoop: for (let i = 0; i < DATA.length; i++) {
-                                                                    console.log(setsSent);
-                                                                    console.log(DATA[i]);
-                                                                    if (DDATA[DATA[i]]) {
-                                                                        for (let j = 0; j < DDATA[DATA[i]].length; j++) {
-                                                                            if (amountofB > 0) {
-                                                                                if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.CARDS.MAXSETSELL) || !setsSent[DATA[i]]) {
-                                                                                    t.addTheirItems(DDATA[DATA[i]][j]);
-                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-                                                                                    amountofB--;
-                                                                                    if (!setsSent[DATA[i]]) {
-                                                                                        setsSent[DATA[i]] = 1;
-                                                                                    } else {
-                                                                                        setsSent[DATA[i]] += 1;
-                                                                                    }
-                                                                                } else {
-                                                                                    logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                    continue firsttLoop;
-                                                                                }
-                                                                            } else {
-                                                                                logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-                                                                                continue firsttLoop;
-                                                                            }
-                                                                        }
-                                                                    } else {
-                                                                        logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN 2");
-                                                                        continue firsttLoop;
-                                                                    }
-                                                                }
-                                                            });
-                                                            if (amountofB > 0) {
-                                                                refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
-                                                            } else {
-                                                                logcolors.info("| [Debug] |: -SENDING");
-                                                                t.addMyItems(botKeys);
-                                                                t.data("commandused", "Sell");
-                                                                t.data("amountofsets", amountofsets.toString());
-                                                                t.data("amountofkeys", n);
-                                                                t.send((ERR, STATUS) => {
-                                                                    if (ERR) {
-                                                                        refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-                                                                        logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-                                                                    } else {
-                                                                        refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-                                                                        logcolors.info("| [Steam] |: Trade offer sent!");
-                                                                    }
-                                                                });
-                                                            }
-                                                        } else {
-                                                            logcolors.fail("| [Inventory] |: An error occurred while getting bot sets: " + ERR);
-                                                        }
-                                                    });
-                                                } else {
-                                                    logcolors.fail("| [Inventory] |: An error occurred while loading user inventory: " + ERR);
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            } else {
-                                refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-                            }
-                        });
-                    } else {
-                        refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-                    }
-                } else {
-                    refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
-                }
+                let n = parseInt(MSG.toUpperCase().replace("!SELLCSGO ", "")),
+                    amountofsets = n * CONFIG.CARDS.GIVE1KEYPERAMOUNTOFSETS;
+            if(method.UserSellingWithCSGO()) {
+               var marketName=CONFIG.ACCEPTEDKEYS;
+		   
+							f.getHisSets(n,manager,SENDER,730,2,botSets,amountofsets,setsThatShouldntBeSent,refloow,marketName,allCards,(callback) =>
+							{
+								logcolors.true('| [Refloow] |: Finished processing of sellcsgo command!');
+							});
         } else {
             refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later. (Steam is down or command is disabled by Admin)");
         }
     }
+		}
     
 // START OF THE ADMIN COMMANDS 
 
@@ -3076,7 +1916,30 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
             } else {
                 refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid SteamID64");
             }
-        } else if (MSG.toUpperCase().indexOf("!USERCHECK") >= 0) {
+        }
+		
+		else if(MSG.toUpperCase().indexOf("!ADMINCOMMANDS") >=0)
+		{
+			var message="/code <--------------------------- Admin Commands --------------------------->\n\n";
+			
+			   message+="!block [steamID] - Block user with given steamID\n";
+			   message+="!usercheck [steamID] - Check how many sets bot has, for user with given steamID\n";
+			   message+="!withdraw - withdraw all TF2 keys\n";
+         message+="!restart - restarts the bot\n";
+         message+="!exit - stops the bot and exits gracefully\n";
+         message+="!refresh - refreshes the bot\n";
+         message+="!pause5m - pauses bot for 5 min and then proceed with an restart\n";
+         message+="!pause10m - pauses bot for 10 min and then proceed with an restart\n";
+         message+="!pause1h - pauses bot for 1 hour and then proceed with an restart\n";
+         message+="!pause2h - pauses bot for 2 hours and then proceed with an restart\n";
+			   message+="!donatesets - with this, you can donate sets to bot\n";
+			   message+="!broadcastall - any message after this command will be sent to all users in bots's friendlist\n";
+			   message+="!broadcast - only send message to users who have, done !reminder ON\n";
+			   
+			refloow.chatMessage(SENDER,message);
+		}
+
+		else if (MSG.toUpperCase().indexOf("!USERCHECK") >= 0) {
             let n = MSG.toUpperCase().replace("!USERCHECK ", "").toString();
             if (SID64REGEX.test(n)) {
                 if (Object.keys(botSets).length > 0) {
@@ -3129,18 +1992,23 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
             } else {
                 refloow.chatMessage(SENDER, "/pre ⚠️ Please provide a valid SteamID64.");
             }
-        } else if (MSG.toUpperCase() == "!WITHDRAW") {
-            manager.getInventoryContents(CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
+        }
+
+    // Withdraw command
+
+		else if (MSG.toUpperCase() == "!WITHDRAW") {
+			let t = manager.createOffer(SENDER.getSteamID64());
+            manager.getInventoryContents(440, 2, true, (ERR, INV, CURR) => {
                 if (ERR) {
                     refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory.");
                     logcolors.fail("| [Inventory] |: An error occurred while getting inventory: " + ERR);
                 } else {
 					refloow.chatMessage(SENDER, "/me ✔️ Bot's inventory loaded.");
                     logcolors.info("| [Inventory] |: Bot's inventory loaded.");
-                    let t = manager.createOffer(SENDER);
+                    
                     for (let i = 0; i < INV.length; i++) {
 						
-                        if (CONFIG.ACCEPTEDKEYS.indexOf(INV[i].market_hash_name) >= 0) {
+                        if (CONFIG.TF2KEY.indexOf(INV[i].market_hash_name) >= 0) {
                             t.addMyItem(INV[i]);
 							logcolors.info("| [Offer] |: Key added to trade ");
 						}
@@ -3148,114 +2016,133 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 					t.send();
                 }
             });
-      } else {
-     // Command not recognized display for admins
-     refloow.chatMessage(SENDER, "/pre ⚠️ Command not recognized. Type !commands or !admincommands to see all the commands.");;
+      }
+	  
+		
+
+    // Admin command RESTART
+
+    else if (MSG.toUpperCase().indexOf("!RESTART") >= 0) {
+      logcolors.true('| [Refloow] |: Restarting the bot...');
+      refloow.logOff();
+      logcolors.info('| [Refloow] |: Logged off... Waiting 15 sec for exceed limit');
+      setTimeout(() => {
+      logon();
+      }, 15000);
     }
     
-	} else if (MSG.toUpperCase().indexOf("!DONATESETS") >= 0) {
+    // Admin command !EXIT (Stops bot totally from functioning by logging it off of an account)
+
+    else if (MSG.toUpperCase().indexOf("!EXIT") >= 0) {
+      logcolors.true('| [Refloow] |: Received forcestop command, exiting...');
+            refloow.logOff();
+    }
+
+    else if (MSG.toUpperCase().indexOf("!REFRESH") >= 0) {
+      logcolors.true('| [Refloow] |: Refreshing the bot...');
+          refloow.setPersona(1);
+    }
+
+    // Admin command !pause (Pauses bot for 2 hours and then restart)
+
+    else if (MSG.toUpperCase().indexOf("!PAUSE5M") >= 0) {
+      logcolors.true('| [Refloow] |: Pausing the bot for next 5 min ...');
+      refloow.logOff();
+      logcolors.info('| [Refloow] |: Bot does not respond on any requests in next 5 min after that it will restart.');
+      setTimeout(() => {
+      logon();
+      }, 300000); // Timer is set to 5 min
+    }
+
+    else if (MSG.toUpperCase().indexOf("!PAUSE10M") >= 0) {
+      logcolors.true('| [Refloow] |: Pausing the bot for next 10 min ...');
+      refloow.logOff();
+      logcolors.info('| [Refloow] |: Bot does not respond on any requests in next 10 min after that it will restart.');
+      setTimeout(() => {
+      logon();
+      }, 600000); // Timer is set to 10 min
+    }
+
+    else if (MSG.toUpperCase().indexOf("!PAUSE1H") >= 0) {
+      logcolors.true('| [Refloow] |: Pausing the bot for next 1 hours ...');
+      refloow.logOff();
+      logcolors.info('| [Refloow] |: Bot does not respond on any requests in next 1 hour after that it will restart.');
+      setTimeout(() => {
+      logon();
+      }, 3600000); // Timer is set to 1 hour
+    }
+
+    else if (MSG.toUpperCase().indexOf("!PAUSE2H") >= 0) {
+      logcolors.true('| [Refloow] |: Pausing the bot for next 2 hours ...');
+      refloow.logOff();
+      logcolors.info('| [Refloow] |: Bot does not respond on any requests in next 2 hours after that it will restart.');
+      setTimeout(() => {
+      logon();
+      }, 7200000); // Timer is set to 2 hours
+    }
+
+		 
+	 else if (MSG.toUpperCase().indexOf("!DONATESETS") >= 0) {
 			if (botSets) {
-				   let n = parseInt(MSG.toUpperCase().replace("!DONATESETS ", "")),
-						amountofsets = n;
-					if (!isNaN(n) && parseInt(n) > 0) {
-						if (n <= CONFIG.MAXSELL) {
-              logcolors.true('| [RefloowAdmin] |: Processing of !donatesets request');
-							refloow.chatMessage(SENDER, "/me ✔️ Processing your request.");
-							let botKeys = [],
-								t = manager.createOffer(SENDER.getSteamID64());
-							t.getUserDetails((ERR, ME, THEM) => {
-								if (ERR) {
-									logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
-									refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while getting your trade holds. Please try again");
-								} else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
-									manager.getUserInventoryContents(refloow.steamID.getSteamID64(), CONFIG.KEYSFROMGAME, 2, true, (ERR, INV, CURR) => {
-										if (ERR) {
-											logcolors.fail("| [Steam] |: An error occurred while getting bot inventory: " + ERR);
-											refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while loading the bot's inventory. Please try again.");
-										} else {
-											let amountofB = amountofsets;
-												Utils.getInventory(SENDER.getSteamID64(), community, (ERR, DATA) => {
-													if (!ERR) {
-														let s = DATA;
-														Utils.getSets(s, allCards, (ERR, DDATA) => {
-															if (!ERR) {
-																sortSetsByAmountB(s, (DATA) => {
-																	let setsSent = {};
-																	firsttLoop: for (let i = 0; i < DATA.length; i++) {
-																		console.log(setsSent);
-																		console.log(DATA[i]);
-																		if (DDATA[DATA[i]]) {
-																			for (let j = 0; j < DDATA[DATA[i]].length; j++) {
-																				if (amountofB > 0) {
-																					if ((setsSent[DATA[i]] && setsSent[DATA[i]] < CONFIG.CARDS.MAXSETSELL) || !setsSent[DATA[i]]) {
-																						t.addTheirItems(DDATA[DATA[i]][j]);
-																						logcolors.info("| [Debug] |: loop #2 CONTINUE: ITEM ADD");
-																						amountofB--;
-																						if (!setsSent[DATA[i]]) {
-																							setsSent[DATA[i]] = 1;
-																						} else {
-																							setsSent[DATA[i]] += 1;
-																						}
-																					} else {
-																						logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-																						continue firsttLoop;
-																					}
-																				} else {
-																					logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN");
-																					continue firsttLoop;
-																				}
-																			}
-																		} else {
-																			logcolors.info("| [Debug] |: loop #2 CONTINUE: RETURN 2");;
-																			continue firsttLoop;
-																		}
-																	}
-																});
-																if (amountofB > 0) {
-																	refloow.chatMessage(SENDER, "/pre ⚠️ You do not have enough sets, (this bot only accepts " + CONFIG.CARDS.MAXSETSELL + " sets per set type at a time). Please try again later.");
-																} else {
-																	logcolors.info("| [Debug] |: -SENDING");
-																	t.addMyItems(botKeys);
-																	t.data("commandused", "Sell");
-																	t.data("amountofsets", amountofsets.toString());
-																	t.data("amountofkeys", n);
-																	t.send((ERR, STATUS) => {
-																		if (ERR) {
-																			refloow.chatMessage(SENDER, "/pre ⚠️ An error occurred while sending your trade. Steam Trades could be down. Please try again later.");
-																			logcolors.fail("| [Steam] |: An error occurred while sending trade: " + ERR);
-																		} else {
-																			refloow.chatMessage(SENDER, "/me ✔️ Trade Sent! Confirming it...");
-																			logcolors.info("| [Steam] |: Trade offer sent!");
-																		}
-																	});
-																}
-															} else {
-																logcolors.fail("| [Inventory] |: An error occurred while getting bot sets: " + ERR);
-															}
-														});
-													} else {
-														logcolors.fail("| [Steam] |: An error occurred while getting user inventory: " + ERR);
-													}
-												});
-										}
-									});
-								} else {
-									refloow.chatMessage(SENDER, "/pre ⚠️ Please make sure you don't have a trade hold!");
-								}
-							});
-						} else {
-							refloow.chatMessage(SENDER, "/pre ⚠️ Please try a lower amount of keys.");
-						}
-					} else {
-						refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
-					}
-			} else {
-				refloow.chatMessage(SENDER, "/pre ⚠️ Please try again later.");
-		}
-            } else {
+				let n = parseInt(MSG.toUpperCase().replace("!DONATESETS ", "")),
+					amountofsets = n;
+					
+					f.donateSets(n,manager,SENDER,amountofsets,setsThatShouldntBeSent,refloow,community,allCards,(callback) => {
+							logcolors.true('| [Refloow] |: Finished processing !donateSets request');
+		});
+			}
+
+  // Broadcastall command - sends an message to everyone in the friendlist 
+	
+	} else if (MSG.indexOf("!broadcastall") >=0)
+	{
+		var msg = MSG.replace("!broadcastall ","");
+		
+		var friends = refloow.myFriends
+		Object.keys(friends).forEach( ( id ) => 
+		{
+			refloow.chatMessage(id,msg);
+		});
+	}
+	
+  // Broadcast reminder command - broadcasts the reminder to everyone when called
+
+	else if (MSG.indexOf("!broadcast") >=0)
+	{
+		var msg = MSG.replace("!broadcast ","");
+		
+		fs.readFile("./app/[DB] UserData/reminder.json",(ERR,ids) =>
+			{
+				let steamids=JSON.parse(ids).IDS;
+				steamids.forEach((id) => {
+					refloow.chatMessage(id,msg);
+				});
+			}	
+		);
+	}
+	
+	else {
+
+ // This is displayed to admins when command is not recognized.
+    
+     refloow.chatMessage(SENDER, "/pre ⚠️ Command not recognized. Type !commands or !admincommands to see all the commands.");;
+    }
+	
+}
+	
+	
+// This is displayed to normal users when command is not recognized.
+
+	else {
      refloow.chatMessage(SENDER, "/pre ⚠️ Command not recognized. Type !commands or !help to see all the commands.");;
-    } 
- });		
+  } 
+});		
+
+
+
+
+
+
 
 
 
@@ -3279,8 +2166,8 @@ manager.on("sentOfferChanged", (OFFER, OLDSTATE) => {
                     }
                     totalBotSets = botNSets;
                     let playThis = CONFIG.PLAYGAMES;
-                    if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES[0]) == "string") {
-                        playThis[0] = parseString(playThis[0], totalBotSets);
+                    if (CONFIG.PLAYGAMES && typeof(CONFIG.PLAYGAMES) == "string") {
+                        playThis = parseString(playThis, totalBotSets);
                     }
                     refloow.gamesPlayed(playThis);
                 });
@@ -3293,13 +2180,18 @@ manager.on("sentOfferChanged", (OFFER, OLDSTATE) => {
         }
         let d = "" + OFFER.data("commandused") + "";
         d += "\nSets: " + OFFER.data("amountofsets");
-        d += "\nKeys: " + OFFER.data("amountofkeys");
+        d += "\nQuantity: " + OFFER.data("quantity");
         d += "\nSteamID: " + OFFER.partner.getSteamID64();
         fs.writeFile("./app/[DB] TradesAccepted/" + OFFER.id + "-" + OFFER.partner.getSteamID64() + ".txt", d, (ERR) => {
             if (ERR) {
                 logcolors.fail("| [Steam] |: An error occurred while writing trade file: " + ERR);
             }
         });
+			for(var i=0;i<CONFIG.ADMINS.length;i++)
+			{
+				refloow.chatMessage(CONFIG.ADMINS[i],"New trade accepted!\n"
+				+ d + "\n" + "https://steamcommunity.com/profiles/"+ OFFER.partner.getSteamID64()+"/");
+			}
         community.getSteamUser(OFFER.partner, (ERR, USER) => {
             if (ERR) {
                 logcolors.fail("| [Steam] |: An error occurred while getting user profile: " + ERR);
@@ -3328,20 +2220,12 @@ manager.on("newOffer", (OFFER) => {
             if (ERR) {
                 logcolors.fail("| [Debug] |: An error occurred while getting trade holds: " + ERR);
                 refloow.chatMessage(OFFER.partner, "An error occurred while getting your trade holds. Please try again");
-                OFFER.decline((ERR) => {
-                    if (ERR) {
-                        logcolors.fail("| [Steam] |: An error occurred while declining trade: " + ERR);
-                    }
-                });
+              
             } else if (ME.escrowDays == 0 && THEM.escrowDays == 0) {
                 OFFER.accept((ERR) => {
                     if (ERR) {
                         logcolors.fail("| [Steam] |: An error occurred while declining trade: " + ERR);
-                        OFFER.decline((ERR) => {
-                            if (ERR) {
-                                logcolors.fail("| [Steam] |: An error occurred while declining trade: " + ERR);
-                            }
-                        });
+                        
                     } else {
                         refloow.chatMessage(OFFER.partner, "Offer accepted!");
                         logcolors.true("| [Offers] |: New offer has been accepted !");
@@ -3349,19 +2233,11 @@ manager.on("newOffer", (OFFER) => {
                 });
             } else {
                 refloow.chatMessage(OFFER.partner, "Please make sure you don't have a trade hold!");
-                OFFER.decline((ERR) => {
-                    if (ERR) {
-                        logcolors.fail("| [Steam] |: An error occurred while declining trade: " + ERR);
-                    }
-                });
             }
         });
     } else if (OFFER.itemsToGive.length == 0) {
         OFFER.accept((ERR) => {
             logcolors.true("| [Donations] |: DONATION ACCEPT");
-            if (ERR) {
-                logcolors.fail("| [Steam] |: An error occurred while declining trade: " + ERR);
-            }
         });
     } else {
         OFFER.decline((ERR) => {
@@ -3390,6 +2266,7 @@ function sortSetsByAmount(SETS, callback) {
 function sortSetsByAmountB(SETS, callback) {
     callback(Object.keys(SETS).sort((k1, k2) => SETS[k1].length - SETS[k2].length));
 }
+
 
 function parseString(INPUT, SETS) {
     return INPUT.replace(":sets:", SETS);
