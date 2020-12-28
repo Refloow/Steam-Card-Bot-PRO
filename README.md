@@ -1,3 +1,5 @@
+
+
 <p align="center">
 <img width="160" height="160" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
 </p>
@@ -6,7 +8,7 @@
 </p>
 
 <h1 align= "center"><b>
-  About [IMPORTANT LINKS](https://github.com/OSL-Works/Steam-Card-Bot-PRO#important-links)
+  About
   </b>
 </h1>
 
