@@ -5,6 +5,8 @@
 <img width="160" height="160" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
 </p>
 
+<br>
+<br>
 
 <p align= "center">
   <img src="https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg" alt="GitHub package version">
