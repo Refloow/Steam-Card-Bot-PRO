@@ -1,4 +1,4 @@
-### `Follow the link down below to see important guides about the project`
+### `Read this page before asking any questions`
 > **[Important Guides](https://github.com/OSL-Works/Steam-Card-Bot-PRO#important-links)**<br>
 
 <p align="center">
