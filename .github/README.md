@@ -41,6 +41,9 @@
 </p>
 
 # Note:
+
+<hr>
+
  **To everyone who plan to sell our project by stating that they coded it or that they sell edited version.**<br>
  **Project is licensed under the MIT license**<br>
 
@@ -57,8 +60,11 @@ Project is made open source and **free for all.**<br>
 **We cant prohibit reselling of our project but if you do please follow the licensing terms.**<br> 
 
 <br>
+<hr>
 
 # Important Links
+
+<hr>
 
 ### `Setup Guide`
 > **[Step By Step Setup Guide](https://github.com/OSL-Works/Steam-Card-Bot-PRO/wiki)**<br>
@@ -70,10 +76,13 @@ Project is made open source and **free for all.**<br>
 > **[Security Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/security/policy)**<br>
 > **[Privacy Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/PRIVACY.md)**<br>
 
+<hr>
 
 # DISCORD Support Server
 
 https://discord.gg/XxvjjPs
+
+<hr>
 
 # Support the project
 - **If you like the project and the fact that is free you can support us by giving an donation.**
@@ -82,10 +91,13 @@ https://discord.gg/XxvjjPs
 1. Ko-fi: https://ko-fi.com/refloow
 2. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
 
+<hr>
 
 # Want Improvements ?
 
 If you have some private requests feel free to contact main dev : https://steamcommunity.com/id/MajokingGames/<br>
 Or mail at refloowlibrarycontact@gmail.com
+
+<hr>
 
 
