@@ -41,10 +41,10 @@
 </p>
 
 # Note:
-To everyone who plan to sell our project by stating that they coded it or that they sell edited version. Project is licensed under the MIT license
+_To everyone who plan to sell our project by stating that they coded it or that they sell edited version. Project is licensed under the MIT license_
 
-"The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software."
+**"The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software."**
 
 This means that if you plan to sell our project to make quick buck please keep the copyright notice and copy of original license. In case of breaking licensing terms we may take legal charges against you.
 
@@ -77,7 +77,7 @@ https://discord.gg/XxvjjPs
 
 # Want Improvements ?
 
-If you have some private requests feel free to contact main dev : https://steamcommunity.com/id/MajokingGames/
+If you have some private requests feel free to contact main dev : https://steamcommunity.com/id/MajokingGames/<br>
 Or mail at refloowlibrarycontact@gmail.com
 
 
