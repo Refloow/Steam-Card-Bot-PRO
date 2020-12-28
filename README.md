@@ -1,4 +1,5 @@
-
+### `Checkout the link down below it will show only important links you shod check out, for more info read everything else`
+> **[Here](https://github.com/OSL-Works/Steam-Card-Bot-PRO#important-links)**<br>
 
 <p align="center">
 <img width="160" height="160" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
