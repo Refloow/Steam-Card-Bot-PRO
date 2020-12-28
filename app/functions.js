@@ -282,7 +282,6 @@ f.getHisKeys = (n,manager,SENDER,appid,contextid,botSets,amountofsets,setsThatSh
 				
 				
             }
-			callback(null);
 			
 			
 };
@@ -431,7 +430,6 @@ f.getHisSets = (n,manager,SENDER,appid,contextid,botSets,amountofsets,setsThatSh
                 } else {
                     refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of keys!");
                 }
-			callback(null);
 			
 			
 };
@@ -528,7 +526,6 @@ f.donateSets = (n,manager,SENDER,amountofsets,setsThatShouldntBeSent,refloow,com
 				} else {
 					refloow.chatMessage(SENDER, "/pre ⚠️ Please enter a valid amount of sets.");
 				}
-				callback(null);
 		};
 
 f.getCurrencyStocks = (manager,SENDER,refloow) => {
@@ -631,3 +628,4 @@ module.exports=f;
   or main dev steam: https://steamcommunity.com/id/MajokingGames/
 
 */
+
