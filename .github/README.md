@@ -41,8 +41,8 @@
 </p>
 
 # Note:
-#### _To everyone who plan to sell our project by stating that they coded it or that they sell edited version._<br>
-### _Project is licensed under the MIT license_<br>
+#### To everyone who plan to sell our project by stating that they coded it or that they sell edited version.<br>
+### Project is licensed under the MIT license<br>
 
 ## "`The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.`"<br>
 
