@@ -1,6 +1,7 @@
 # Security Policy
 
 <b> We are not responsible for any losses that happened by use of our software. </b>
+* Make sure to always download our project from original source
 <h4> About the security </h4>
 
 * Project is open source (code is visible and checked by everyone)
