@@ -71,7 +71,7 @@ Project is made open source and free for all. We cant prohibit reselling of our 
 > **[See list of features]()**<br>
 ### `Policies`
 > **[Security Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/security/policy)**<br>
-> **[Privacy Policy]()**<br>
+> **[Privacy Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/PRIVACY.md)**<br>
 
 
 # DISCORD Support Server
