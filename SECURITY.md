@@ -7,6 +7,7 @@
 * Community trusted (Many use our software without an issue)
 * Well tested (We make sure everything works right and that is secure before pushing an update)
 * We make sure there is no active issues (In case of an issue we push an patch as soon as possible (currently there was only one or two issues with newly added features that got fixed asap)
+* We keep the project updated
 * In case of any major issues we will post an disclaimer and mark the project unsafe as soon as possible
 
 About the information security check the Privacy Policy
