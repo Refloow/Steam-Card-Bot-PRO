@@ -66,7 +66,7 @@ Project is made open source and free for all. We cant prohibit reselling of our 
 ### `Setup Guide`
 > **[Step By Step Setup Guide](https://github.com/OSL-Works/Steam-Card-Bot-PRO/wiki)**<br>
 ### `Contributions`
-> **[Want to contribute? Read how]()**<br>
+> **[Want to contribute? Read how](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/CONTRIBUTING.md)**<br>
 ### `Features`
 > **[See list of features]()**<br>
 ### `Policies`
