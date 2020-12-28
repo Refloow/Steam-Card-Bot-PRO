@@ -8,20 +8,6 @@
 <img width="600" height="100" src="https://github.com/d0biar/skdsajl/blob/master/ProjectImages/Steam-Card-Bot-PRO.png">
 </p>
 
-<h1 align= "center"><b>
-  About
-  </b>
-</h1>
-
-<p align= "center">
-Steam Card Bot PRO is free open source, fully automated Level Up Bot with all features and support + much more!
-  <hr>
-</p>
-
-<p align= "center">
-This project will receive constant updates and new features added !
-</p>
-
 <p align= "center">
   <img src="https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg" alt="GitHub package version">
   </a>
