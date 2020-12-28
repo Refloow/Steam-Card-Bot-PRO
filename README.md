@@ -6,7 +6,7 @@
 </p>
 
 <h1 align= "center"><b>
-  About # Scroll down for important links
+  About [IMPORTANT LINKS](https://github.com/OSL-Works/Steam-Card-Bot-PRO#important-links)
   </b>
 </h1>
 
