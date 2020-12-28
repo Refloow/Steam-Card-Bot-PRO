@@ -13,7 +13,7 @@ In case of project requiring an connection to an database connection details [ip
 
 ## Security
 
-Read the [Security Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/SECURITY.md)
+Read the [Security Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/SECURITY.md)
 
 ## Changes To This Privacy Policy
 
