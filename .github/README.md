@@ -46,11 +46,17 @@
 
 ## "`The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.`"<br>
 
+<br>
+
 This means that if you plan to sell our project to make quick buck please keep the copyright notice and copy of original license. <br>
 **In case of breaking licensing terms we may take legal charges against you.**<br>
 
+<br>
+
 Project is made open source and **free for all.**<br>
-**We cant prohibit reselling of our project but if you do please follow the licensing terms.**<br>
+**We cant prohibit reselling of our project but if you do please follow the licensing terms.**<br> 
+
+<br>
 
 # Important Links
 
