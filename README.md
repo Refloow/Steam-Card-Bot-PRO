@@ -61,6 +61,19 @@ This means that if you plan to sell our project to make quick buck please keep t
 
 Project is made open source and free for all. We cant prohibit reselling of our project but if you do please follow the licensing terms.
 
+# Important Links
+
+### `Setup Guide`
+> **[Step By Step Setup Guide]()**<br>
+### `Contributions`
+> **[Want to contribute? Read how]()**<br>
+### `Features`
+> **[See list of features]()**<br>
+### `Policies`
+> **[Security Policy]()**<br>
+> **[Privacy Policy]()**<br>
+
+
 # DISCORD Support Server
 
 https://discord.gg/XxvjjPs
@@ -77,4 +90,5 @@ https://discord.gg/XxvjjPs
 
 If you have some private requests feel free to contact main dev : https://steamcommunity.com/id/MajokingGames/
 Or mail at refloowlibrarycontact@gmail.com
+
 
