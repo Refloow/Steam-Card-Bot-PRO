@@ -76,7 +76,7 @@ Project is made open source and **free for all.**<br>
 https://discord.gg/XxvjjPs
 
 # Support the project
-- If you like the project and the fact that is free you can support us by giving an donation.
+- **If you like the project and the fact that is free you can support us by giving an donation.**
 - We are accepting donations on:
 
 1. Ko-fi: https://ko-fi.com/refloow
