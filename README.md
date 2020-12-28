@@ -6,7 +6,7 @@
 </p>
 
 <h1 align= "center"><b>
-  About
+  About # Scroll down for important links
   </b>
 </h1>
 
