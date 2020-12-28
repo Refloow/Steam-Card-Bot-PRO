@@ -11,7 +11,7 @@
 * We keep the project updated
 * In case of any major issues we will post an disclaimer and mark the project unsafe as soon as possible
 
-About the information security check the [Privacy Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/edit/master/.github/PRIVACY.md)
+About the information security check the [Privacy Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/PRIVACY.md)
 
 ## Trusted Versions
 <br>
