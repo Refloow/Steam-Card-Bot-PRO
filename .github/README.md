@@ -75,7 +75,7 @@ Project is made open source and **free for all.**<br>
 > **[Security Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/security/policy)**<br>
 > **[Privacy Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/PRIVACY.md)**<br>
 ### `FAQ`
-> **[frequently asked questions]()**<br>
+> **[Frequently Asked Questions](https://github.com/OSL-Works/Steam-Card-Bot-PRO/wiki/FAQ---Frequently-Asked-Questions)**<br>
 
 <hr>
 
