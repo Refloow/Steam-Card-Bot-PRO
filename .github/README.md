@@ -70,6 +70,7 @@ Project is made open source and **free for all.**<br>
 > **[Want to contribute? Read how](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/CONTRIBUTING.md)**<br>
 ### `Features`
 > **[See list of features]()**<br>
+> **[See version changelogs]()**<br>
 ### `Policies`
 > **[Security Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/security/policy)**<br>
 > **[Privacy Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/PRIVACY.md)**<br>
