@@ -2,7 +2,7 @@
 > **[Important Guides](https://github.com/OSL-Works/Steam-Card-Bot-PRO#important-links)**<br>
 
 <p align="center">
-<img width="160" height="160" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Steam_Logo.png">
+<img width="264.6" height="154" src="https://i.imgur.com/PUCBfA6.png">
 </p>
 
 <br>
