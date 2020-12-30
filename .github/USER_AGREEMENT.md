@@ -29,4 +29,3 @@ Part of the [STEAM TOS - Steam Subscriber Agreement](https://store.steampowered.
 > As a Subscriber you may obtain access to certain services, software and content available to Subscribers. The Steam client software and any other software, content, and updates you download or access via Steam, including but not limited to Valve or third-party video games and in-game content, and any virtual items you trade, sell or purchase in a Steam Subscription Marketplace are referred to in this Agreement as “Content and Services”; the rights to access and/or use any Contents and Services accessible through Steam are referred to in this Agreement as "Subscriptions
 
 Adding modifications for usage of community market or causing the spam on the platform might make the platform to take actions.
-You as the user read and understood this agreement and by adding modifications or usage of our project take responsibility for any actions taken by the platform.
