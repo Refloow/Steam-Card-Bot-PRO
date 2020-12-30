@@ -82,7 +82,7 @@ Project is made open source and **free for all.**<br>
 
 # DISCORD Support Server
 
-https://discord.gg/XxvjjPs
+**https://discord.gg/XxvjjPs**
 
 <hr>
 
