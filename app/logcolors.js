@@ -1,5 +1,17 @@
 // Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
 
+
+/*
+
+Want active support and updates with new features all for free?
+
+Leave an star on github repo its free ( we push updates based on the engagement )
+Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO 
+
+*/
+
+
+
 /* 
   Here is contact info: refloowlibrarycontact@gmail.com
   or main dev steam: https://steamcommunity.com/id/MajokingGames/
@@ -52,6 +64,18 @@ const logger = module.exports = winston.createLogger({
 });
 
 // Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+
+
+/*
+
+Want active support and updates with new features all for free?
+
+Leave an star on github repo its free ( we push updates based on the engagement )
+Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO 
+
+*/
+
+
 
 /* 
   Here is contact info: refloowlibrarycontact@gmail.com
