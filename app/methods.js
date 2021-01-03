@@ -8,6 +8,7 @@
 Want active support and updates with new features all for free?
 
 Leave an star on github repo its free ( we push updates based on the engagement )
+Discord Support Server: https://discord.gg/D8WCtDD     (Open an ticket)
 Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO 
 
 */
