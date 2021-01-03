@@ -13,6 +13,7 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
 /* 
   Here is contact info: refloowlibrarycontact@gmail.com
+  Discord Support Server: https://discord.gg/D8WCtDD     (Open an ticket)
   or main dev steam: https://steamcommunity.com/id/MajokingGames/
 
 */
@@ -648,6 +649,7 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
 /* 
   Here is contact info: refloowlibrarycontact@gmail.com
+  Discord Support Server: https://discord.gg/D8WCtDD     (Open an ticket)
   or main dev steam: https://steamcommunity.com/id/MajokingGames/
 
 */
