@@ -45,6 +45,15 @@ const v = package.version;
 
 // Basic display information on app start
 
+// ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+/////////////////////////////////////////////////////////////////////
+
+// COPYRIGHT NOTICE. DO NOT EDIT & REMOVE
+//  ONES AGAIN:
+
+//       Removing copyright notice & distributing, using or selling the software without
+// the original license and notice above is licence agreement breach and its considered criminal offense.
+
 console.log('8888888b.          .d888888                              '.cyan);
 console.log('888   Y88b        d88P" 888                              '.cyan);
 console.log('888    888        888   888                              '.cyan);
@@ -52,8 +61,17 @@ console.log('888   d88P .d88b. 888888888 .d88b.  .d88b. 888  888  888'.cyan);
 console.log('8888888P" d8P  Y8b888   888d88""88bd88""88b888  888  888'.cyan); 
 console.log('888 T88b  88888888888   888888  888888  888888  888  888'.cyan); 
 console.log('888  T88b Y8b.    888   888Y88..88PY88..88PY88b 888 d88P '.cyan);
-console.log('888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P" \n\n\n'.cyan);                              
-console.log('This bot was developed by MajokingGames'.cyan);
+console.log('888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P" \n\n'.cyan); 
+console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);                             
+console.log('This bot was developed by MajokingGames [Dev] at - Refloow and published for free at OSL-Works GitHub org'.cyan);
+console.log('Code origin: https://github.com/OSL-Works/Steam-Card-Bot-PRO' .red);
+console.log('Copyright holder: ©Refloow - OSL-Works GITHUB\n' .green);
+console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);
+console.log('Removing copyright notice above & distributing, using or selling the software without \n the original license and notice above is licence agreement breach and its considered criminal offense.\n' .yellow);
+
+/////////////////////////////////////////////////////////////////////
+// ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+
 console.log(`Verision v${v} PRO` .cyan);
 console.log('Loading config file...'.green );
 console.log('Starting LevelUp bot...'.green );
@@ -132,5 +150,3 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
   Donate: https://ko-fi.com/refloow
 
  */
-
-
