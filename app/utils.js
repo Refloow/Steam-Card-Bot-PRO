@@ -251,3 +251,5 @@ t.getBadges = (SID, callback) => {
 };
 
 module.exports = t;
+
+// Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
