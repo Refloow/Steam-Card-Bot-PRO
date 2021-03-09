@@ -2,7 +2,7 @@
 // Copyright notice:
 
 /*--------------------------------------------------------------------------------------------- 
-* Original work: Copyright (c) 2021 Refloow All rights reserved.
+* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
 
 * Code origin: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 * Developer name: Veljko Vuckovic
@@ -28,6 +28,10 @@
 * Copyright notice should not be removed even within the larger works (Larger modifications applied).
 * Original file tags cannot be removed without creators exclusive permission.
 * Adding own tags in files is possible in case of modification - even in that case original tags must be kept.
+* Year on the copyright notice breakdown:
+* Generally, the “year of first publication of the work” refers to the year in which the work was first distributed to the public (first year mentioned)
+* Any year after represents the year of added modifications.
+* Copyright cannot expire so therefore you cannot remove copyright notice if its not updated to the latest year.
 
 ===================================================================================
 Removing copyright notice & distributing, using or selling the software without
@@ -367,5 +371,5 @@ t = module.exports = {
 
 }
 
-// Original work: Copyright (c) 2021 Refloow All rights reserved.
+// Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
 
