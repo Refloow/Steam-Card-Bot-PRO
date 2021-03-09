@@ -1,6 +1,6 @@
 module.exports = {
 	
-// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
+// Original work: Copyright (c) 2021 Refloow All rights reserved.
 	
 	    
 /*
