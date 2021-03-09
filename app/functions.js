@@ -657,5 +657,5 @@ function sortSetsByAmountB(SETS, callback) {
 
 module.exports=f;
 
-// Original work: Copyright (c) 2021 Refloow All rights reserved.
+// Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
 
