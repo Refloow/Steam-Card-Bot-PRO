@@ -10,6 +10,11 @@ echo 888  T88b Y8b.    888   888Y88..88PY88..88PY88b 888 d88P
 echo 888   T88b  Y8888 888   888  Y88P    Y88P    Y8888888P 
 echo .
 echo .
+echo // Copyright notice:
+echo .
+echo /* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
+echo  Code origin (Free GitHub publish): https://github.com/OSL-Works/Steam-Card-Bot-PRO */
+echo .
 echo .
 echo Installing the required modules.
 npm install
