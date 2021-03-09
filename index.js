@@ -1,25 +1,41 @@
-// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
-	
-	    
-/*
 
-Want active support and new updates with new features all for free?
+// Copyright notice:
 
-Leave an star on github repo its free ( we push updates based on the engagement )
-Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO 
+/*--------------------------------------------------------------------------------------------- 
+* Original work: Copyright (c) 2021 Refloow All rights reserved.
 
-  Discord Support Server: https://discord.gg/D8WCtDD     (Open an ticket)
+* Code origin: https://github.com/OSL-Works/Steam-Card-Bot-PRO
+* Developer name: Veljko Vuckovic
+* Licensed under the MIT License. See LICENSE in the project root for license information.
+* Published License: https://github.com/OSL-Works/Steam-Card-Bot-PRO/master/LICENSE
+
+* Contact information:
+  Discord Support Server: https://discord.gg/D8WCtDD
+  Main developer steam: https://steamcommunity.com/id/MajokingGames/ 
+  Mail: refloowlibrarycontact@gmail.com
+
+* Donations:
+  Donate: https://ko-fi.com/refloow
+ --------------------------------------------------------------------------------------------*/
+
+ /* 
+
+// legal advice: PERMISSIONS AND RIGHTS
+
+* License does not prohibit modification, distribution, private/commercial use or sale of copies as long as the original LICENSE file
+ and authors copyright notice are left ass they are in the project files.
+* Copyright notice could be included ones or multiple times within the file.
+* Copyright notice should not be removed even within the larger works (Larger modifications applied).
+* Original file tags cannot be removed without creators exclusive permission.
+* Adding own tags in files is possible in case of modification - even in that case original tags must be kept.
+
+===================================================================================
+Removing copyright notice & distributing, using or selling the software without
+the original license and copyright notice is licence agreement breach and its considered criminal offense and piracy.
+===================================================================================
 
 */
 	
-
-/* 
-  Here is contact info: refloowlibrarycontact@gmail.com
-  main dev steam: https://steamcommunity.com/id/MajokingGames/
-  
-  Donate: https://ko-fi.com/refloow
-
- */
 
 
 
@@ -52,7 +68,7 @@ const v = package.version;
 //  ONES AGAIN:
 
 //       Removing copyright notice & distributing, using or selling the software without
-// the original license and notice above is licence agreement breach and its considered criminal offense.
+// the original license and notice above is license agreement breach and its considered criminal offense.
 
 console.log('8888888b.          .d888888                              '.cyan);
 console.log('888   Y88b        d88P" 888                              '.cyan);
@@ -65,7 +81,7 @@ console.log('888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P" \n\n'.cyan)
 console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);                             
 console.log('This bot was developed by MajokingGames [Dev] at - Refloow and published for free at OSL-Works GitHub org'.cyan);
 console.log('Code origin: https://github.com/OSL-Works/Steam-Card-Bot-PRO' .red);
-console.log('Copyright holder: ©Refloow - OSL-Works GITHUB\n' .green);
+console.log('Original work: Copyright (c) 2021 Refloow All rights reserved.\n' .green);
 console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);
 console.log('Removing copyright notice above & distributing, using or selling the software without \n the original license and notice above is licence agreement breach and its considered criminal offense.\n' .yellow);
 
@@ -125,28 +141,3 @@ mongoose.connect(url,connectionParams)
               console.log(`or contact: https://steamcommunity.com/id/MajokingGames/` .red);
       });
     })
-
-
-
-// Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
-	
-	    
-/*
-
-Want active support and new updates with new features all for free?
-
-Leave an star on github repo its free ( we push updates based on the engagement )
-Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO 
-
-  Discord Support Server: https://discord.gg/D8WCtDD     (Open an ticket)
-
-*/
-	
-
-/* 
-  Here is contact info: refloowlibrarycontact@gmail.com
-  main dev steam: https://steamcommunity.com/id/MajokingGames/
-  
-  Donate: https://ko-fi.com/refloow
-
- */
