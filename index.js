@@ -145,3 +145,5 @@ mongoose.connect(url,connectionParams)
               console.log(`or contact: https://steamcommunity.com/id/MajokingGames/` .red);
       });
     })
+
+// Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
