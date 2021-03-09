@@ -1,6 +1,6 @@
 module.exports = {
 	
-// Original work: Copyright (c) 2021 Refloow All rights reserved.
+// Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
 	
 	    
 /*
