@@ -32,6 +32,7 @@
 * Generally, the “year of first publication of the work” refers to the year in which the work was first distributed to the public (first year mentioned)
 * Any year after represents the year of added modifications.
 * Copyright cannot expire so therefore you cannot remove copyright notice if its not updated to the latest year.
+* Editing existing copyright notice(s) is also prohibited.
 
 ===================================================================================
 Removing copyright notice & distributing, using or selling the software without
