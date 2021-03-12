@@ -64,6 +64,7 @@ try {
 const package = require('./package.json');
 const v = package.version;
 
+function initialize() {
 // Basic display information on app start
 
 // ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
@@ -86,19 +87,24 @@ console.log('888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P" \n\n'.cyan)
 console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);                             
 console.log('This bot was developed by MajokingGames [Dev] at - Refloow and published for free at OSL-Works GitHub org'.cyan);
 console.log('Code origin: https://github.com/OSL-Works/Steam-Card-Bot-PRO' .red);
-console.log('Original work: Copyright (c) 2020-2021 Refloow All rights reserved.\n' .green);
+console.log('Original work: Copyright (c) 2020-2021 Refloow All rights reserved.\n ' .green);
+console.log('Copyright (c) 2020-2021 Refloow official version of the bot is free with regular updates, we wont suggest buying \n "upgraded" copies since they might contain a backdoor. For any feature request just open a issue on github repo \n feel free to donate the money instead of being scammed!')
 console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);
-console.log('Removing copyright notice above & distributing, using or selling the software without \n the original license and notice above is licence agreement breach and its considered criminal offense.\n' .yellow);
+console.log('Removing copyright notice above & distributing, using or selling the software without \n the original license and notice above is licence agreement breach and its considered criminal offense.\n\n\n' .yellow);
+console.log('Please read the notice above, app will start in 15 secounds (restarting app fast can result in being rate limited by steam)\n');
 
 /////////////////////////////////////////////////////////////////////
 // ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+  
+}
 
+function resume() {
 console.log(`Verision v${v} PRO` .cyan);
 console.log('Loading config file...'.green );
 console.log('Starting LevelUp bot...'.green );
 console.log('If bot doesnt start in next 1 minute steam is down.\n'.green );
 
-console.log('If you are running app for the first time wait 15 sec - 1 min for app to initialize.\n\n'.cyan);
+console.log('If you are running app for the first time wait a bit for app to initialize.\n\n'.cyan);
 
 // Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
 
@@ -146,6 +152,12 @@ mongoose.connect(url,connectionParams)
               console.log(`or contact: https://steamcommunity.com/id/MajokingGames/` .red);
       });
     })
+}
+
+initialize();
+
+setTimeout(resume, 15000);
+
 
 // Copyright notice:
 
