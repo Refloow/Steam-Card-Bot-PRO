@@ -95,6 +95,7 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
     // Limits
 
+    STARTAWAIT: 15000, // Suggest not to edit, this is protection from being rate limited by steam in case of multiple script restarts
     MAXLEVEL: 1000, // Max level you can request using !level
     MAXBUY: 50, // Max keys you can buy sets for at a time
     MAXSELL: 100, // Max keys you can sell sets for at a time
