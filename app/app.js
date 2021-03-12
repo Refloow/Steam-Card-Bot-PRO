@@ -23,7 +23,7 @@
 // legal advice: PERMISSIONS AND RIGHTS
 
 * License does not prohibit modification, distribution, private/commercial use or sale of copies as long as the original LICENSE file
- and authors copyright notice are left ass they are in the project files.
+ and authors copyright notice are left as they are in the project files.
 * Copyright notice could be included ones or multiple times within the file.
 * Copyright notice should not be removed even within the larger works (Larger modifications applied).
 * Original file tags cannot be removed without creators exclusive permission.
