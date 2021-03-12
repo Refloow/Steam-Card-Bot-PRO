@@ -62,6 +62,7 @@ try {
 
 // Const package and define version then feed output to the ${v}
 const package = require('./package.json');
+const config = require('./app/SETTINGS/config.js');
 const v = package.version;
 
 function initialize() {
@@ -154,9 +155,12 @@ mongoose.connect(url,connectionParams)
     })
 }
 
+// Starting the app
 initialize();
 
-setTimeout(resume, 15000);
+// Do not recommend changing
+// Awaiting a little bit in case of app restarting itself or restarting by command, it will wait some time before accessing steam to prevent steam blocking connection
+setTimeout(resume, config.STARTAWAIT);
 
 
 // Copyright notice:
