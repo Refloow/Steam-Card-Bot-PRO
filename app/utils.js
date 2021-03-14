@@ -42,7 +42,7 @@ the original license and copyright notice is licence agreement breach and its co
 */
 
 
-const logcolors = require('./logcolors.js')
+const logcolors = require('console-master');
 
 let _ = require('lodash'),
     request = require('request'),
