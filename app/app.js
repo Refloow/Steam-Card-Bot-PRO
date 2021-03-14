@@ -68,7 +68,7 @@ try {
 let Utils = require("../app/utils.js"),
     method = require('./methods'),
     CONFIG = require("../app/SETTINGS/config.js"),
-    logcolors = require("../app/logcolors.js"),
+    logcolors = require("console-master"),
     f = require("../app/functions.js"),
     allCards = {},
     botSets = {},
