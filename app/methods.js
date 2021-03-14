@@ -59,7 +59,7 @@ try {
 // Importing required files
 const package = require('./../package.json');
 const config = require('./SETTINGS/config.js');
-const logcolors = require('./logcolors.js')
+const logcolors = require('console-master')
 
 
 t = module.exports = {
