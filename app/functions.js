@@ -45,7 +45,7 @@ the original license and copyright notice is licence agreement breach and its co
 
 let Utils = require("../app/utils.js"),
 	CONFIG = require("../app/SETTINGS/config.js"),
-	logcolors = require("../app/logcolors.js");
+	logcolors = require("console-master");
 	f={}
 	
 
