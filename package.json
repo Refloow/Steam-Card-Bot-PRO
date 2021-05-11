@@ -32,7 +32,7 @@
     "steamcommunity": "3.41.6",
     "steam-totp": "2.1.1",
     "steam-tradeoffer-manager": "2.10.2",
-    "lodash": "4.17.20",
+    "lodash": "4.17.21",
     "path": "0.12.7",
     "colors": "1.4.0",
     "winston": "3.3.3",
