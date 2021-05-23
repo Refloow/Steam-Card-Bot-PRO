@@ -22,7 +22,9 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
   Here is contact info: refloowlibrarycontact@gmail.com
   main dev steam: https://steamcommunity.com/id/MajokingGames/
   
-  Donate: https://ko-fi.com/refloow
+* Donations:
+  Crypto: https://refloow.com/cdonate
+  Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
 
  */
 
