@@ -90,9 +90,9 @@ Project is made open source and **free for all.**<br>
 
 # Support the project
 - **If you like the project and the fact that is free you can support us by giving an donation.**
-- We are accepting donations on:
+- We are accepting donations:
 
-1. Ko-fi: https://ko-fi.com/refloow
+1. Crypto: https://refloow.com/cdonate
 2. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
 
 <hr>
