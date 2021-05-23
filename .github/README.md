@@ -35,8 +35,8 @@
 </p>
 
 <p align= "center">
-  <a href="https://ko-fi.com/P5P02ONAC" target="_blank">
-  <img src="https://www.ko-fi.com/img/githubbutton_sm.svg">
+  <a href="https://refloow.com/cdonate" target="_blank">
+  <img src="https://img.shields.io/badge/-CRYPTO%20Donations-red">
   </a>
 </p>
 
