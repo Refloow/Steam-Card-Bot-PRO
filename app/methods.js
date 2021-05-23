@@ -15,7 +15,8 @@
   Mail: refloowlibrarycontact@gmail.com
 
 * Donations:
-  Donate: https://ko-fi.com/refloow
+  Crypto: https://refloow.com/cdonate
+  Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
  --------------------------------------------------------------------------------------------*/
 
  /* 
