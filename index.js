@@ -111,9 +111,15 @@ console.log('If you are running app for the first time wait a bit for app to ini
 // Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
 
 // Starting app file
-
+try {
 require('./app/app.js');
-
+} catch (ex) {
+  // If modules are not installed showing an clear error message to user.
+  console.log(`\n\n\n| [APP.JS] |: Looks like there is an fatal error that kills the app, check your configuration error is down below: \n\n\n`);
+  console.log(ex);
+  process.exit(1);
+}
+	
 /*
 mongoose.connect(url,connectionParams)
     .then( () => {
@@ -145,8 +151,10 @@ mongoose.connect(url,connectionParams)
               console.log(`or contact: https://steamcommunity.com/id/MajokingGames/` .red);
       });
     })
+    
+    */
 }
-*/
+
 
 // Starting the app
 initialize();
