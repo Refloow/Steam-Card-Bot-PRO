@@ -112,22 +112,13 @@ console.log('If you are running app for the first time wait a bit for app to ini
 
 // Starting app file
 
+require('./app/app.js');
 
-// CONNECTION IS ALLOWED TO ALL USERS
-
-
-// URL that will connect to the database. If connection fails user is not verified.
-const url = `mongodb+srv://Steam-Card-Bot-PRO:ac3Fnknrq25GHv5q@cluster0.s3hpq.mongodb.net/setdata?retryWrites=true&w=majority`;
-
-const connectionParams={
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true 
-}
+/*
 mongoose.connect(url,connectionParams)
     .then( () => {
         require('./app/app.js');
-    })
+
     .catch( (err) => {
         console.log(`| [OSL-Works] |: Hello, thanks for downloading our software !` .green);
         console.log(`| [OSL-Works] |: Looks like there is some issues with connecting to database. \n\n` .green);
@@ -155,6 +146,7 @@ mongoose.connect(url,connectionParams)
       });
     })
 }
+*/
 
 // Starting the app
 initialize();
