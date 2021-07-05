@@ -16,6 +16,7 @@ echo /* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
 echo  Code origin (Free GitHub publish): https://github.com/OSL-Works/Steam-Card-Bot-PRO */
 echo .
 echo .
+explorer "https://refloow.com/cdonate"
 echo Installing the required modules.
 npm install
 echo Modules finsished! You can close this window now.
