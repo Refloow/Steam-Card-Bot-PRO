@@ -77,3 +77,30 @@
 * !donatesets - with this, you can donate sets to bot
 * !broadcastall - any message after this command will be sent to all users in bots's friendlist
 * !broadcast - only send message to users who have, done !reminder ON
+
+<hr>
+
+# Additional features 
+
+* Auto accepting friend request
+* Uppon accepting friend request sending an welcome message (Message can be set or disabled in config)
+* Uppon accepting friend request adding user to the selected group (Group can be set or inviting disabled inside of the config)
+* Checks for offline friend requests
+* Chat spam protection (can be disabled or enabled in config)
+* Uppon removing user sending him message (message can be set or disabled in config)
+* Notifing admin when user get removed for spaming -sending user id (user can get blocked via admin command !block) (notifications can be disabled in config)
+* Setting limit of messages per sec to count as spam
+* Bot clearing friendlist (feature can be disabled in config)
+* Sending message to the user which is removed (message can be set or disabled in config)
+* Setting timer for removing inactive users (time can be set at config)
+* CHAT LOGS
+    * Daily chat logs (can be disabled in config)
+    * Chat logs per user (can be disabled in config)
+
+* TRADE LOGS
+   * Saves logs of trades
+* Responding to incoming group invites (can be totaly disabled in config)
+
+* Auto declining incoming group invites
+* Auto accepting incoming group invites
+* Commenting after trade (comment can be set or commenting disabled in config)
