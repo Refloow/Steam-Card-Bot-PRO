@@ -201,6 +201,26 @@ t.getSets = (INV, DATA, callback) => {
             name: "The Descendant",
             count: 5
         };
+	DATA["48000"] = {
+            appid: "48000",
+            name: "LIMBO",
+            count: 5
+		};
+        DATA["718650"] = {
+            appid: "718650",
+            name: "Driftland: The Magic Revival",
+            count: 5
+        };
+        DATA["979120"] = {
+            appid: "979120",
+            name: "Autonauts",
+            count: 5
+        };
+        DATA["1331910"] = {
+            appid: "1331910",
+            name: "Morkredd",
+            count: 9
+        };
 
         let uc = Object.keys(c).length;
        
