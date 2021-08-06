@@ -226,6 +226,21 @@ t.getSets = (INV, DATA, callback) => {
             name: "Mini Motorways",
             count: 5
         };
+		DATA["1205960"] = {
+            appid: "1205960",
+            name: "My Cute Fuhrer",
+            count: 6
+        };
+		DATA["1079310"] = {
+            appid: "1079310",
+            name: "Elemental Girls",
+            count: 10
+        };
+		DATA["1252560"] = {
+            appid: "1252560",
+            name: "Love Breakout",
+            count: 7
+        };
         let uc = Object.keys(c).length;
        
         if (DATA[id.toString()] && uc == DATA[id.toString()].count) {
