@@ -241,6 +241,41 @@ t.getSets = (INV, DATA, callback) => {
             name: "Love Breakout",
             count: 7
         };
+		DATA["531920"] = {
+            appid: "531920",
+            name: "Carton",
+            count: 5
+        };
+		DATA["860910"] = {
+            appid: "860910",
+            name: "Hentai 3018",
+            count: 5
+        };
+		DATA["1077410"] = {
+            appid: "1077410",
+            name: "Hentai Sweet Girls",
+            count: 10
+        };
+		DATA["1101260"] = {
+            appid: "1101260",
+            name: "FURRY GIRL PUZZLE",
+            count: 10
+        };
+		DATA["1111030"] = {
+            appid: "1111030",
+            name: "Hentai Bad Girls",
+            count: 10
+        };
+		DATA["1145360"] = {
+            appid: "1145360",
+            name: "Hades",
+            count: 10
+        };
+		DATA["1260390"] = {
+            appid: "1260390",
+            name: "Hentai Furry",
+            count: 10
+        };
         let uc = Object.keys(c).length;
        
         if (DATA[id.toString()] && uc == DATA[id.toString()].count) {
