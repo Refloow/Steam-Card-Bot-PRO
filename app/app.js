@@ -804,12 +804,12 @@ else if (MSG.toUpperCase().indexOf("!LEVEL") >= 0) {
 							{
 								if(DATA[Object.keys(DATA)[i]].length >= CONFIG.MAXSTOCKSETSPERGAME)
 								{
-									botNSets= CONFIG.MAXSTOCKSETSPERGAME-botSets[Object.keys(DATA)[i]].length;
+									botNSets+= CONFIG.MAXSTOCKSETSPERGAME-botSets[Object.keys(DATA)[i]].length;
 								}
 								else
 								{
 									var left = CONFIG.MAXSTOCKSETSPERGAME - DATA[Object.keys(DATA)[i]].length;
-									botNSets = (left>DATA[Object.keys(DATA)[i]].length) ? DATA[Object.keys(DATA)[i]].length:left;
+									botNSets += (left>DATA[Object.keys(DATA)[i]].length) ? DATA[Object.keys(DATA)[i]].length:left;
 									
 								}
 						    }
