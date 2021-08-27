@@ -93,7 +93,7 @@ Project is made open source and **free for all.**<br>
 - We are accepting donations:
 
 1. Crypto: https://refloow.com/cdonate
-2. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
+2. Steam: https://steamcommunity.com/tradeoffer/new/?partner=908829436&token=wCNxGnyr
 
 <hr>
 
