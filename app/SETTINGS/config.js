@@ -11,7 +11,7 @@ module.exports = {
 Want active support and new updates with new features all for free?
 
 Leave an star on github repo its free ( we push updates based on the engagement )
-Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO 
+Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
   Discord Support Server: https://discord.gg/D8WCtDD     (Open an ticket)
 
@@ -48,9 +48,10 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
     PLAYGAMES: ":sets: sets - XX:X CSGO / XX:X TF2 / XX:X Gems", // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
     ADMINS: [""], // to add admin put steam64id 
+    64 ID Can be found here - https://www.steamidfinder.com/
 
     //-----------------------------------------------------------------------------------------------
-    // ---------------|   C-O-N-S-O-L-E---M-S-S-A-G-E-S   |--------------------------------------------------------//
+    // ---------------|   C-O-N-S-O-L-E---M-E-S-S-A-G-E-S   |--------------------------------------------------------//
 
    
         CalledCommandsLive: true,           // [true/false] Enable or disable | This feature shows in the logs which commands were called by which user.
@@ -156,7 +157,6 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
 
 // Here is short turoial on how to navigate through theese settings.
-// 
 // Commands are sorted in sections, | check commands | , | buy commands | and | sell commands |
 // for easier navigation commands that include some currencys are tagged with side number like /*1*/
 // If you check all commands that have /*1*/ at the side they include ref currency in command
@@ -186,33 +186,33 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
 
  /*1*/  buyref_enable: false,                    // [true/false] Enable or disable | !buyref command      (// This command when called sell sets to user for ref metal)
- /*2*/  buyhydra_enable: true,                  // [true/false] Enable or disable | !buyhydra command    (// This command when called sell sets for user hydra keys)
- /*3*/  buycsgo_enable: true,                   // [true/false] Enable or disable | !buycsgo command     (// This command when called sell sets to user for csgo keys)
- /*4*/  buytf2_enable: true,                    // [true/false] Enable or disable | !buytf2 command      (// This command when called sell sets to user for tf2 keys)
- /*5*/  buygems_enable: true,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*6*/  buypubg_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  buyhydra_enable: true,                   // [true/false] Enable or disable | !buyhydra command    (// This command when called sell sets for user hydra keys)
+ /*3*/  buycsgo_enable: true,                    // [true/false] Enable or disable | !buycsgo command     (// This command when called sell sets to user for csgo keys)
+ /*4*/  buytf2_enable: true,                     // [true/false] Enable or disable | !buytf2 command      (// This command when called sell sets to user for tf2 keys)
+ /*5*/  buygems_enable: true,                    // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buypubg_enable: false,                   // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
 		buygemsforkey_enable: false,
 
 // ----------------------------CURRENCYS BUY ONE (!buyoneref, !buyonehydra, !buyonecsgo, !buyonetf2, !buyonegems, !buyonepubg)
 
  
- /*1*/  buyoneref_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*2*/  buyonehydra_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*3*/  buyonecsgo_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*4*/  buyonetf2_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*5*/  buyonegems_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*6*/  buyonepubg_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*1*/  buyoneref_enable: false,                  // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  buyonehydra_enable: false,                // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*3*/  buyonecsgo_enable: false,                 // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*4*/  buyonetf2_enable: false,                  // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  buyonegems_enable: false,                 // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buyonepubg_enable: false,                 // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
 
 
 // ----------------------------CURRENCYS BUY ANY (!buyanyref, !buyanyhydra, !buyanycsgo, !buyanytf2, !buyanygems, !buyanypubg)
 
  
- /*1*/  buyanyref_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*2*/  buyanyhydra_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*3*/  buyanycsgo_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*4*/  buyanytf2_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*5*/  buyanygems_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*6*/  buyanypubg_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*1*/  buyanyref_enable: false,                  // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  buyanyhydra_enable: false,                // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*3*/  buyanycsgo_enable: false,                 // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*4*/  buyanytf2_enable: false,                  // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  buyanygems_enable: false,                 // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buyanypubg_enable: false,                 // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
 		
 //-----------------------------------------------------------------------------------------------------------------------------------//
 
@@ -226,13 +226,13 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
 // ----------------------------SIMPLE CURRENCYS (!sellref, !sellhydra, !sellcsgo, !selltf2, !sellgems, !sellpubg)
 
- /*1*/  sellref_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*2*/  sellhydra_enable: true,                    // [true/false] Enable or disable | !sellhydra command   (// This command when called sell hydra cs go keys for sets to user)
- /*3*/  sellcsgo_enable: true,                     // [true/false] Enable or disable | !sellcsgo command    (// This command when called sell csgo keys for sets to user)
- /*4*/  selltf2_enable: true,                      // [true/false] Enable or disable | !selltf2 command     (// This command when called sell tf2 keys for sets to user)
- /*5*/  sellgems_enable: true,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*6*/  sellpubg_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
-		sellgemsforkey_enable:false,
+ /*1*/  sellref_enable: false,                   // -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  sellhydra_enable: true,                  // [true/false] Enable or disable | !sellhydra command   (// This command when called sell hydra cs go keys for sets to user)
+ /*3*/  sellcsgo_enable: true,                   // [true/false] Enable or disable | !sellcsgo command    (// This command when called sell csgo keys for sets to user)
+ /*4*/  selltf2_enable: true,                    // [true/false] Enable or disable | !selltf2 command     (// This command when called sell tf2 keys for sets to user)
+ /*5*/  sellgems_enable: true,                   // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  sellpubg_enable: false,                  // -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+	sellgemsforkey_enable:false,
 
 //-------------------------------------------------------------------------------------------------------------------------------------//
 
@@ -246,9 +246,9 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
         //IFNO COMMANDS
 
-    INFO: "/code Use these commands to get information about the bot: \n!stock [card sets in stock] \n!owner [profile]", //Info command message
-    OWNER: "/me https://steamcommunity.com/profiles/ID/", // owner command message
-    SELLHELP: "You are also able to sell sets. You can do this by using !sell [amount of keys].", // sellhelp command message
+    INFO: "/code Use these commands to get information about the bot: \n!stock [card sets in stock] \n!owner [profile]",   //Info command message
+    OWNER: "/me https://steamcommunity.com/profiles/ID/",    // owner command message
+    SELLHELP: "You are also able to sell sets. You can do this by using !sell [amount of keys].",    // sellhelp command message
 
 
     //-----------------------------------------------------------------------------------------------
@@ -286,7 +286,7 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
     //-SETTINGS: INVITING TO THE GROUP
 
     friend_group_inviting: true,            // [true/false] Enable or disable | Inviting user to the selected group on friend request
-    INVITETOGROUPID: "",                    // Invite users to this group
+    INVITETOGROUPID: "",                    // Invite users to this group Please Note this has to be the Steam 64 Invite Code
 
 
 
