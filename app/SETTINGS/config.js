@@ -189,30 +189,30 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
  /*2*/  buyhydra_enable: true,                  // [true/false] Enable or disable | !buyhydra command    (// This command when called sell sets for user hydra keys)
  /*3*/  buycsgo_enable: true,                   // [true/false] Enable or disable | !buycsgo command     (// This command when called sell sets to user for csgo keys)
  /*4*/  buytf2_enable: true,                    // [true/false] Enable or disable | !buytf2 command      (// This command when called sell sets to user for tf2 keys)
- /*5*/  buygems_enable: true,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*6*/  buypubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  buygems_enable: true,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buypubg_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
 		buygemsforkey_enable: false,
 
 // ----------------------------CURRENCYS BUY ONE (!buyoneref, !buyonehydra, !buyonecsgo, !buyonetf2, !buyonegems, !buyonepubg)
 
  
- /*1*/  buyoneref_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*2*/  buyonehydra_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*3*/  buyonecsgo_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*4*/  buyonetf2_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*5*/  buyonegems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*6*/  buyonepubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*1*/  buyoneref_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  buyonehydra_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*3*/  buyonecsgo_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*4*/  buyonetf2_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  buyonegems_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buyonepubg_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
 
 
 // ----------------------------CURRENCYS BUY ANY (!buyanyref, !buyanyhydra, !buyanycsgo, !buyanytf2, !buyanygems, !buyanypubg)
 
  
- /*1*/  buyanyref_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*2*/  buyanyhydra_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*3*/  buyanycsgo_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*4*/  buyanytf2_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*5*/  buyanygems_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*6*/  buyanypubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*1*/  buyanyref_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*2*/  buyanyhydra_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*3*/  buyanycsgo_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*4*/  buyanytf2_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  buyanygems_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  buyanypubg_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
 		
 //-----------------------------------------------------------------------------------------------------------------------------------//
 
@@ -230,8 +230,8 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
  /*2*/  sellhydra_enable: true,                    // [true/false] Enable or disable | !sellhydra command   (// This command when called sell hydra cs go keys for sets to user)
  /*3*/  sellcsgo_enable: true,                     // [true/false] Enable or disable | !sellcsgo command    (// This command when called sell csgo keys for sets to user)
  /*4*/  selltf2_enable: true,                      // [true/false] Enable or disable | !selltf2 command     (// This command when called sell tf2 keys for sets to user)
- /*5*/  sellgems_enable: true,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
- /*6*/  sellpubg_enable: false,// -comming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*5*/  sellgems_enable: true,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
+ /*6*/  sellpubg_enable: false,// -coming in next update (Leave it on false for !help and !commands to display working commands correctly)
 		sellgemsforkey_enable:false,
 
 //-------------------------------------------------------------------------------------------------------------------------------------//
