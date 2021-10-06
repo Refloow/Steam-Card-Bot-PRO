@@ -301,6 +301,8 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
    //                                              //
    //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//
 
+	
+	/* 10.6.2021 this is dumb and i always forget to rework it xD */
    // RANDOM GROUP INVITES CAN ONLY BE SET TO ACCEPT OR DECLINE
    // IF DECLINING IS ON TURN OFF THE ACCEPTING OF THE RANDOM GROUP INVITES
    // UNPREDICTABLE ERRORS AND CRASHES CAN HAPPEN IF BOTH WERE SET ON TRUE
