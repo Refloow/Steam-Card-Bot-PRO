@@ -275,11 +275,15 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
     //-SETTINGS: BOT COMMENTING AFTER TRADE
 
-	// Make sure that commends don't contain any words such as rep, reputation, cash, trading, etc.
+        /* 10.6.2021 Make sure to disable this feature. Steam flags accounts as hijacked due comment contents and comments volume bots can post
+	If you use you are risking an 15 days hold
 	
+	In case you use comments after trade feature */
+	// Make sure that commends don't contain any words such as rep, reputation, cash, trading, etc.
 	/* steam is recently changing its policy and marks accounts that talk with certain trigger words as hijacked and community lock them for 15 days.
 	Make sure that in the commands that bot left isn't any words such as +rep, trusted, cash, trade, etc. */
 	
+    // By default set to false (will be removed in next update)	
     After_Trade_Comment_enable: false,       // [true/false] Enable or disable | posting coments after trade
     COMMENTAFTERTRADE: "Thanks for trading with our level up service!",
 
