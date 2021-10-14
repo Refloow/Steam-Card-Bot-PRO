@@ -35,8 +35,8 @@ Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
 
     //-----------------------------------------------------------------------------------------------
 
-    USERNAME: "", // Steam Bot Account Username
-    PASSWORD: "", // Steam Bot Account Password
+    USERNAME: "", // Name used to login to the account
+    PASSWORD: "", // Steam Account Password
     SHAREDSECRET: "", // Code that can be found in {Steam64ID}maFile in SDA(Steam desktop Auth) 
     IDENTITYSECRET: "", // Code that can be found in {Steam64ID}maFile in SDA(Steam desktop Auth) 
     STEAMAPIKEY: "", // Code from steam in readme how to find it
