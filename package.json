@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OSL-Works/Steam-Card-Bot-PRO.git"
+    "url": "git+https://github.com/Refloow/Steam-Card-Bot-PRO.git"
   },
   "keywords": [
     "Steam",
@@ -24,9 +24,9 @@
   "author": "Refloow -Veljko Vuckovic - https://steamcommunity.com/id/MajokingGames/",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/OSL-Works/Steam-Card-Bot-PRO/issues"
+    "url": "https://github.com/Refloow/Steam-Card-Bot-PRO/issues"
   },
-  "homepage": "https://github.com/OSL-Works/Steam-Card-Bot-PRO#readme",
+  "homepage": "https://github.com/Refloow/Steam-Card-Bot-PRO#readme",
   "dependencies": {
     "console-master": "^1.0.3",
     "steam-user": "4.18.0",
