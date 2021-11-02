@@ -4,10 +4,10 @@
 /*--------------------------------------------------------------------------------------------- 
 * Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
 
-* Code origin: https://github.com/OSL-Works/Steam-Card-Bot-PRO
+* Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO
 * Developer name: Veljko Vuckovic
 * Licensed under the MIT License. See LICENSE in the project root for license information.
-* Published License: https://github.com/OSL-Works/Steam-Card-Bot-PRO/master/LICENSE
+* Published License: https://github.com/Refloow/Steam-Card-Bot-PRO/master/LICENSE
 
 * Contact information:
   Discord Support Server: https://discord.gg/D8WCtDD
@@ -89,7 +89,7 @@ console.log('888  T88b Y8b.    888   888Y88..88PY88..88PY88b 888 d88P '.cyan);
 console.log('888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P" \n\n'.cyan); 
 console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);                             
 console.log('This bot was developed by MajokingGames [Dev] at - Refloow and published for free at OSL-Works GitHub org'.cyan);
-console.log('Code origin: https://github.com/OSL-Works/Steam-Card-Bot-PRO' .red);
+console.log('Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO' .red);
 console.log('Original work: Copyright (c) 2020-2021 Refloow All rights reserved.\n ' .green);
 console.log('Copyright (c) 2020-2021 Refloow official version of the bot is free with regular updates, we wont suggest buying \n "upgraded" copies since they might contain a backdoor. For any feature request just open a issue on github repo \n feel free to donate the money instead of being scammed!')
 console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);
@@ -168,5 +168,5 @@ setTimeout(resume, config.STARTAWAIT);
 // Copyright notice:
 
 /* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
-  Code origin (Free GitHub publish): https://github.com/OSL-Works/Steam-Card-Bot-PRO*/
+  Code origin (Free GitHub publish): https://github.com/Refloow/Steam-Card-Bot-PRO*/
 
