@@ -4,10 +4,10 @@
 /*--------------------------------------------------------------------------------------------- 
 * Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
 
-* Code origin: https://github.com/OSL-Works/Steam-Card-Bot-PRO
+* Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO
 * Developer name: Veljko Vuckovic
 * Licensed under the MIT License. See LICENSE in the project root for license information.
-* Published License: https://github.com/OSL-Works/Steam-Card-Bot-PRO/master/LICENSE
+* Published License: https://github.com/Refloow/Steam-Card-Bot-PRO/master/LICENSE
 
 * Contact information:
   Discord Support Server: https://discord.gg/D8WCtDD
@@ -662,5 +662,5 @@ module.exports=f;
 // Copyright notice:
 
 /* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
-  Code origin (Free GitHub publish): https://github.com/OSL-Works/Steam-Card-Bot-PRO*/
+  Code origin (Free GitHub publish): https://github.com/Refloow/Steam-Card-Bot-PRO*/
 
