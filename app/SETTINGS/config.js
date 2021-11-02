@@ -3,7 +3,7 @@ module.exports = {
 // Copyright notice:
 
 /* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
-  Code origin (Free GitHub publish): https://github.com/OSL-Works/Steam-Card-Bot-PRO*/
+  Code origin (Free GitHub publish): https://github.com/Refloow/Steam-Card-Bot-PRO*/
 	
 	    
 /*
@@ -11,7 +11,7 @@ module.exports = {
 Want active support and new updates with new features all for free?
 
 Leave an star on github repo its free ( we push updates based on the engagement )
-Repo link: https://github.com/OSL-Works/Steam-Card-Bot-PRO
+Repo link: https://github.com/Refloow/Steam-Card-Bot-PRO
 
   Discord Support Server: https://discord.gg/D8WCtDD     (Open an ticket)
 
