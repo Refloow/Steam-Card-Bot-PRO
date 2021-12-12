@@ -107,4 +107,7 @@ Or mail at refloowlibrarycontact@gmail.com <br>
 
 <hr>
 
+# Stars over time 
+
+[![Stargazers over time](https://starchart.cc/Refloow/Steam-Card-Bot-PRO.svg)](https://starchart.cc/Refloow/Steam-Card-Bot-PRO)
 
