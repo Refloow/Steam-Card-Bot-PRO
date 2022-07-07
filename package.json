@@ -21,29 +21,30 @@
     "stgeamcardbot",
     "levelbot"
   ],
-  "author": "Refloow -Veljko Vuckovic - https://steamcommunity.com/id/MajokingGames/",
+  "author": "Veljko Vuckovic",
   "license": "MIT",
+  "years": "2020-2022",
   "bugs": {
     "url": "https://github.com/Refloow/Steam-Card-Bot-PRO/issues"
   },
   "homepage": "https://github.com/Refloow/Steam-Card-Bot-PRO#readme",
   "dependencies": {
+    "colors": "1.4.0",
     "console-master": "^1.0.3",
-    "steam-user": "4.18.0",
-    "steamcommunity": "3.41.6",
+    "forever": "3.0.2",
+    "jsonfile": "6.0.1",
+    "lodash": "4.17.21",
+    "moment": "2.28.0",
+    "mongoose": "5.10.5",
+    "node-fetch": "latest",
+    "path": "0.12.7",
+    "request": "2.88.2",
     "steam-totp": "2.1.1",
     "steam-tradeoffer-manager": "2.10.2",
-    "lodash": "4.17.21",
-    "path": "0.12.7",
-    "colors": "1.4.0",
-    "winston": "3.3.3",
+    "steam-user": "4.18.0",
+    "steamcommunity": "3.41.6",
     "steamid": "1.1.3",
-    "request": "2.88.2",
-    "moment": "2.28.0",
-    "jsonfile": "6.0.1",
-    "node-fetch": "latest",
-    "mongoose": "5.10.5",
-    "forever": "3.0.2"
+    "winston": "3.3.3"
   },
   "private": true
 }
