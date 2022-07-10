@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/Refloow/Steam-Card-Bot-PRO/issues"
   },
-  "homepage": "https://github.com/Refloow/Steam-Card-Bot-PRO#readme",
+  "homepage": "https://github.com/Refloow/Steam-Card-Bot-PRO",
   "dependencies": {
     "colors": "1.4.0",
     "console-master": "^1.0.3",
