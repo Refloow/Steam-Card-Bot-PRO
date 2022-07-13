@@ -237,6 +237,8 @@ Repo link: https://github.com/Refloow/Steam-Card-Bot-PRO
 //-------------------------------------------------------------------------------------------------------------------------------------//
 
 
+    checkdata: false,                       // [true/false] Enable or disable | This feature is used for monitoring it shows scripts ussage of system resources
+    howtimer: 600000,  // Time in ms of cycle when will next info be shown. (By default set to 10min);
 
 
     //-SETTINGS: MESSAGES
