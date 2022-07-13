@@ -172,6 +172,10 @@ t = module.exports = {
         return config.chat_spam_protection == true;
     },
 
+    CheckData: function() {
+        return config.checkdata == true;
+    },
+
     SpamRemoveMessageEnabled: function() {
         return config.spam_remove_message_enable == true;
     },
