@@ -54,6 +54,7 @@ try {
   mongoose = require('mongoose');
   fetch = require('node-fetch');
   request = require('request');
+  diagnostics = require('scb-diagnostics');
 
 } catch (ex) {
   // If modules are not installed showing an clear error message to user.
@@ -64,6 +65,7 @@ try {
 
 // Const package and define version then feed output to the ${v}
 const package = require('./package.json');
+const method = require('./app/methods.js');
 const config = require('./app/SETTINGS/config.js');
 const v = package.version;
 
@@ -108,6 +110,18 @@ console.log('Starting LevelUp bot...'.green );
 console.log('If bot doesnt start in next 1 minute steam is down.\n'.green );
 
 console.log('If you are running app for the first time wait a bit for app to initialize.\n\n'.cyan);
+
+function call() {
+    setInterval(getit, config.showtimer);
+}
+
+function getit() {
+  diagnostics.getusage();
+}
+
+if(method.CheckData()) {
+  call();
+}
 
 // Steam-Card-Bot-PRO built by Refloow (-MajokingGames)
 
