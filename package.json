@@ -36,7 +36,7 @@
     "lodash": "4.17.21",
     "moment": "2.28.0",
     "mongoose": "5.10.5",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "path": "0.12.7",
     "request": "2.88.2",
     "scb-diagnostics": "^1.0.1",
