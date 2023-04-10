@@ -40,7 +40,7 @@
   </a>
 </p>
 
-<h3 align= "center"> Leave a star, we push updates based on activity </h3>
+<h3 align= "center"> Leave a star, we push updates based on activity, due economic situation and lack of support, new updates for this project will be security only! Software will remain free but paid versions will be available for purchase on our official discord: https://discord.gg/XZtwJ4WW6T </h3>
 
 # Note:
 
@@ -102,7 +102,6 @@ Project is made open source and **free for all.**<br>
 # Want Improvements ?
 
 If you have some private requests feel free to contact main dev : https://steamcommunity.com/id/MajokingGames/<br>
-Or mail at refloowlibrarycontact@gmail.com <br>
 **Note that we wont add any platform breaking TOS Modifications to any of our existing or requested projects**
 
 <hr>
