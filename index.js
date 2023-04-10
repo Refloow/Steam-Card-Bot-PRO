@@ -2,7 +2,7 @@
 // Copyright notice:
 
 /*--------------------------------------------------------------------------------------------- 
-* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
+* Original work: Copyright (c) 2020-2023 Refloow All rights reserved.
 
 * Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO
 * Developer name: Veljko Vuckovic
@@ -81,26 +81,40 @@ function initialize() {
 //       Removing copyright notice & distributing, using or selling the software without
 // the original license and notice above is license agreement breach and its considered criminal offense.
 
-console.log('8888888b.          .d888888                              '.cyan);
-console.log('888   Y88b        d88P" 888                              '.cyan);
-console.log('888    888        888   888                              '.cyan);
-console.log('888   d88P .d88b. 888888888 .d88b.  .d88b. 888  888  888'.cyan);
-console.log('8888888P" d8P  Y8b888   888d88""88bd88""88b888  888  888'.cyan); 
-console.log('888 T88b  88888888888   888888  888888  888888  888  888'.cyan); 
-console.log('888  T88b Y8b.    888   888Y88..88PY88..88PY88b 888 d88P '.cyan);
-console.log('888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P" \n\n'.cyan); 
-console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);                             
-console.log('This bot was developed by MajokingGames [Dev] at - Refloow and published for free at OSL-Works GitHub org'.cyan);
-console.log('Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO' .red);
-console.log('Original work: Copyright (c) 2020-2021 Refloow All rights reserved.\n ' .green);
-console.log('Copyright (c) 2020-2021 Refloow official version of the bot is free with regular updates, we wont suggest buying \n "upgraded" copies since they might contain a backdoor. For any feature request just open a issue on github repo \n feel free to donate the money instead of being scammed!')
-console.log('▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n' .red);
-console.log('Removing copyright notice above & distributing, using or selling the software without \n the original license and notice above is licence agreement breach and its considered criminal offense.\n\n\n' .yellow);
-console.log('Please read the notice above, app will start in 15 secounds (restarting app fast can result in being rate limited by steam)\n');
-
+  console.log(`\n\n                    (((((((                `.cyan);
+  console.log(`                 (((((((((((((((              `.cyan);
+  console.log(`              ((((((((((((((((((((((.           `.cyan);
+  console.log(`          ((((((((((.        ((((((((((((       8888888b.          .d888888                              `.cyan);
+  console.log(`        (((((((((    ,((((((    ((((((((((      888   Y88b        d88P" 888                              `.cyan);
+  console.log(`        (((((((((((   ((((((((   (((((((((      888    888        888   888                              `.cyan);
+  console.log(`        (((((((((((   (((((    /((((((((((      888   d88P .d88b. 888888888 .d88b.  .d88b. 888  888  888`.cyan);
+  console.log(`        ((((((((((.  (      ((((((((((((((      8888888P" d8P  Y8b888   888d88""88bd88""88b888  888  888`.cyan);
+  console.log(`        ((((((((((   %%%%%     (((((((((((      888 T88b  88888888888   888888  888888  888888  888  888`.cyan)
+  console.log(`        (((((((%%%   %%%%%%%%*     (((((((      888  T88b Y8b.    888   888Y88..88PY88..88PY88b 888 d88P`.cyan)
+  console.log(`        (((#%%%%%%%  %%%%%%%%%%%%   %%%(((      888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P"`.cyan)
+  console.log(`        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.       888   T88b "Y8888 888   888 "Y88P"  "Y88P"  "Y8888888P"`.cyan)
+  console.log(`            %%%%%%%%%%%%%%%%%%%%%%%%%           `.cyan)
+  console.log(`                 %%%%%%%%%%%%%%%%               `.cyan)
+  console.log(`                     %%%%%%%%                   \n` .cyan)
+  console.log(
+    "                               ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀".red
+  );                             
+console.log('        This software has been developed by Veljko Vuckovic at - Refloow and published for free at GitHub.org'.cyan);
+console.log('                           Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO' .yellow);
+console.log('                        Original work: Copyright (c) 2020-2023 Refloow All rights reserved. ' .green);
+console.log('      Official version of the bot is FREE with security updates only! Due economic situation and lack of support\n         newer versions can be purchased on our official discord server: https://discord.gg/XZtwJ4WW6T');
+  console.log(
+    "                               ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n".red
+  );
+  console.log(
+    "                      Removing copyright notice above & distributing, using or selling the software without \n           the original license and notice above is licence agreement breach and its considered criminal offense.\n"
+      .yellow
+  );
+  console.log(
+    "Please read the notice above, app will start in 15 secounds (restarting fast can result in being rate limited by steam)\n"
+  );
 /////////////////////////////////////////////////////////////////////
 // ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-  
 }
 
 function resume() {
@@ -134,40 +148,7 @@ require('./app/app.js');
   console.log(ex);
   process.exit(1);
 }
-	
-/*
-mongoose.connect(url,connectionParams)
-    .then( () => {
-        require('./app/app.js');
 
-    .catch( (err) => {
-        console.log(`| [OSL-Works] |: Hello, thanks for downloading our software !` .green);
-        console.log(`| [OSL-Works] |: Looks like there is some issues with connecting to database. \n\n` .green);
-        console.log(`| [Whitelist] |: Access to the app denied. \n` .red);
-        console.log(`| [APP] |: If you made changes to app, unexpected error happened please check err message down below` .red)
-
-
-    console.log(err);
-
-
-
-      // API that gets public ip adress {Required if user is need special verification by database servers}
-      // Otherwise not used.
-      let uri = "https://api.ipify.org/?format=json";
-
-      let settings = { method: "Get" };
-      // Displays public ip adress in terminal
-      fetch(uri, settings)
-          .then(res => res.json())
-          .then((json) => {
-              console.log(json)
-              console.log('\n | [Server] |: Ip listed above requires special verification by our servers. \n')
-              console.log(`To get acccess please create support ticket on discord: https://discord.gg/D8WCtDD` .red)
-              console.log(`or contact: https://steamcommunity.com/id/MajokingGames/` .red);
-      });
-    })
-    
-    */
 }
 
 
@@ -181,6 +162,6 @@ setTimeout(resume, config.STARTAWAIT);
 
 // Copyright notice:
 
-/* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
+/* Original work: Copyright (c) 2020-2023 Refloow All rights reserved.
   Code origin (Free GitHub publish): https://github.com/Refloow/Steam-Card-Bot-PRO*/
 
