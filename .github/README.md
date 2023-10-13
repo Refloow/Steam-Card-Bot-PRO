@@ -1,5 +1,5 @@
 ### `Read this page before asking any questions`
-> **[Important Guides](https://github.com/OSL-Works/Steam-Card-Bot-PRO#important-links)**<br>
+> **[Important Guides](https://github.com/Refloow/Steam-Card-Bot-PRO#important-links)**<br>
 
 <p align="center">
 <img width="264.6" height="154" src="https://i.imgur.com/PUCBfA6.png">
@@ -40,7 +40,10 @@
   </a>
 </p>
 
-<h3 align= "center"> Leave a star, we push updates based on activity, due economic situation and lack of support, new updates for this project will be security only! Software will remain free but paid versions will be available for purchase on our official discord: https://discord.gg/XZtwJ4WW6T </h3>
+<h3 align= "center"> Due economic situation and lack of support, new updates for this project will be security only! Software will remain free but paid versions will be available for purchase on our official discord: https://discord.gg/XZtwJ4WW6T 
+Read more at:</h3>
+
+[Steam-Card-Bot-ULTRA](https://github.com/Refloow/Steam-Card-Bot-ULTRA)
 
 # Note:
 
