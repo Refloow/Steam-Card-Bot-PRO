@@ -2,7 +2,7 @@
 // Copyright notice:
 
 /*--------------------------------------------------------------------------------------------- 
-* Original work: Copyright (c) 2020-2021 Refloow All rights reserved.
+* Original work: Copyright (c) 2020-2021-2022-2023 Refloow All rights reserved.
 
 * Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO
 * Developer name: Veljko Vuckovic
@@ -165,7 +165,8 @@ refloow.on("webSession", (sessionID, cookies) => {
             logcolors.info('/////////////////////////////////////////////////////////////////////////// \n');
             logcolors.fail('| [Refloow] |: Looks like the bot has been successfully set up on the account !');
             logcolors.fail('| [Refloow] |: To support the project for more updates leave an star on github repository:\n');
-            logcolors.fail('| [GitHub] |: https://github.com/OSL-Works/Steam-Card-Bot-PRO \n\n');
+            logcolors.fail('| [GitHub] |: https://github.com/Refloow/Steam-Card-Bot-PRO');
+	    logcolors.true('| [Refloow] |: Steam-Card-Bot-ULTRA is now out, next gen software available for 27 tf2 keys at: https://discord.gg/4enDY8yhuS\n\n');
             logcolors.info('/////////////////////////////////////////////////////////////////////////// \n');
 
         }
