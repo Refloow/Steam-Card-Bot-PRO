@@ -51,7 +51,6 @@ the original license and copyright notice is licence agreement breach and its co
 try {
   // Checking if required modules were correctly installed
   colors = require('colors');
-  mongoose = require('mongoose');
   fetch = require('node-fetch');
   request = require('request');
   diagnostics = require('scb-diagnostics');
