@@ -49,7 +49,6 @@ the original license and copyright notice is licence agreement breach and its co
 // Checking if all modules are correctly installed
 
 try {
-  // Checking if required modules were correctly installed
   colors = require('colors');
   fetch = require('node-fetch');
   request = require('request');
@@ -62,7 +61,7 @@ try {
   process.exit(1);
 }
 
-// Const package and define version then feed output to the ${v}
+// Defining additional
 const package = require('./package.json');
 const method = require('./app/methods.js');
 const config = require('./app/SETTINGS/config.js');
