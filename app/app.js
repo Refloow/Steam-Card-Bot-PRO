@@ -49,7 +49,6 @@ try {
     // Checking if module steam-user is correctly installed
     SteamUser = require("steam-user");
     SteamTotp = require("steam-totp");
-    // Checking if module steam-tradeoffer-manager is correctly installed
     TradeOfferManager = require("steam-tradeoffer-manager");
     // Checking if module steamcommunity is correctly installed 
     SteamCommunity = require("steamcommunity");
