@@ -42,9 +42,10 @@ the original license and copyright notice is licence agreement breach and its co
 
 */
 
-
+// Importing module for logging in colors
 const logcolors = require('console-master');
 
+// Additional defined
 let _ = require('lodash'),
     request = require('request'),
     config = require("./SETTINGS/config.js"),
