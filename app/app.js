@@ -48,7 +48,6 @@ the original license and copyright notice is licence agreement breach and its co
 try {
     // Checking if module steam-user is correctly installed
     SteamUser = require("steam-user");
-    // Checking if module steam-totp is correctly installed
     SteamTotp = require("steam-totp");
     // Checking if module steam-tradeoffer-manager is correctly installed
     TradeOfferManager = require("steam-tradeoffer-manager");
