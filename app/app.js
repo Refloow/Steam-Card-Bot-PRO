@@ -46,13 +46,10 @@ the original license and copyright notice is licence agreement breach and its co
 // Checking if all modules are correctly installed
 
 try {
-    // Checking if module steam-user is correctly installed
     SteamUser = require("steam-user");
     SteamTotp = require("steam-totp");
     TradeOfferManager = require("steam-tradeoffer-manager");
-    // Checking if module steamcommunity is correctly installed 
     SteamCommunity = require("steamcommunity");
-    // Checking if module fs is correctly installed
     fs = require("graceful-fs");
 // Catching error    
 } catch (ex) {
