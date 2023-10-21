@@ -44,11 +44,9 @@ the original license and copyright notice is licence agreement breach and its co
 */
 
 
-
+// Checking if modules are correctly installed
 try {
-    // Checking if module colors is installed
     colors = require('colors');
-    // Checking if module moment is installed
     moment = require('moment');
 // Catching error
 } catch (ex) {
