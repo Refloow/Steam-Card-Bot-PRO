@@ -7,7 +7,6 @@
 </p>
 
 <br>
-<br>
 
 <p align= "center">
   <img src="https://img.shields.io/github/package-json/v/Refloow/Steam-Card-Bot-PRO.svg" alt="GitHub package version">
