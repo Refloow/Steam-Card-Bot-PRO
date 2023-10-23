@@ -12,7 +12,6 @@
 * Contact information:
   Discord Support Server: https://discord.gg/D8WCtDD
   Main developer steam: https://steamcommunity.com/id/MajokingGames/ 
-  Mail: refloowlibrarycontact@gmail.com
 
 * Donations:
   Crypto: https://refloow.com/cdonate
