@@ -104,7 +104,6 @@ Project is made open source and **free for all.**<br>
 
 # Want Improvements ?
 
-
 If you have some private requests feel free to contact the main dev : https://steamcommunity.com/id/MajokingGames/<br>
 **Note that we wont add any platform breaking TOS Modifications to any of our existing or requested projects**
 Also checkout
