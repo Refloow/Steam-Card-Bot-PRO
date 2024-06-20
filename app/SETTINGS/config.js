@@ -46,7 +46,7 @@ Repo link: https://github.com/Refloow/Steam-Card-Bot-PRO
 
     //-----------------------------------------------------------------------------------------------
 
-    PLAYGAMES: ":sets: sets - XX:X CSGO / XX:X TF2 / XX:X Gems", // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
+    PLAYGAMES: ":sets: sets - XX:X CS2 / XX:X TF2 / XX:X Gems", // List of appid's/names. Names will be played as non steam games. First game entered will show on profile, others will be idled in the background.
     ADMINS: [""], // to add admin put steam64id 
     // 64 ID Can be found here - https://www.steamidfinder.com/
 
