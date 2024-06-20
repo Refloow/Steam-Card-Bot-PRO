@@ -174,6 +174,7 @@ refloow.on("webSession", (sessionID, cookies) => {
             refloow.addFriend(Object.keys(refloow.myFriends)[i]);
         }
     }
+    manager.apiKey = `${CONFIG.STEAMAPIKEY}`
     community.setCookies(cookies);
     community.startConfirmationChecker(10000, CONFIG.IDENTITYSECRET);
     Utils.getInventory(refloow.steamID.getSteamID64(), community, (ERR, DATA) => {
