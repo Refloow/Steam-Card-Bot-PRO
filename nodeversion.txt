@@ -1,0 +1,4 @@
+Rcently updated node.js version.
+This is node.js version needed for program to run (and install exactly the same as on development machine)
+v20.10.0
+https://nodejs.org/dist/v20.10.0/
