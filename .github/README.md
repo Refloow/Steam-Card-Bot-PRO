@@ -76,7 +76,7 @@ Project is made open source and **free for all.**<br>
 ### `Contributions`
 > **[Want to contribute? Read how](https://github.com/Refloow/Steam-Card-Bot-PRO/blob/master/.github/CONTRIBUTING.md)**<br>
 ### `Features`
-> **[See list of features](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/FEATURES.md)**<br>
+> **[See list of features](https://github.com/Refloow/Steam-Card-Bot-PRO/blob/master/.github/FEATURES.md)**<br>
 > **[See version changelogs](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/changelog.md)**<br>
 ### `Policies & Agreements`
 > **[User Agreement](https://github.com/Refloow/Steam-Card-Bot-PRO/blob/master/.github/USER_AGREEMENT.md)**<br>
