@@ -80,7 +80,7 @@ Project is made open source and **free for all.**<br>
 > **[See version changelogs](https://github.com/Refloow/Steam-Card-Bot-PRO/blob/master/.github/changelog.md)**<br>
 ### `Policies & Agreements`
 > **[User Agreement](https://github.com/Refloow/Steam-Card-Bot-PRO/blob/master/.github/USER_AGREEMENT.md)**<br>
-> **[Security Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/security/policy)**<br>
+> **[Security Policy](https://github.com/Refloow/Steam-Card-Bot-PRO/security/policy)**<br>
 > **[Privacy Policy](https://github.com/OSL-Works/Steam-Card-Bot-PRO/blob/master/.github/PRIVACY.md)**<br>
 ### `FAQ`
 > **[Frequently Asked Questions](https://github.com/Refloow/Steam-Card-Bot-PRO/wiki/FAQ---Frequently-Asked-Questions)**<br>
