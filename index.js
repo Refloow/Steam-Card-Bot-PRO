@@ -2,7 +2,7 @@
 // Copyright notice:
 
 /*--------------------------------------------------------------------------------------------- 
-* Original work: Copyright (c) 2020-2023 Refloow All rights reserved.
+* Original work: Copyright (c) 2020-2024 Refloow All rights reserved.
 
 * Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO
 * Developer name: Veljko Vuckovic
@@ -160,6 +160,6 @@ setTimeout(resume, config.STARTAWAIT);
 
 // Copyright notice:
 
-/* Original work: Copyright (c) 2020-2023 Refloow All rights reserved.
+/* Original work: Copyright (c) 2020-2024 Refloow All rights reserved.
   Code origin (Free GitHub publish): https://github.com/Refloow/Steam-Card-Bot-PRO*/
 
