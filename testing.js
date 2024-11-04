@@ -1,1 +1,2 @@
-alert("Hello, this is your alert message!");
+document.body.addEventListener('click', function() {
+    document.body.style.backgroundColor = 'red';
