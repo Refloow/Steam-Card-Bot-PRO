@@ -12,7 +12,7 @@ echo .
 echo .
 echo // Copyright notice:
 echo .
-echo /* Original work: Copyright (c) 2020-2023 Refloow All rights reserved.
+echo /* Original work: Copyright (c) 2020-2025 Refloow All rights reserved.
 echo  Code origin (Free GitHub publish): https://github.com/Refloow/Steam-Card-Bot-PRO */
 echo .
 echo .
