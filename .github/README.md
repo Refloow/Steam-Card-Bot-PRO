@@ -90,23 +90,6 @@ Project is made open source and **free for all.**<br>
 
 **https://discord.gg/XxvjjPs**
 
-<hr>
-
-# Support the project
-- **If you like the project and the fact that is free you can support us by giving an donation.**
-- We are accepting donations:
-
-1. Crypto: https://refloow.com/cdonate
-2. Steam: https://steamcommunity.com/tradeoffer/new/?partner=392773011&token=CncehZti
-
-<hr>
-
-# Want Improvements ?
-
-If you have some private requests feel free to contact the main dev : https://steamcommunity.com/id/MajokingGames/<br>
-**Note that we wont add any platform breaking TOS Modifications to any of our existing or requested projects**
-Also checkout
-> **[Upgrade | Steam-Card-Bot-ULTRA](https://github.com/Refloow/Steam-Card-ULTRA)**<br>
 
 <hr>
 
