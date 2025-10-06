@@ -2,6 +2,7 @@
 > **[Important Guides](https://github.com/Refloow/Steam-Card-Bot-PRO#important-links)**<br>
 > **[Upgrade | Steam-Card-Bot-ULTRA](https://github.com/Refloow/Steam-Card-Bot-ULTRA)**<br>
 
+
 <br>
 
 <p align= "center">
@@ -30,11 +31,8 @@
   </a>
 </p>
 
-<p align= "center">
-  <a href="https://refloow.com/cdonate" target="_blank">
-  <img src="https://img.shields.io/badge/-CRYPTO%20Donations-red">
-  </a>
-</p>
+
+<img width="614" height="409" alt="steam-card-bot-pro-min" src="https://github.com/user-attachments/assets/097f085c-6202-415d-91c2-d94154a5680c" />
 
 <h3 align= "center"> Due economic situation and lack of support, new updates for this project will be security only! Software will remain free but paid versions will be available for purchase on our official discord: https://discord.gg/XZtwJ4WW6T 
 Read more at:</h3>
