@@ -2,10 +2,6 @@
 > **[Important Guides](https://github.com/Refloow/Steam-Card-Bot-PRO#important-links)**<br>
 > **[Upgrade | Steam-Card-Bot-ULTRA](https://github.com/Refloow/Steam-Card-Bot-ULTRA)**<br>
 
-<p align="center">
-<img width="264.6" height="154" src="https://i.imgur.com/PUCBfA6.png">
-</p>
-
 <br>
 
 <p align= "center">
