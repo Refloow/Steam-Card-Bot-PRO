@@ -84,7 +84,6 @@ Project is made open source and **free for all.**<br>
 
 **https://discord.gg/XxvjjPs**
 
-
 <hr>
 
 # Stars over time 
