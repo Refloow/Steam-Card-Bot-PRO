@@ -1,11 +1,9 @@
 name: Sync to GitLab
 
 on:
-  # This action runs every time a commit is pushed to the main branch
   push:
     branches:
-      - master  # branch name
-  # run the action manually from the Actions tab
+      - master
   workflow_dispatch:
 
 jobs:
