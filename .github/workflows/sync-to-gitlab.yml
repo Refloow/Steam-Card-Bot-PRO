@@ -17,4 +17,5 @@ jobs:
 
       - name: Push to GitLab mirror
         run: |
-          git push --mirror https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/Refloow/Steam-Card-Bot-PRO.git
+          git push --all https://gitlab-ci-token:${{ secrets.GITLAB_TOKEN }}@gitlab.com/Refloow/Steam-Card-Bot-PRO.git
+          git push --tags https://gitlab-ci-token:${{ secrets.GITLAB_TOKEN }}@gitlab.com/Refloow/Steam-Card-Bot-PRO.git
