@@ -1,0 +1,22 @@
+name: Sync to GitLab
+
+on:
+  # This action runs every time a commit is pushed to the main branch
+  push:
+    branches:
+      - master  # branch name
+  # run the action manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitLab mirror
+        run: |
+          git push --mirror https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/Refloow/Steam-Card-Bot-PRO.git
