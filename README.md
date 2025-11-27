@@ -88,4 +88,3 @@ Project is made open source and **free for all.**<br>
 # Stars over time
 
 [![Stargazers over time](https://starchart.cc/Refloow/Steam-Card-Bot-PRO.svg)](https://starchart.cc/Refloow/Steam-Card-Bot-PRO)
-
