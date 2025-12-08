@@ -1,7 +1,7 @@
 {
-  "name": "steam-card-bot-pro",
+  "name": "@refloow/steam-card-bot-pro",
   "version": "1.6.6",
-  "description": "An free open source, fully automated Level Up Bot with all features and support and much more",
+  "description": "Refloow™ Steam Card Bot PRO - A free open source, fully automated Level Up Bot with all features and support and much more",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,7 +21,17 @@
     "stgeamcardbot",
     "levelbot"
   ],
-  "author": "Veljko Vuckovic",
+"author": {
+    "name": "Refloow",
+    "email": "legal@refloow.com",
+    "url": "https://refloow.com"
+  },
+  "contributors": [
+    {
+      "name": "Veljko Vuckovic",
+      "url": "https://github.com/Refloow"
+    }
+  ],
   "license": "MIT",
   "years": "2020-2022-2023-2024-2025",
   "bugs": {
