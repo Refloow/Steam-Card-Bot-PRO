@@ -56,5 +56,9 @@
     "steamid": "2.0.0",
     "winston": "3.3.3"
   },
+  "funding": {
+    "type": "individual",
+    "url": "https://refloow.com"
+  },
   "private": true
 }
