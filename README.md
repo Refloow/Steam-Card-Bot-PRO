@@ -83,6 +83,10 @@ Project is made open source and **free for all.**<br>
 
 **https://discord.gg/XxvjjPs**
 
+# Telegram Channel
+
+https://t.me/+LC9l6d-Jhco2NTU0
+
 <hr>
 
 # Stars over time
