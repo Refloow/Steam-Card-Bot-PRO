@@ -36,7 +36,7 @@
 <h3 align= "center"> Due economic situation and lack of support, new updates for this project will be security only! Software will remain free but paid versions will be available for purchase on our official discord: https://discord.gg/XZtwJ4WW6T 
 Read more at:</h3>
 
-[Steam-Card-Bot-ULTRA](https://github.com/Refloow/Steam-Card-Bot-ULTRA)
+[Steam-Card-Bot-ULTRA](https://github.com/Refloow/Steam-Card-Bot-ULTRA) !
 
 # Note:
 
