@@ -1,6 +1,6 @@
 ### `Read this page before asking any questions`
 > **[Important Guides](https://github.com/Refloow/Steam-Card-Bot-PRO#important-links)**<br>
-> **[Upgrade | Steam-Card-Bot-ULTRA](https://github.com/Refloow/Steam-Card-Bot-ULTRA)**<br>
+> **[Upgrade | Steam-Card-Bot-ULTRA](https://github.com/Refloow/Steam-Card-Bot-ULTRA)**<br> 50% off limited time offer
 
 <br>
 
