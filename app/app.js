@@ -337,29 +337,21 @@ if(method.removingInactiveFriendsEnabled()) {
     }, 1000 * 60 * 60);
 }
 
-// Code for declining random group invites
-
-if(method.DecliningRandomGroupInvites()) {
-  refloow.on('groupRelationship', function(sid, REL) {
-      if (REL == SteamUser.EClanRelationship.Invited) {
-          logcolors.info('| [Steam] |: We were asked to join steam group #'+sid );  //cyan
-          refloow.respondToGroupInvite(sid, false);
-          logcolors.false('| [Steam] |: Declined incoming group invite.');
-      }
-  });
-}
-
-// Code for accepting random group invites
-
-if(method.AcceptingRandomGroupInvites()) {
-  refloow.on('groupRelationship', function(sid, REL) {
-      if (REL == SteamUser.EClanRelationship.Invited) {
-          logcolors.info('| [Steam] |: We were asked to join steam group #'+sid );  //cyan
-          refloow.respondToGroupInvite(sid, true);
-          logcolors.true('| [Steam] |: Accepting incoming group invite.');
-      }
-  });
-}
+// Handling random group invites safely
+refloow.on('groupRelationship', function (sid, REL) {
+    if (REL == SteamUser.EClanRelationship.Invited) {
+        logcolors.info('| [Steam] |: We were asked to join steam group #' + sid);
+        
+        // Checks the single config setting to decide what to do
+        if (CONFIG.accept_random_group_inv === true) {
+            refloow.respondToGroupInvite(sid, true);
+            logcolors.true('| [Steam] |: Accepted incoming group invite.');
+        } else {
+            refloow.respondToGroupInvite(sid, false);
+            logcolors.false('| [Steam] |: Declined incoming group invite.');
+        }
+    }
+});
 
 // Spam protection logic
 
