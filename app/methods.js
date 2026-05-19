@@ -247,18 +247,6 @@ t = module.exports = {
         return config.EnableWelcomeMessage == true;
     },
 
-    // Random group invites
-
-
-    DecliningRandomGroupInvites: function() {
-        return config.decline_random_group_inv == true;
-    },
-
-    AcceptingRandomGroupInvites: function() {
-        return config.accept_random_group_inv == true;
-    },
-
-
     // -------------------- COMMAND METHODS ----------------------------------
 
     // Check commands methods
