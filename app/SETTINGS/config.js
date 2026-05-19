@@ -297,26 +297,9 @@ Repo link: https://github.com/Refloow/Steam-Card-Bot-PRO
 
 
 
-   //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//
-   //                                              //
-   //                W A R N I N G                 //
-   //                                              //
-   //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*//
-
-	
-	/* 10.6.2021 this is dumb and i always forget to rework it xD */
-   // RANDOM GROUP INVITES CAN ONLY BE SET TO ACCEPT OR DECLINE
-   // IF DECLINING IS ON TURN OFF THE ACCEPTING OF THE RANDOM GROUP INVITES
-   // UNPREDICTABLE ERRORS AND CRASHES CAN HAPPEN IF BOTH WERE SET ON TRUE
-   // BOTH CAN BE SET ON FALSE THAT WAY BOT WOTN RESPOND ON GROUP INVITES !
-
-   // SUMMARY: One of the 2 options always needs to be false
-   // IF both of the settings were set to false bot doesnt respond on group invites.
-
-
-    // SETTINGS: AUTO DECLINING RANDOM GROUP INVITES
-
-    decline_random_group_inv: false,         // [true/false] Enable or disable | Auto declining all incoming random group invites.
-    accept_random_group_inv: false,         // [true/false] Enable or disable | Auto accepting all incoming random group invites.
+    // SETTINGS: RANDOM GROUP INVITES
+    // true = Auto-accept all incoming random group invites.
+    // false = Auto-decline all incoming random group invites.
+    accept_random_group_inv: false,
 
 }
