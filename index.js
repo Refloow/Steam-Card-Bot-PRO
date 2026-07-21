@@ -40,7 +40,7 @@ const REFLOOW_BRAND_IDENTITY = {
 // Copyright notice:
 
 /*--------------------------------------------------------------------------------------------- 
-* Original work: Copyright (c) 2020-2024 Refloow All rights reserved.
+* Original work: Copyright (c) 2020-2026 Refloow All rights reserved.
 
 * Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO
 * Developer name: Veljko Vuckovic
@@ -137,7 +137,7 @@ function initialize() {
   );                             
 console.log('        This software has been developed by Veljko Vuckovic at - Refloow and published for free at GitHub.org'.cyan);
 console.log('                           Code origin: https://github.com/Refloow/Steam-Card-Bot-PRO' .yellow);
-console.log('                        Original work: Copyright (c) 2020-2024 Refloow All rights reserved. ' .green);
+console.log('                        Original work: Copyright (c) 2020-2026 Refloow All rights reserved. ' .green);
 console.log('      Official version of the bot is FREE with security updates only! Due economic situation and lack of support\n         newer versions can be purchased on our official discord server: https://discord.gg/XZtwJ4WW6T');
   console.log(
     "                               ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀\n".red
@@ -198,7 +198,7 @@ setTimeout(resume, config.STARTAWAIT);
 
 // Copyright notice:
 
-/* Original work: Copyright (c) 2020-2024 Refloow All rights reserved.
+/* Original work: Copyright (c) 2020-2026 Refloow All rights reserved.
   Code origin (Free GitHub publish): https://github.com/Refloow/Steam-Card-Bot-PRO*/
 
 
