@@ -40,7 +40,7 @@
   "homepage": "https://github.com/Refloow/Steam-Card-Bot-PRO",
   "dependencies": {
     "colors": "1.4.0",
-    "console-master": "^1.0.3",
+    "console-master": "1.0.3",
     "forever": "3.0.2",
     "jsonfile": "6.0.1",
     "lodash": "4.17.21",
@@ -52,7 +52,7 @@
     "steam-totp": "2.1.2",
     "steam-tradeoffer-manager": "2.12.1",
     "steam-user": "5.2.3",
-    "steamcommunity": "3.48.8",
+    "steamcommunity": "3.50.3",
     "steamid": "2.0.0",
     "winston": "3.3.3"
   },
