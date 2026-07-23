@@ -120,16 +120,33 @@ let Utils = require("../app/utils.js"),
 // Setting client
 
 let refloow = new SteamUser(),
-    manager = new TradeOfferManager({
-        "steam": refloow,
-        "language": "en",
-        "pollInterval": "10000",
-        "cancelTime": "7200000" // 2 hours in ms
-    }),
     community = new SteamCommunity();
 
-// Checking for correct version (updates) for bot on github (On app start)
+community.request = community.request.defaults({
+    headers: {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Accept-Language": "en-US,en;q=0.9",
+        "sec-ch-ua": '"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"',
+        "sec-ch-ua-mobile": "?1",
+        "sec-ch-ua-platform": '"Android"',
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "same-origin",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": "1"
+    }
+});
 
+let manager = new TradeOfferManager({
+    "steam": refloow,
+    "community": community,
+    "language": "en",
+    "pollInterval": "10000",
+    "cancelTime": "7200000" // 2 hours in ms
+});
+
+// Checking for correct version (updates) for bot on github (On app start)
 method.check();
 
 // Checking for new version every 2 hours and display alert only if update available.
